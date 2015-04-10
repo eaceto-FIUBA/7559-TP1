@@ -13,30 +13,45 @@ void Proceso::correr() {
     while (seguirCorriendo()) {
         realizarTarea();
     }
-    estadoProceso = PARADO;
+    parar();
 }
 
 Proceso::Proceso() {
+    idProceso = 0;
     estadoProceso = INICIALIZADO;
 }
 
-void Proceso::iniciar() {
-    if (estadoProceso == CORRIENDO) return;
+pid_t Proceso::iniciar() {
+    if (idProceso != 0) return false;
+    if (estadoProceso == CORRIENDO) return false;
 
-    SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
-    correr();
+    idProceso = fork();
+    cout << "idProcess " << to_string(idProceso) << endl;
+    if (idProceso == 0) {
+        idProceso = getpid(); // el proceso hijo obtiene su pid
+
+        cout << "Proceso iniciado. " << this->descripcion() << endl;
+
+        SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
+
+        // Poner al proceso a correr
+        correr();
+
+        //TODO eliminar los recursos del proceso
+
+        //Termino el proeso
+        exit(0);
+    }
+    return idProceso;
 }
 
-void Proceso::parar() {
-    if (estadoProceso == PARADO) return;
-
+bool Proceso::parar() {
     SignalHandler::getInstance()->removerHandler(SIGINT);
     estadoProceso = PARADO;
+    return true;
 };
 
-string Proceso::descripcion() {
-    return this->nombre() + "[" + to_string(getpid()) + "]";
-}
+string Proceso::descripcion() { return this->nombre() + "[" + to_string(getpid()) + "]"; }
 
 Proceso::~Proceso() {
     SignalHandler::destruir();

@@ -9,9 +9,13 @@
 
 class Cocinera: public Proceso {
 private:
-    virtual string nombre();
+    void realizarTarea() {
+        //cout << "TAREA Cocinera" << endl;
+    }
 
-    virtual void realizarTarea();
+    string nombre() {
+        return "Cocinera";
+    };
 };
 
 

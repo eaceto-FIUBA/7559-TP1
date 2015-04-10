@@ -8,10 +8,13 @@
 #include "Proceso.h"
 
 class Cadeta: public Proceso {
-private:
-    virtual string nombre();
+    void realizarTarea() {
+        //cout << "TAREA CADETA" << endl;
+    }
 
-    virtual void realizarTarea();
+    string nombre() {
+        return "Cadete";
+    };
 };
 
 

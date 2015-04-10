@@ -9,9 +9,13 @@
 
 class Supervisora : public Proceso {
 private:
-    virtual string nombre();
+    void realizarTarea() {
+        //cout << "TAREA Supervisora" << endl;
+    }
 
-    virtual void realizarTarea();
+    string nombre() {
+        return "Supervisora";
+    };
 };
 
 

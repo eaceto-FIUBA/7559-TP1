@@ -20,7 +20,7 @@
 
 using namespace std;
 
-class Proceso: public EventHandler{
+class Proceso: public SIGINT_Handler {
 
     enum EstadoProceso {
         INICIALIZADO,
@@ -29,19 +29,20 @@ class Proceso: public EventHandler{
     };
 
 private:
+    pid_t idProceso;
     EstadoProceso estadoProceso;
     SIGINT_Handler sigint_handler;
     void correr();
     bool seguirCorriendo();
     virtual void realizarTarea() = 0;
-    virtual string nombre() { return "Proceso"; }
+    virtual string nombre() = 0;
 
 public:
     Proceso();
     virtual ~Proceso();
 
-    void iniciar();
-    void parar();
+    pid_t iniciar();
+    bool parar();
 
     string descripcion();
 };

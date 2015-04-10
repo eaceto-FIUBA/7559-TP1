@@ -9,9 +9,13 @@
 
 class Recepcionista: public Proceso {
 private:
-    virtual string nombre();
+    void realizarTarea() {
+        //cout << "TAREA Recepcionista" << endl;
+    }
 
-    virtual void realizarTarea();
+    string nombre() {
+        return "Recepcionista";
+    };
 };
 
 

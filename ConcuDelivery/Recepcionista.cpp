@@ -3,11 +3,3 @@
 //
 
 #include "Recepcionista.h"
-
-string Recepcionista::nombre() {
-    return "Recepcionista";
-}
-
-void Recepcionista::realizarTarea() {
-
-}
