@@ -3,3 +3,11 @@
 //
 
 #include "Cadeta.h"
+
+string Cadeta::nombre() {
+    return "Cadeta";
+}
+
+void Cadeta::realizarTarea() {
+
+}

@@ -3,3 +3,11 @@
 //
 
 #include "Cocinera.h"
+
+string Cocinera::nombre() {
+    return "Cocinera";
+}
+
+void Cocinera::realizarTarea() {
+
+}

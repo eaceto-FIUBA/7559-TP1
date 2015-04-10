@@ -3,3 +3,11 @@
 //
 
 #include "Supervisora.h"
+
+string Supervisora::nombre() {
+    return "Supervisora";
+}
+
+void Supervisora::realizarTarea() {
+
+}

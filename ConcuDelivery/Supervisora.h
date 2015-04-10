@@ -7,8 +7,11 @@
 
 #include "Proceso.h"
 
-class Supervisora: public Proceso {
+class Supervisora : public Proceso {
+private:
+    virtual string nombre();
 
+    virtual void realizarTarea();
 };
 
 

@@ -4,10 +4,14 @@
 
 #include "Proceso.h"
 
-void Proceso::run() {
-    estadoProceso = CORRIENDO;
-    while (sigint_handler.getGracefulQuit() == 0 && estadoProceso == CORRIENDO) {
+bool Proceso::seguirCorriendo() {
+    return sigint_handler.getGracefulQuit() == 0 && estadoProceso == CORRIENDO;
+}
 
+void Proceso::correr() {
+    estadoProceso = CORRIENDO;
+    while (seguirCorriendo()) {
+        realizarTarea();
     }
     estadoProceso = PARADO;
 }
@@ -17,15 +21,23 @@ Proceso::Proceso() {
 }
 
 void Proceso::iniciar() {
-    SignalHandler :: getInstance()->registrarHandler ( SIGINT,&sigint_handler );
-    run();
+    if (estadoProceso == CORRIENDO) return;
+
+    SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
+    correr();
 }
 
 void Proceso::parar() {
-    SignalHandler::getInstance()->removerHandler( SIGINT );
+    if (estadoProceso == PARADO) return;
+
+    SignalHandler::getInstance()->removerHandler(SIGINT);
     estadoProceso = PARADO;
 };
 
-Proceso::~Proceso() {
+string Proceso::descripcion() {
+    return this->nombre() + "[" + to_string(getpid()) + "]";
+}
 
+Proceso::~Proceso() {
+    SignalHandler::destruir();
 }

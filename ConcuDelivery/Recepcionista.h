@@ -8,7 +8,10 @@
 #include "Proceso.h"
 
 class Recepcionista: public Proceso {
+private:
+    virtual string nombre();
 
+    virtual void realizarTarea();
 };
 
 

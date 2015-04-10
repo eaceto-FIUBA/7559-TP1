@@ -8,7 +8,10 @@
 #include "Proceso.h"
 
 class Cadeta: public Proceso {
+private:
+    virtual string nombre();
 
+    virtual void realizarTarea();
 };
 
 
