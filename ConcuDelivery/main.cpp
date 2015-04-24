@@ -38,7 +38,7 @@ void print_version() {
 
 
 void printHelp() {
-
+    cout << endl;
     cout << "Usage: ConcuDelivery <parameter>"  << endl;
     cout << endl;
     cout << "where <parameter> may be one or more of: " << endl;
