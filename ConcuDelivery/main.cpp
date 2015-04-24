@@ -9,6 +9,8 @@
 
 using namespace std;
 
+#define kAppVersion "0.1"
+
 #define kDefaultRecepcionistasCount 5
 #define kDefaultCadetasCount        2
 #define kDefaultCocinerasCount      3
@@ -28,39 +30,42 @@ int     cadetasCount            = kDefaultCadetasCount;
 int     hornosCount             = kDefaultHornosCount;
 int     cocinerasCount          = kDefaultCocinerasCount;
 
-void print_welcome() {
-    cout << "                 ConcuDelivery v.01                 " << endl;
-    cout << "====================================================" << endl;
-    cout << "[     ] Opromolla, Giovanni - giopromolla@gmail.com " << endl;
-    cout << "[84316] Aceto, Ezequiel - ezequiel.aceto@gmail.com  " << endl;
-    cout << "====================================================" << endl;
+void print_version() {
+    cout << "ConcuDelivery v" << kAppVersion << endl << endl;
+    cout << "[     ]\tOpromolla, Giovanni\t\tgiopromolla@gmail.com " << endl;
+    cout << "[84316]\tAceto, Ezequiel\t\tezequiel.aceto@gmail.com  " << endl;
 }
 
-int exit() {
-    // matar al resto de los procesos
-    return 0;
-}
 
 void printHelp() {
-    print_welcome();
-    cout << "Ayuda" << endl << endl;
+
+    cout << "Usage: ConcuDelivery <parameter>"  << endl;
+    cout << endl;
+    cout << "where <parameter> may be one or more of: " << endl;
+    cout << "\tr (recepcionista)\t\t[int] Number of process with type 'recepcionistas'" << endl;
+    cout << "\tc (cocineras)\t\t\t[int] Number of process with type 'cocineras'" << endl;
+    cout << "\to (hornos)\t\t\t[int] Number of process with type 'hornos'" << endl;
+    cout << "\ta (cadetas)\t\t\t[int] Number of process with type 'cadetas'" << endl;
+    cout << endl;
+    cout << "ConcuDelivery --help\t\t\tdisplay help" <<endl;
+    cout << "ConcuDelivery --version\t\t\tdisplay version" <<endl;
+    cout << endl;
 }
 
 void printVersion() {
-    print_welcome();
-    cout << "Version v.01 (1C 2015)" << endl << endl;
+    print_version();
 }
 
-void setupCLI(int argc, char **argv) {
+int setupCLI(int argc, char **argv) {
     const struct option longopts[] =
         {
                 {"version",         kCLINoAargument,        NULL, 'v'},
                 {"help",            kCLINoAargument,        NULL, 'h'},
                 {"debug",           kCLINoAargument,        NULL, 'd'},
-                {"recepcionistas",  kCLIOptionalArgument,   NULL, 'r'},
-                {"cocineras",       kCLIOptionalArgument,   NULL, 'c'},
-                {"hornos",          kCLIOptionalArgument,   NULL, 'o'},
-                {"cadetas",         kCLIOptionalArgument,   NULL, 'a'},
+                {"recepcionistas",  kCLIRequiredArgument,   NULL, 'r'},
+                {"cocineras",       kCLIRequiredArgument,   NULL, 'c'},
+                {"hornos",          kCLIRequiredArgument,   NULL, 'o'},
+                {"cadetas",         kCLIRequiredArgument,   NULL, 'a'},
                 {0,0,0,0},
         };
 
@@ -74,51 +79,58 @@ void setupCLI(int argc, char **argv) {
     {
         iarg = getopt_long(argc, argv, "vhdr:c:o:a:", longopts, &index);
 
-        switch (iarg)
-        {
+        switch (iarg) {
             case 'h':
                 printHelp();
-                exit();
-                break;
+                return -1;
 
             case 'v':
                 printVersion();
-                exit();
-                break;
+                return -1;
 
             case 'd':
                 debugMode = kDebugModeON;
                 break;
 
             case 'r':
-                recepcionistasCount = atoi(::optarg);
+                if (optarg) {
+                    recepcionistasCount = atoi(optarg);
+                }
                 if (recepcionistasCount < 0) {
                     recepcionistasCount = kDefaultRecepcionistasCount;
                 }
                 break;
 
             case 'c':
-                cocinerasCount = atoi(::optarg);
+                if (optarg) {
+                    cocinerasCount = atoi(optarg);
+                }
                 if (cocinerasCount < 0) {
                     cocinerasCount = kDefaultCocinerasCount;
                 }
                 break;
 
             case 'o':
-                hornosCount = atoi(::optarg);
+                if (optarg) {
+                    hornosCount = atoi(optarg);
+                }
                 if (hornosCount < 0) {
                     hornosCount = kDefaultHornosCount;
                 }
                 break;
 
             case 'a':
-                cadetasCount = atoi(::optarg);
+                if (optarg) {
+                    cadetasCount = atoi(optarg);
+                }
                 if (cadetasCount < 0) {
                     cadetasCount = kDefaultCadetasCount;
                 }
                 break;
         }
     }
+
+    return 0;
 }
 
 void printRunParameters() {
@@ -134,9 +146,11 @@ void printRunParameters() {
 }
 
 int main(int argc, char **argv) {
-    setupCLI(argc, argv);
+    if (setupCLI(argc, argv)) {
+        return ( 0 );
+    }
 
     printRunParameters();
 
-    return exit();
+    return ( 0 );
 }
