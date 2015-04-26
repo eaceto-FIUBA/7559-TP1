@@ -6,6 +6,7 @@
 #include "Cocinera.h"
 #include "Cadeta.h"
 #include "Supervisora.h"
+#include "Logger.h"
 
 using namespace std;
 
@@ -149,7 +150,8 @@ int main(int argc, char **argv) {
     if (setupCLI(argc, argv)) {
         return ( 0 );
     }
-
+    Logger* log = Logger::getInstance();
+    log->log(logINFO,"Inicio de ConcuDelivery.");
     printRunParameters();
 
     return ( 0 );
