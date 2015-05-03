@@ -13,7 +13,7 @@ class Cadeta: public Proceso {
     }
 
     string nombre() {
-        return "Cadete";
+        return "Cadeta";
     };
 };
 

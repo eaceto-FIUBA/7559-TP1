@@ -51,7 +51,7 @@ bool Proceso::parar() {
     return true;
 };
 
-string Proceso::descripcion() { return this->nombre() + "[" + to_string(getpid()) + "]"; }
+string Proceso::descripcion() { return this->nombre() + "[" + (this->estadoProceso == INICIALIZADO ? "INICIALIZADO" : to_string(getpid())) + "]"; }
 
 Proceso::~Proceso() {
     SignalHandler::destruir();

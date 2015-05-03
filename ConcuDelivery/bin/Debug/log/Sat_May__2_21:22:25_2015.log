@@ -1,0 +1,21 @@
+[DEBUG] Sat_May__2_21:22:25_2015 Proceso-1490: Inicio de ConcuDelivery.
+[DEBUG] Sat_May__2_21:22:25_2015 Proceso-1490: Recepcionistas: 10
+[DEBUG] Sat_May__2_21:22:25_2015 Proceso-1490: Cocineras: 3
+[DEBUG] Sat_May__2_21:22:25_2015 Proceso-1490: Hornos: 6
+[DEBUG] Sat_May__2_21:22:25_2015 Proceso-1490: Cadetas: 2
+[DEBUG] Sat_May__2_21:22:25_2015 Proceso-1490: Pedidos a simular: 1024
+[DEBUG] Sat_May__2_21:22:25_2015 Proceso-1490: Creando proceso: Recepcionista[INICIALIZADO]
+[DEBUG] Sat_May__2_21:22:33_2015 Proceso-1490: Creando proceso: Recepcionista[INICIALIZADO]
+[DEBUG] Sat_May__2_21:22:35_2015 Proceso-1490: Creando proceso: Recepcionista[INICIALIZADO]
+[DEBUG] Sat_May__2_21:22:36_2015 Proceso-1490: Creando proceso: Recepcionista[INICIALIZADO]
+[DEBUG] Sat_May__2_21:22:41_2015 Proceso-1490: Creando proceso: Recepcionista[INICIALIZADO]
+[DEBUG] Sat_May__2_21:22:41_2015 Proceso-1490: Creando proceso: Recepcionista[INICIALIZADO]
+[DEBUG] Sat_May__2_21:22:41_2015 Proceso-1490: Creando proceso: Recepcionista[INICIALIZADO]
+[DEBUG] Sat_May__2_21:22:41_2015 Proceso-1490: Creando proceso: Recepcionista[INICIALIZADO]
+[DEBUG] Sat_May__2_21:22:41_2015 Proceso-1490: Creando proceso: Recepcionista[INICIALIZADO]
+[DEBUG] Sat_May__2_21:22:41_2015 Proceso-1490: Creando proceso: Recepcionista[INICIALIZADO]
+[DEBUG] Sat_May__2_21:22:41_2015 Proceso-1490: Creando proceso: Cocinera[INICIALIZADO]
+[DEBUG] Sat_May__2_21:22:41_2015 Proceso-1490: Creando proceso: Cocinera[INICIALIZADO]
+[DEBUG] Sat_May__2_21:22:41_2015 Proceso-1490: Creando proceso: Cocinera[INICIALIZADO]
+[DEBUG] Sat_May__2_21:22:41_2015 Proceso-1490: Creando proceso: Cadeta[INICIALIZADO]
+[DEBUG] Sat_May__2_21:22:41_2015 Proceso-1490: Creando proceso: Cadeta[INICIALIZADO]

@@ -1,0 +1,7 @@
+[DEBUG] Sat_May__2_21:19:12_2015 Proceso-1442: Inicio de ConcuDelivery.
+[DEBUG] Sat_May__2_21:19:12_2015 Proceso-1442: Recepcionistas: 10
+[DEBUG] Sat_May__2_21:19:12_2015 Proceso-1442: Cocineras: 3
+[DEBUG] Sat_May__2_21:19:12_2015 Proceso-1442: Hornos: 6
+[DEBUG] Sat_May__2_21:19:12_2015 Proceso-1442: Cadetas: 2
+[DEBUG] Sat_May__2_21:19:12_2015 Proceso-1442: Pedidos a simular: 1024
+[DEBUG] Sat_May__2_21:19:12_2015 Proceso-1442: Creando proceso: Recepcionista[INICIALIZADO]

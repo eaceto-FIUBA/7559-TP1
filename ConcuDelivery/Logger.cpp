@@ -48,7 +48,10 @@ void Logger::log( LogLevel level, string message ){
 		std::string tag = getTag(level);
 
 		stringstream s;
-		s << tag << " " << getDateTime() << " Proceso-"<< getpid() << ": " << message << std::endl;
+
+		string dateTime = getDateTime();
+
+		s << tag << " " << dateTime << " Proceso-"<< getpid() << ": " << message << std::endl;
 
 		string full_message(s.str());
 		const char * msg_toSave = full_message.c_str();
@@ -58,10 +61,11 @@ void Logger::log( LogLevel level, string message ){
 				std::cerr << "\"" << msg_toSave << "\"" << std::endl;
 		}
 
+		cout << tag << " " << dateTime << " Proceso-"<< getpid() << ": " << message << std::endl;
+
 		logFile.liberarLock();
     }
     else {
     	std::cerr << "Proceso: " << getpid() << ": Error al abrir el archivo: " << fileName << ". Mensaje: " << message << std::endl;
     }
-
 }

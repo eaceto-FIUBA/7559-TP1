@@ -1,5 +1,6 @@
 #include <iostream>
 #include <getopt.h>
+#include <vector>
 
 // Include de objectos del modelo
 #include "Recepcionista.h"
@@ -16,6 +17,7 @@ using namespace std;
 #define kDefaultCadetasCount        2
 #define kDefaultCocinerasCount      3
 #define kDefaultHornosCount         6
+#define kDefaultSimulacionCount     1024
 
 #define kCLINoAargument         0
 #define kCLIRequiredArgument    1
@@ -30,6 +32,8 @@ int     recepcionistasCount     = kDefaultRecepcionistasCount;
 int     cadetasCount            = kDefaultCadetasCount;
 int     hornosCount             = kDefaultHornosCount;
 int     cocinerasCount          = kDefaultCocinerasCount;
+
+int     simulacionCount         = kDefaultSimulacionCount;
 
 void print_version() {
     cout << "ConcuDelivery v" << kAppVersion << endl << endl;
@@ -134,25 +138,112 @@ int setupCLI(int argc, char **argv) {
     return 0;
 }
 
-void printRunParameters() {
-    cout << "====================================" << endl;
-    cout << "Parametros" << endl;
-    cout << "------------------------------------" << endl;
-    cout << "\tRecepcionistas:\t\t" << recepcionistasCount << endl;
-    cout << "\tCocineras:\t\t" << cocinerasCount << endl;
-    cout << "\tHornos:\t\t\t" << hornosCount << endl;
-    cout << "\tCadetas:\t\t" << cadetasCount << endl;
-    cout << "====================================" << endl << endl;
+void inicializar() {
+    Logger* log = Logger::getInstance();
+    log->log(logDEBUG,"Inicio de ConcuDelivery.");
+}
 
+void loggearParametros() {
+    Logger* log = Logger::getInstance();
+    log->log(logDEBUG,"Recepcionistas: " + to_string(recepcionistasCount));
+    log->log(logDEBUG,"Cocineras: " + to_string(cocinerasCount));
+    log->log(logDEBUG,"Hornos: " + to_string(hornosCount));
+    log->log(logDEBUG,"Cadetas: " + to_string(cadetasCount));
+    log->log(logDEBUG,"Pedidos a simular: " + to_string(simulacionCount));
+}
+
+void terminarProcesos(vector<Proceso*>& procesos) {
+    Logger* log = Logger::getInstance();
+    for (unsigned long i = 0; i < procesos.size(); i++) {
+
+        Proceso* p = procesos.back();
+
+        string str = p->descripcion();
+
+        log->log(logDEBUG,"Terminando proceso :" + str);
+
+        procesos.pop_back();
+        delete p;
+
+        log->log(logDEBUG,"Proceso borrado: " + str);
+    }
+    procesos.clear();
+}
+
+void crearRecepcionistas(vector<Proceso*>& recepcionistas) {
+    recepcionistas.reserve(cadetasCount);
+    Logger* log = Logger::getInstance();
+    for (unsigned long i = 0; i < recepcionistasCount; i++) {
+        Recepcionista* r = new Recepcionista();
+
+        log->log(logDEBUG,"Creando proceso: " + r->descripcion());
+        recepcionistas.push_back(r);
+    }
+}
+
+
+void crearCocineras(vector<Proceso*>& cocineras) {
+    cocineras.reserve(cocinerasCount);
+    Logger* log = Logger::getInstance();
+    for (unsigned long i = 0; i < cocinerasCount; i++) {
+        Cocinera* c = new Cocinera();
+
+        log->log(logDEBUG,"Creando proceso: " + c->descripcion());
+        cocineras.push_back(c);
+    }
+}
+
+
+void crearCadetas(vector<Proceso*>& cadetas) {
+    cadetas.reserve(cadetasCount);
+    Logger* log = Logger::getInstance();
+    for (unsigned long i = 0; i < cadetasCount; i++) {
+        Cadeta* c = new Cadeta();
+
+        log->log(logDEBUG,"Creando proceso: " + c->descripcion());
+        cadetas.push_back(c);
+    }
+}
+
+void comenzarTrabajo() {
+    SIGINT_Handler sigint_handler;
+    SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
+    SignalHandler::getInstance()->registrarHandler(SIGTERM, &sigint_handler);
+
+    // crear procesos
+    vector<Proceso*> recepcionistas;
+    vector<Proceso*> cocineras;
+    vector<Proceso*> cadetas;
+    Supervisora* supervisora = new Supervisora;
+
+    crearRecepcionistas(recepcionistas);
+    crearCocineras(cocineras);
+    crearCadetas(cadetas);
+
+    bool working = false;
+    while (sigint_handler.getGracefulQuit() == 0 && working) {
+
+    }
+
+    terminarProcesos(recepcionistas);
+    terminarProcesos(cocineras);
+    terminarProcesos(cadetas);
+    supervisora->parar();
+
+    delete supervisora;
+
+    SignalHandler::destruir();
 }
 
 int main(int argc, char **argv) {
     if (setupCLI(argc, argv)) {
         return ( 0 );
     }
-    Logger* log = Logger::getInstance();
-    log->log(logINFO,"Inicio de ConcuDelivery.");
-    printRunParameters();
+
+    inicializar();
+    loggearParametros();
+
+    comenzarTrabajo();
 
     return ( 0 );
 }
