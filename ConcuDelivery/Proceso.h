@@ -5,7 +5,6 @@
 #ifndef CONCUDELIVERY_PROCESO_H
 #define CONCUDELIVERY_PROCESO_H
 
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
@@ -17,21 +16,21 @@
 #include "EventHandler.h"
 #include "SIGINT_Handler.h"
 #include "SignalHandler.h"
+#include "Logger.h"
 
 using namespace std;
 
 class Proceso: public SIGINT_Handler {
 
     enum EstadoProceso {
-        INICIALIZADO,
-        CORRIENDO,
-        PARADO
+        INICIALIZADO = 0,
+        CORRIENDO = 1,
+        PARADO = 2
     };
 
 private:
-    pid_t idProceso;
-    EstadoProceso estadoProceso;
     SIGINT_Handler sigint_handler;
+    EstadoProceso estadoProceso;
     void correr();
     bool seguirCorriendo();
     virtual void realizarTarea() = 0;
@@ -42,7 +41,7 @@ public:
     virtual ~Proceso();
 
     pid_t iniciar();
-    bool parar();
+    static bool parar(pid_t pid);
 
     string descripcion();
 };

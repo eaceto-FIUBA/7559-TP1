@@ -13,11 +13,11 @@ using namespace std;
 
 #define kAppVersion "0.1"
 
-#define kDefaultRecepcionistasCount 5
-#define kDefaultCadetasCount        2
-#define kDefaultCocinerasCount      3
-#define kDefaultHornosCount         6
-#define kDefaultSimulacionCount     1024
+#define kDefaultRecepcionistasCount 2
+#define kDefaultCadetasCount        1
+#define kDefaultCocinerasCount      4
+#define kDefaultHornosCount         4
+#define kDefaultSimulacionCount     4
 
 #define kCLINoAargument         0
 #define kCLIRequiredArgument    1
@@ -33,7 +33,7 @@ unsigned long   cadetasCount            = kDefaultCadetasCount;
 unsigned long   hornosCount             = kDefaultHornosCount;
 unsigned long   cocinerasCount          = kDefaultCocinerasCount;
 
-unsigned long   simulacionCount         = kDefaultSimulacionCount;
+long            simulacionCount         = kDefaultSimulacionCount;
 
 void print_version() {
     cout << "ConcuDelivery v" << kAppVersion << endl << endl;
@@ -140,83 +140,111 @@ int setupCLI(int argc, char **argv) {
 
 void inicializar() {
     Logger* log = Logger::getInstance();
-    log->log(logDEBUG,"Inicio de ConcuDelivery.");
+    log->log(logINFO,"Inicio de ConcuDelivery.");
 }
 
 void loggearParametros() {
     Logger* log = Logger::getInstance();
-    log->log(logDEBUG,"Recepcionistas: " + to_string(recepcionistasCount));
-    log->log(logDEBUG,"Cocineras: " + to_string(cocinerasCount));
-    log->log(logDEBUG,"Hornos: " + to_string(hornosCount));
-    log->log(logDEBUG,"Cadetas: " + to_string(cadetasCount));
-    log->log(logDEBUG,"Pedidos a simular: " + to_string(simulacionCount));
+    log->log(logINFO,"Recepcionistas: " + to_string(recepcionistasCount));
+    log->log(logINFO,"Cocineras: " + to_string(cocinerasCount));
+    log->log(logINFO,"Hornos: " + to_string(hornosCount));
+    log->log(logINFO,"Cadetas: " + to_string(cadetasCount));
+    log->log(logINFO,"Pedidos a simular: " + to_string(simulacionCount));
 }
 
-void crearRecepcionistas(vector<Recepcionista>& recepcionistas) {
+void crearRecepcionistas(vector<pid_t>& recepcionistas) {
     recepcionistas.reserve(cadetasCount);
     Logger* log = Logger::getInstance();
     for (unsigned long i = 0; i < recepcionistasCount; i++) {
         Recepcionista r;
-        log->log(logDEBUG,"Creando recepcionista "+ to_string(i) + ": " + r.descripcion());
-        recepcionistas.push_back(r);
+        pid_t rpid = r.iniciar();
+        log->log(logINFO,"Nueva recepcionista. PID: " + to_string(rpid));
+        recepcionistas.push_back(rpid);
     }
 }
 
 
-void crearCocineras(vector<Cocinera>& cocineras) {
+void crearCocineras(vector<pid_t>& cocineras) {
     cocineras.reserve(cocinerasCount);
     Logger* log = Logger::getInstance();
+    Cocinera c;
     for (unsigned long i = 0; i < cocinerasCount; i++) {
-        Cocinera c;
-        log->log(logDEBUG,"Creando cocinera "+ to_string(i) + ": " + c.descripcion());
-        cocineras.push_back(c);
+        pid_t rpid = c.iniciar();
+        log->log(logINFO,"Nueva Cocinera. PID: " + to_string(rpid));
+        cocineras.push_back(rpid);
     }
 }
 
 
-void crearCadetas(vector<Cadeta>& cadetas) {
+void crearCadetas(vector<pid_t>& cadetas) {
     cadetas.reserve(cadetasCount);
     Logger* log = Logger::getInstance();
+    Cadeta c;
     for (unsigned long i = 0; i < cadetasCount; i++) {
-        Cadeta c;
-        log->log(logDEBUG,"Creando cadeta "+ to_string(i) + ": " + c.descripcion());
-        cadetas.push_back(c);
+        pid_t rpid = c.iniciar();
+        log->log(logINFO,"Nueva Cadeta. PID: " + to_string(rpid));
+        cadetas.push_back(rpid);
     }
 }
 
+void crearHornos() {
+
+}
+
+
+void pararTodas(vector<pid_t>& pids) {
+    Logger* log = Logger::getInstance();
+    for (unsigned long i = 0; i < pids.size(); i++) {
+        pid_t pid = pids.at(i);
+        log->log(logINFO,"Parando pid "+ to_string(pid));
+        Proceso::parar(pid);
+    }
+}
+
+
 void comenzarTrabajo() {
+    Logger* log = Logger::getInstance();
+
     SIGINT_Handler sigint_handler;
     SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
     SignalHandler::getInstance()->registrarHandler(SIGTERM, &sigint_handler);
 
     // crear procesos
-    vector<Recepcionista> recepcionistas;
-    vector<Cocinera> cocineras;
-    vector<Cadeta> cadetas;
-    Supervisora* supervisora = new Supervisora;
+    log->log(logINFO,"Creando procesos");
+    vector<pid_t> recepcionistas;
+    vector<pid_t> cocineras;
+    vector<pid_t> cadetas;
+    Supervisora s;
+    pid_t supervisora = s.iniciar();
 
     crearRecepcionistas(recepcionistas);
     crearCocineras(cocineras);
     crearCadetas(cadetas);
+    crearHornos();
 
-    bool working = false;
-    while (sigint_handler.getGracefulQuit() == 0 && working) {
-
+    bool working = true;
+    while (sigint_handler.getGracefulQuit() == 0 && working && simulacionCount-- > 0) {
+        log->log(logINFO,"<< Contador simulacion " + to_string(simulacionCount));
+        sleep(1);
     }
+
+    log->log(logINFO,">> Deteniendo procesos...");
+    pararTodas(recepcionistas);
+    pararTodas(cocineras);
+    pararTodas(cadetas);
 
     recepcionistas.clear();
     cocineras.clear();
     cadetas.clear();
-    supervisora->parar();
-
-    delete supervisora;
+    Proceso::parar(supervisora);
 
     SignalHandler::destruir();
+
+    log->log(logDEBUG,"Simulacion terminada");
 }
 
 void eliminarRecursos() {
-    Logger* log = Logger::getInstance();
-    delete log;
+    Logger::destroy();
 }
 
 int main(int argc, char **argv) {

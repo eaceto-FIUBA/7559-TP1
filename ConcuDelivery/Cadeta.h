@@ -9,7 +9,9 @@
 
 class Cadeta: public Proceso {
     void realizarTarea() {
-        //cout << "TAREA CADETA" << endl;
+        // Logger* log = Logger::getInstance();
+        // log->log(logDEBUG,"Cadeta. Trabajando.");
+        sleep(1);
     }
 
     string nombre() {

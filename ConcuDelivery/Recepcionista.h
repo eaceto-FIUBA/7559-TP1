@@ -10,7 +10,8 @@
 class Recepcionista: public Proceso {
 private:
     void realizarTarea() {
-        //cout << "TAREA Recepcionista" << endl;
+        cout << "TAREA Recepcionista" << endl;
+        sleep(1);
     }
 
     string nombre() {

@@ -10,50 +10,54 @@ bool Proceso::seguirCorriendo() {
 
 void Proceso::correr() {
     estadoProceso = CORRIENDO;
+
+    Logger* log = Logger::getInstance();
     while (seguirCorriendo()) {
         realizarTarea();
     }
-    parar();
+
+    log->log(logDEBUG,"Se ha detenido el proceso " + to_string(getpid()));
 }
 
 Proceso::Proceso() {
-    idProceso = 0;
-    estadoProceso = INICIALIZADO;
+
 }
 
 pid_t Proceso::iniciar() {
-    if (idProceso != 0) return false;
-    if (estadoProceso == CORRIENDO) return false;
+    Logger* log = Logger::getInstance();
+    log->log(logDEBUG,"Creando proceso");
 
-    idProceso = fork();
-    cout << "idProcess " << to_string(idProceso) << endl;
+    pid_t idProceso = fork();
     if (idProceso == 0) {
         idProceso = getpid(); // el proceso hijo obtiene su pid
+        cout << "idProcess " << to_string(idProceso) << endl;
 
-        cout << "Proceso iniciado. " << this->descripcion() << endl;
+        log->log(logDEBUG,"Proceso creado con PID: " + to_string(idProceso));
+
+        log->log(logDEBUG,"Registrando SignalHandler");
 
         SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
 
-        // Poner al proceso a correr
-        correr();
+        log->log(logDEBUG,"Corriendo");
+        this->correr();
 
-        //TODO eliminar los recursos del proceso
+        log->log(logDEBUG,"Proceso detenido. Saliendo...");
 
-        //Termino el proeso
-        exit(0);
+        SignalHandler::getInstance()->removerHandler(SIGINT);
+        SignalHandler::destruir();
+        Logger::destroy();
+
+        exit ( 0 );
     }
     return idProceso;
 }
 
-bool Proceso::parar() {
-    SignalHandler::getInstance()->removerHandler(SIGINT);
-    estadoProceso = PARADO;
-    return true;
+bool Proceso::parar(pid_t pid) {
+    return kill(pid, SIGINT) == 0;
 };
 
 string Proceso::descripcion() { return this->nombre() + "[" + (this->estadoProceso == INICIALIZADO ? "INICIALIZADO" : to_string(getpid())) + "]"; }
 
 Proceso::~Proceso() {
-    this->parar();
     SignalHandler::destruir();
 }
