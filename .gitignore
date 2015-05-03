@@ -31,7 +31,7 @@
 # *.iml
 
 ## Directory-based project format:
-.idea/
+# .idea/
 # if you remove the above rule, at least ignore the following:
 
 # User-specific stuff:
@@ -47,8 +47,8 @@
 # .idea/uiDesigner.xml
 
 ## File-based project format:
-*.ipr
-*.iws
+# *.ipr
+# *.iws
 
 ## Plugin-specific files:
 
