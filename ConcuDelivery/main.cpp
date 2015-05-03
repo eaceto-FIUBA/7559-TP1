@@ -1,6 +1,7 @@
 #include <iostream>
 #include <getopt.h>
 #include <vector>
+#include <sys/wait.h>
 
 // Include de objectos del modelo
 #include "Recepcionista.h"
@@ -198,6 +199,9 @@ void pararTodas(vector<pid_t>& pids) {
         pid_t pid = pids.at(i);
         log->log(logINFO,"Parando pid "+ to_string(pid));
         Proceso::parar(pid);
+        int status = 0;
+        waitpid(pid,&status,0);
+        log->log(logINFO,"Proceso " + to_string(pid) + " parado con status: " + to_string(status));
     }
 }
 

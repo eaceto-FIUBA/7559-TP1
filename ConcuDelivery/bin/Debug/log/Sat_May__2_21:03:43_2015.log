@@ -1,7 +1,0 @@
-[DEBUG] Sat_May__2_21:03:43_2015 Proceso-1252: Inicio de ConcuDelivery.
-[DEBUG] Sat_May__2_21:03:43_2015 Proceso-1252: Recepcionistas: 10
-[DEBUG] Sat_May__2_21:03:43_2015 Proceso-1252: Cocineras: 3
-[DEBUG] Sat_May__2_21:03:43_2015 Proceso-1252: Hornos: 6
-[DEBUG] Sat_May__2_21:03:43_2015 Proceso-1252: Cadetas: 2
-[DEBUG] Sat_May__2_21:03:43_2015 Proceso-1252: Pedidos a simular: 1024
-[DEBUG] Sat_May__2_21:08:31_2015 Proceso-1252: PCreando proceso: Recepcionista[1252]
