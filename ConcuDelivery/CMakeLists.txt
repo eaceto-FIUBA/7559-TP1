@@ -30,4 +30,4 @@ set(SOURCE_FILES
 	Supervisora.cpp 
 	Supervisora.h )
 	
-add_executable(ConcuDelivery ${SOURCE_FILES})
+add_executable(ConcuDelivery ${SOURCE_FILES} MemoriaCompartidaConcurrente.h)

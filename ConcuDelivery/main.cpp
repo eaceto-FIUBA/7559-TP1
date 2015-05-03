@@ -2,13 +2,14 @@
 #include <getopt.h>
 #include <vector>
 #include <sys/wait.h>
+#include <unistd.h>
 
 // Include de objectos del modelo
 #include "Recepcionista.h"
 #include "Cocinera.h"
 #include "Cadeta.h"
 #include "Supervisora.h"
-#include "Logger.h"
+
 
 using namespace std;
 
@@ -205,6 +206,9 @@ void pararTodas(vector<pid_t>& pids) {
     }
 }
 
+void realizarPedido() {
+
+}
 
 void comenzarTrabajo() {
     Logger* log = Logger::getInstance();
@@ -213,7 +217,12 @@ void comenzarTrabajo() {
     SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
     SignalHandler::getInstance()->registrarHandler(SIGTERM, &sigint_handler);
 
-    // crear procesos
+    // crear recursos
+    crearHornos();
+
+    // memoria compartida donde se almacena el contador de pedidos entregados
+
+    // crear empleadas
     log->log(logINFO,"Creando procesos");
     vector<pid_t> recepcionistas;
     vector<pid_t> cocineras;
@@ -224,13 +233,28 @@ void comenzarTrabajo() {
     crearRecepcionistas(recepcionistas);
     crearCocineras(cocineras);
     crearCadetas(cadetas);
-    crearHornos();
 
     bool working = true;
-    while (sigint_handler.getGracefulQuit() == 0 && working && simulacionCount-- > 0) {
+
+    int cantidadDePedidosEntregados = 0;
+    int cantidadDePedidosRealizados = 0;
+
+    while (sigint_handler.getGracefulQuit() == 0 && working && cantidadDePedidosRealizados++ < simulacionCount) {
         log->log(logINFO,"<< Contador simulacion " + to_string(simulacionCount));
-        sleep(1);
+
+        // hacer nuevo pedido
+        realizarPedido();
+
+        // sleep max 1seg
+        long time_in_usec = std::rand() % 1000;
+        usleep(time_in_usec * 1000);
     }
+
+    // esperar a que se terminen de entregar todos los productos
+    do {
+        cantidadDePedidosEntregados = 1;
+
+    } while (cantidadDePedidosEntregados < cantidadDePedidosRealizados);
 
     log->log(logINFO,">> Deteniendo procesos...");
     pararTodas(recepcionistas);

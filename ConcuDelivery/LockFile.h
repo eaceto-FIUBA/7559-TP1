@@ -16,6 +16,8 @@ public:
 	LockFile ( const std::string nombre );
 	~LockFile();
 
+	std::string nombreArchivo() const;
+
 	int tomarLock ();
 	int liberarLock ();
 	ssize_t escribir ( const void* buffer,const ssize_t buffsize ) const;

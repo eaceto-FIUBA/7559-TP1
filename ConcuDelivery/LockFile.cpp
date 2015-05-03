@@ -25,6 +25,10 @@ ssize_t LockFile :: escribir ( const void* buffer,const ssize_t buffsize ) const
 	return write ( this->fd,buffer,buffsize );
 }
 
+std::string LockFile::nombreArchivo() const {
+	return this->nombre;
+}
+
 LockFile :: ~LockFile () {
 	close ( this->fd );
 }
