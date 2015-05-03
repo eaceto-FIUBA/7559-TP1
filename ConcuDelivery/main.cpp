@@ -27,13 +27,13 @@ using namespace std;
 #define kDebugModeOFF           false
 #define kDefaultDebugMode       kDebugModeOFF
 
-int     debugMode               = kDefaultDebugMode;
-int     recepcionistasCount     = kDefaultRecepcionistasCount;
-int     cadetasCount            = kDefaultCadetasCount;
-int     hornosCount             = kDefaultHornosCount;
-int     cocinerasCount          = kDefaultCocinerasCount;
+bool            debugMode               = kDefaultDebugMode;
+unsigned long   recepcionistasCount     = kDefaultRecepcionistasCount;
+unsigned long   cadetasCount            = kDefaultCadetasCount;
+unsigned long   hornosCount             = kDefaultHornosCount;
+unsigned long   cocinerasCount          = kDefaultCocinerasCount;
 
-int     simulacionCount         = kDefaultSimulacionCount;
+unsigned long   simulacionCount         = kDefaultSimulacionCount;
 
 void print_version() {
     cout << "ConcuDelivery v" << kAppVersion << endl << endl;
@@ -99,7 +99,7 @@ int setupCLI(int argc, char **argv) {
 
             case 'r':
                 if (optarg) {
-                    recepcionistasCount = atoi(optarg);
+                    recepcionistasCount = atol(optarg);
                 }
                 if (recepcionistasCount < 0) {
                     recepcionistasCount = kDefaultRecepcionistasCount;
@@ -108,7 +108,7 @@ int setupCLI(int argc, char **argv) {
 
             case 'c':
                 if (optarg) {
-                    cocinerasCount = atoi(optarg);
+                    cocinerasCount = atol(optarg);
                 }
                 if (cocinerasCount < 0) {
                     cocinerasCount = kDefaultCocinerasCount;
@@ -117,7 +117,7 @@ int setupCLI(int argc, char **argv) {
 
             case 'o':
                 if (optarg) {
-                    hornosCount = atoi(optarg);
+                    hornosCount = atol(optarg);
                 }
                 if (hornosCount < 0) {
                     hornosCount = kDefaultHornosCount;
@@ -126,7 +126,7 @@ int setupCLI(int argc, char **argv) {
 
             case 'a':
                 if (optarg) {
-                    cadetasCount = atoi(optarg);
+                    cadetasCount = atol(optarg);
                 }
                 if (cadetasCount < 0) {
                     cadetasCount = kDefaultCadetasCount;
@@ -152,55 +152,34 @@ void loggearParametros() {
     log->log(logDEBUG,"Pedidos a simular: " + to_string(simulacionCount));
 }
 
-void terminarProcesos(vector<Proceso*>& procesos) {
-    Logger* log = Logger::getInstance();
-    for (unsigned long i = 0; i < procesos.size(); i++) {
-
-        Proceso* p = procesos.back();
-
-        string str = p->descripcion();
-
-        log->log(logDEBUG,"Terminando proceso :" + str);
-
-        procesos.pop_back();
-        delete p;
-
-        log->log(logDEBUG,"Proceso borrado: " + str);
-    }
-    procesos.clear();
-}
-
-void crearRecepcionistas(vector<Proceso*>& recepcionistas) {
+void crearRecepcionistas(vector<Recepcionista>& recepcionistas) {
     recepcionistas.reserve(cadetasCount);
     Logger* log = Logger::getInstance();
     for (unsigned long i = 0; i < recepcionistasCount; i++) {
-        Recepcionista* r = new Recepcionista();
-
-        log->log(logDEBUG,"Creando proceso: " + r->descripcion());
+        Recepcionista r;
+        log->log(logDEBUG,"Creando recepcionista "+ to_string(i) + ": " + r.descripcion());
         recepcionistas.push_back(r);
     }
 }
 
 
-void crearCocineras(vector<Proceso*>& cocineras) {
+void crearCocineras(vector<Cocinera>& cocineras) {
     cocineras.reserve(cocinerasCount);
     Logger* log = Logger::getInstance();
     for (unsigned long i = 0; i < cocinerasCount; i++) {
-        Cocinera* c = new Cocinera();
-
-        log->log(logDEBUG,"Creando proceso: " + c->descripcion());
+        Cocinera c;
+        log->log(logDEBUG,"Creando cocinera "+ to_string(i) + ": " + c.descripcion());
         cocineras.push_back(c);
     }
 }
 
 
-void crearCadetas(vector<Proceso*>& cadetas) {
+void crearCadetas(vector<Cadeta>& cadetas) {
     cadetas.reserve(cadetasCount);
     Logger* log = Logger::getInstance();
     for (unsigned long i = 0; i < cadetasCount; i++) {
-        Cadeta* c = new Cadeta();
-
-        log->log(logDEBUG,"Creando proceso: " + c->descripcion());
+        Cadeta c;
+        log->log(logDEBUG,"Creando cadeta "+ to_string(i) + ": " + c.descripcion());
         cadetas.push_back(c);
     }
 }
@@ -211,9 +190,9 @@ void comenzarTrabajo() {
     SignalHandler::getInstance()->registrarHandler(SIGTERM, &sigint_handler);
 
     // crear procesos
-    vector<Proceso*> recepcionistas;
-    vector<Proceso*> cocineras;
-    vector<Proceso*> cadetas;
+    vector<Recepcionista> recepcionistas;
+    vector<Cocinera> cocineras;
+    vector<Cadeta> cadetas;
     Supervisora* supervisora = new Supervisora;
 
     crearRecepcionistas(recepcionistas);
@@ -225,14 +204,19 @@ void comenzarTrabajo() {
 
     }
 
-    terminarProcesos(recepcionistas);
-    terminarProcesos(cocineras);
-    terminarProcesos(cadetas);
+    recepcionistas.clear();
+    cocineras.clear();
+    cadetas.clear();
     supervisora->parar();
 
     delete supervisora;
 
     SignalHandler::destruir();
+}
+
+void eliminarRecursos() {
+    Logger* log = Logger::getInstance();
+    delete log;
 }
 
 int main(int argc, char **argv) {
@@ -245,5 +229,6 @@ int main(int argc, char **argv) {
 
     comenzarTrabajo();
 
+    eliminarRecursos();
     return ( 0 );
 }

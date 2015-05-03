@@ -54,5 +54,6 @@ bool Proceso::parar() {
 string Proceso::descripcion() { return this->nombre() + "[" + (this->estadoProceso == INICIALIZADO ? "INICIALIZADO" : to_string(getpid())) + "]"; }
 
 Proceso::~Proceso() {
+    this->parar();
     SignalHandler::destruir();
 }
