@@ -9,8 +9,6 @@
 #include "Cocinera.h"
 #include "Cadeta.h"
 #include "Supervisora.h"
-#include "MemoriaCompartidaConcurrente.h"
-
 
 using namespace std;
 
@@ -207,8 +205,18 @@ void pararTodas(vector<pid_t>& pids) {
     }
 }
 
-void realizarPedido() {
+bool realizarPedido(MemoriaCompartidaConcurrente<unsigned long> &pedidosEnCurso) {
 
+    if (pedidosEnCurso.tomarLockManualmente()) {
+        unsigned long cantidadActualDeLlamados = pedidosEnCurso.leerInseguro();
+        if (cantidadActualDeLlamados < recepcionistasCount) {
+            cantidadActualDeLlamados++;
+            pedidosEnCurso.escribirInseguro(cantidadActualDeLlamados);
+        }
+        pedidosEnCurso.liberarLockManualmente();
+        return true;
+    }
+    return false;
 }
 
 void comenzarTrabajo() {
@@ -219,12 +227,15 @@ void comenzarTrabajo() {
     SignalHandler::getInstance()->registrarHandler(SIGTERM, &sigint_handler);
 
     // crear recursos
-    crearHornos();
 
-    // memoria compartida donde se almacena el contador de pedidos entregados
-    MemoriaCompartidaConcurrente<long> pedidosEntregados("pedidosEntregados.shm", 'A');
+
+    /// memoria compartida donde se almacena el contador de pedidos entregados
+    MemoriaCompartidaConcurrente<unsigned long> pedidosEntregados("pedidosEntregados.shm", 'A');
     pedidosEntregados.escribir(0);
 
+    /// memoria compartida donde se almacena la cantidad pedidos entrantes (llamadas)
+    MemoriaCompartidaConcurrente<unsigned long> pedidosEnCurso("pedidosEntrantes.shm", 'A');
+    pedidosEnCurso.escribir(0);
 
     // crear empleadas
     log->log(logINFO,"Creando procesos");
@@ -243,11 +254,17 @@ void comenzarTrabajo() {
     int cantidadDePedidosEntregados = 0;
     int cantidadDePedidosRealizados = 0;
 
-    while (sigint_handler.getGracefulQuit() == 0 && working && cantidadDePedidosRealizados++ < simulacionCount) {
-        log->log(logINFO,"<< Contador simulacion " + to_string(simulacionCount));
+    while (sigint_handler.getGracefulQuit() == 0 && working && cantidadDePedidosRealizados < simulacionCount) {
 
         // hacer nuevo pedido
-        realizarPedido();
+        bool pedidoRealizado = realizarPedido(pedidosEnCurso);
+
+        if (pedidoRealizado) {
+            cantidadDePedidosRealizados++;
+
+            log->log(logINFO,
+                     "<< Nuevo pedido en curso. Cantidad de pedidos " + to_string(cantidadDePedidosRealizados));
+        }
 
         // sleep max 1seg
         long time_in_usec = std::rand() % 1000;

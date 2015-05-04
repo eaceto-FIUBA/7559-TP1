@@ -22,15 +22,22 @@ public:
     ~MemoriaCompartidaConcurrente();
 
     void escribir(const T &dato);
-
     T leer() const;
+
+    bool tomarLockManualmente();
+
+    void liberarLockManualmente();
+
+    void escribirInseguro(const T &dato);
+
+    T leerInseguro() const;
 };
 
 template<class T>
 void MemoriaCompartidaConcurrente<T>::escribir(const T &dato) {
     if (lockFile->tomarLock() == 0) {
 
-        this->buffer->escribir(dato);
+        escribirInseguro(dato);
 
         lockFile->liberarLock();
     }
@@ -45,7 +52,7 @@ T MemoriaCompartidaConcurrente<T>::leer() const {
     T dato;
     if (lockFile->tomarLock() == 0) {
 
-        dato = this->buffer->leer();
+        dato = leerInseguro();
 
         lockFile->liberarLock();
     }
@@ -57,9 +64,31 @@ T MemoriaCompartidaConcurrente<T>::leer() const {
     return dato;
 }
 
+
+template<class T>
+void MemoriaCompartidaConcurrente<T>::escribirInseguro(const T &dato) {
+    this->buffer->escribir(dato);
+}
+
+template<class T>
+T MemoriaCompartidaConcurrente<T>::leerInseguro() const {
+    T dato = this->buffer->leer();
+    return dato;
+}
+
+template<class T>
+bool MemoriaCompartidaConcurrente<T>::tomarLockManualmente() {
+    return lockFile->tomarLock() == 0;
+}
+
+template<class T>
+void MemoriaCompartidaConcurrente<T>::liberarLockManualmente() {
+    lockFile->liberarLock();
+}
+
 template<class T>
 MemoriaCompartidaConcurrente<T>::MemoriaCompartidaConcurrente(const std::string &archivo, const char letra) {
-    lockFile = new LockFile(archivo + ".lock");
+    lockFile = new LockFile(archivo);
     buffer = new MemoriaCompartida2<T>(archivo, letra);
 }
 
