@@ -5,8 +5,8 @@
 #ifndef CONCUDELIVERY_MEMORIACOMPARTIDACONCURRENTE_H
 #define CONCUDELIVERY_MEMORIACOMPARTIDACONCURRENTE_H
 
-#include "MemoriaCompartida2.h"
 #include "LockFile.h"
+#include "MemoriaCompartida2.h"
 
 template<class T>
 class MemoriaCompartidaConcurrente {
@@ -14,7 +14,7 @@ class MemoriaCompartidaConcurrente {
 private:
     MemoriaCompartida2<T> *buffer = NULL;
     char letra = 0;
-    LockFile lockFile;
+    LockFile *lockFile;
 
 public:
     MemoriaCompartidaConcurrente(const std::string &archivo, const char letra);
@@ -28,45 +28,45 @@ public:
 
 template<class T>
 void MemoriaCompartidaConcurrente<T>::escribir(const T &dato) {
-    if (this->lockFile.tomarLock() == 0) {
+    if (lockFile->tomarLock() == 0) {
 
         this->buffer->escribir(dato);
 
-        this->lockFile.liberarLock();
+        lockFile->liberarLock();
     }
     else {
-        std::cerr << "Proceso: " << getpid() << ": Error al abrir el archivo de locks: " << lockFile.nombreArchivo() <<
-        " para escritura sobre Memoria Compartida";
+        std::cerr << "Proceso: " << getpid() << ": Error al abrir el archivo de locks: " << lockFile->nombreArchivo() <<
+        " para escritura sobre Memoria Compartida" << endl;
     }
 }
 
 template<class T>
 T MemoriaCompartidaConcurrente<T>::leer() const {
     T dato;
-    if (this->lockFile.tomarLock() == 0) {
+    if (lockFile->tomarLock() == 0) {
 
         dato = this->buffer->leer();
 
-        this->lockFile.liberarLock();
+        lockFile->liberarLock();
     }
     else {
-        std::cerr << "Proceso: " << getpid() << ": Error al abrir el archivo de locks: " << lockFile.nombreArchivo() <<
-        " para lectura sobre Memoria Compartida";
+        std::cerr << "Proceso: " << getpid() << ": Error al abrir el archivo de locks: " << lockFile->nombreArchivo() <<
+        " para lectura sobre Memoria Compartida" << endl;
     }
 
     return dato;
 }
 
 template<class T>
-MemoriaCompartidaConcurrente<T>::MemoriaCompartidaConcurrente(const std::string &archivo, const char letra) : lockFile(
-        archivo) {
+MemoriaCompartidaConcurrente<T>::MemoriaCompartidaConcurrente(const std::string &archivo, const char letra) {
+    lockFile = new LockFile(archivo + ".lock");
     buffer = new MemoriaCompartida2<T>(archivo, letra);
 }
 
 template<class T>
 MemoriaCompartidaConcurrente<T>::~MemoriaCompartidaConcurrente() {
-    buffer->liberar();
     delete buffer;
+    delete lockFile;
 }
 
 #endif //CONCUDELIVERY_MEMORIACOMPARTIDACONCURRENTE_H

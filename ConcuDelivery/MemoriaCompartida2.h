@@ -77,7 +77,7 @@ void MemoriaCompartida2<T>::liberar() {
             shmctl(this->shmId, IPC_RMID, NULL);
         }
     } else {
-        std::string mensaje = std::string("Error en shmdt(): ") + std::string(strerror(errno));
+        std::string mensaje = std::string("Error en shmdt() al liberar: ") + std::string(strerror(errno));
         throw mensaje;
     }
 }
@@ -129,7 +129,7 @@ MemoriaCompartida2<T>::~MemoriaCompartida2() {
             shmctl(this->shmId, IPC_RMID, NULL);
         }
     } else {
-        std::cerr << "Error en shmdt(): " << strerror(errno) << std::endl;
+        std::cerr << "Error en shmdt() al destruir: " << strerror(errno) << std::endl;
     }
 }
 

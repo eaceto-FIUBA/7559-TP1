@@ -9,6 +9,7 @@
 #include "Cocinera.h"
 #include "Cadeta.h"
 #include "Supervisora.h"
+#include "MemoriaCompartidaConcurrente.h"
 
 
 using namespace std;
@@ -221,6 +222,9 @@ void comenzarTrabajo() {
     crearHornos();
 
     // memoria compartida donde se almacena el contador de pedidos entregados
+    MemoriaCompartidaConcurrente<long> pedidosEntregados("pedidosEntregados.shm", 'A');
+    pedidosEntregados.escribir(0);
+
 
     // crear empleadas
     log->log(logINFO,"Creando procesos");
@@ -252,7 +256,13 @@ void comenzarTrabajo() {
 
     // esperar a que se terminen de entregar todos los productos
     do {
-        cantidadDePedidosEntregados = 1;
+        cantidadDePedidosEntregados = pedidosEntregados.leer();
+        cout << "Pedidos Realizados: " << cantidadDePedidosRealizados << " vs Entregados: " <<
+        cantidadDePedidosEntregados << endl;
+
+        // ESTO ES SIMULACION. LAS CADETAS DEBEN ESCRIBIR EN LA MEMORIA COMPARTIDA
+        pedidosEntregados.escribir(cantidadDePedidosEntregados + 1);
+        sleep(1);
 
     } while (cantidadDePedidosEntregados < cantidadDePedidosRealizados);
 
