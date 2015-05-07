@@ -212,8 +212,6 @@ void pararTodas(vector<pid_t>& pids) {
 bool realizarPedido(MemoriaCompartidaConcurrente<unsigned long> pedidosSiendoAtendidos) {
     unsigned long siendoAtendidos = pedidosSiendoAtendidos.leer();
     if (siendoAtendidos < recepcionistasCount) {
-
-
         pedidosSiendoAtendidos.escribir(siendoAtendidos + 1);
         return true;
     }
@@ -251,7 +249,6 @@ void comenzarTrabajo() {
 
     MemoriaCompartidaConcurrente<unsigned long> pedidosSiendoAtendidos (".pedidosSiendoAtendidos.sh",'A');
     pedidosSiendoAtendidos.escribir(0);
-
 
     while (sigint_handler.getGracefulQuit() == 0 && working && cantidadDePedidosRealizados < simulacionCount) {
         log->log(logINFO,"<< Contador simulacion " + to_string(simulacionCount));

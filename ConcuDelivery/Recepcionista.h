@@ -6,17 +6,29 @@
 #define CONCUDELIVERY_RECEPCIONISTA_H
 
 #include "Proceso.h"
+#include "MemoriaCompartidaConcurrente.h"
+
 
 class Recepcionista: public Proceso {
+
+public:
+    Recepcionista();
+    ~Recepcionista();
+
 private:
-    void realizarTarea() {
-        cout << "TAREA Recepcionista" << endl;
-        sleep(1);
-    }
+    MemoriaCompartidaConcurrente<unsigned long>* pedidosPorAtender;
+
+    void procesarNuevoPedido();
+
+    bool puedoProcesarNuevoPedido();
+
+    void realizarTarea();
 
     string nombre() {
         return "Recepcionista";
     };
+
+
 };
 
 

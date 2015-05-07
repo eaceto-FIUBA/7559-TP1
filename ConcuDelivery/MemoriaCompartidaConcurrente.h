@@ -18,10 +18,37 @@ public:
     ~MemoriaCompartidaConcurrente();
 
     void escribir(const T &dato);
-
     T leer() const;
+
+    void escribirInseguro(const T &dato);
+    T leerInseguro() const;
+
+    bool tomarLockManualmente () ;
+    bool liberarLockManualmente ();
+
 };
 
+template<class T>
+bool MemoriaCompartidaConcurrente<T>::tomarLockManualmente ()  {
+    return (lockFile->tomarLock() == 0);
+}
+
+template<class T>
+bool MemoriaCompartidaConcurrente<T>::liberarLockManualmente () {
+    lockFile->liberarLock();
+    return true;
+}
+
+template<class T>
+void MemoriaCompartidaConcurrente<T>::escribirInseguro(const T &dato) {
+    buffer->escribir(dato);
+}
+
+template<class T>
+T MemoriaCompartidaConcurrente<T>::leerInseguro() const {
+    T dato = buffer->leer();
+    return dato;
+}
 
 template<class T>
 void MemoriaCompartidaConcurrente<T>::escribir(const T &dato) {
@@ -64,6 +91,7 @@ template<class T>
 MemoriaCompartidaConcurrente<T>::~MemoriaCompartidaConcurrente() {
     buffer->liberar();
     delete buffer;
+    delete lockFile;
 }
 
 #endif //CONCUDELIVERY_MEMORIACOMPARTIDACONCURRENTE_H
