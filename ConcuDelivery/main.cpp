@@ -10,6 +10,9 @@
 #include "Cadeta.h"
 #include "Supervisora.h"
 
+#include "MemoriaCompartida2.h"
+#include "MemoriaCompartidaConcurrente.h"
+
 
 using namespace std;
 
@@ -30,10 +33,10 @@ using namespace std;
 #define kDefaultDebugMode       kDebugModeOFF
 
 bool            debugMode               = kDefaultDebugMode;
-unsigned long   recepcionistasCount     = kDefaultRecepcionistasCount;
-unsigned long   cadetasCount            = kDefaultCadetasCount;
-unsigned long   hornosCount             = kDefaultHornosCount;
-unsigned long   cocinerasCount          = kDefaultCocinerasCount;
+long   recepcionistasCount     = kDefaultRecepcionistasCount;
+long   cadetasCount            = kDefaultCadetasCount;
+long   hornosCount             = kDefaultHornosCount;
+long   cocinerasCount          = kDefaultCocinerasCount;
 
 long            simulacionCount         = kDefaultSimulacionCount;
 
@@ -206,8 +209,15 @@ void pararTodas(vector<pid_t>& pids) {
     }
 }
 
-void realizarPedido() {
+bool realizarPedido(MemoriaCompartidaConcurrente<unsigned long> pedidosSiendoAtendidos) {
+    unsigned long siendoAtendidos = pedidosSiendoAtendidos.leer();
+    if (siendoAtendidos < recepcionistasCount) {
 
+
+        pedidosSiendoAtendidos.escribir(siendoAtendidos + 1);
+        return true;
+    }
+    return false;
 }
 
 void comenzarTrabajo() {
@@ -239,11 +249,17 @@ void comenzarTrabajo() {
     int cantidadDePedidosEntregados = 0;
     int cantidadDePedidosRealizados = 0;
 
-    while (sigint_handler.getGracefulQuit() == 0 && working && cantidadDePedidosRealizados++ < simulacionCount) {
+    MemoriaCompartidaConcurrente<unsigned long> pedidosSiendoAtendidos (".pedidosSiendoAtendidos.sh",'A');
+    pedidosSiendoAtendidos.escribir(0);
+
+
+    while (sigint_handler.getGracefulQuit() == 0 && working && cantidadDePedidosRealizados < simulacionCount) {
         log->log(logINFO,"<< Contador simulacion " + to_string(simulacionCount));
 
         // hacer nuevo pedido
-        realizarPedido();
+        if (realizarPedido(pedidosSiendoAtendidos)) {
+            cantidadDePedidosRealizados++;
+        }
 
         // sleep max 1seg
         long time_in_usec = std::rand() % 1000;

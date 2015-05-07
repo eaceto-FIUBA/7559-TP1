@@ -16,8 +16,10 @@ set(SOURCE_FILES
 	Cocinera.h 
 	EventHandler.h
 	LockFile.cpp 
-	LockFile.h 
-	Logger.cpp 
+	LockFile.h
+	MemoriaCompartida2.h
+    MemoriaCompartidaConcurrente.h
+	Logger.cpp
 	Logger.h		 
 	main.cpp 
 	Proceso.cpp 
@@ -30,4 +32,4 @@ set(SOURCE_FILES
 	Supervisora.cpp 
 	Supervisora.h )
 	
-add_executable(ConcuDelivery ${SOURCE_FILES} MemoriaCompartidaConcurrente.h)
+add_executable(ConcuDelivery ${SOURCE_FILES})
