@@ -21,7 +21,9 @@ set(SOURCE_FILES
     MemoriaCompartidaConcurrente.h
 	Logger.cpp
 	Logger.h		 
-	main.cpp 
+	main.cpp
+	Semaforo.cpp
+	Semaforo.h
 	Proceso.cpp 
 	Proceso.h 
 	Recepcionista.cpp 
@@ -30,6 +32,8 @@ set(SOURCE_FILES
 	SignalHandler.cpp
 	SignalHandler.h  
 	Supervisora.cpp 
-	Supervisora.h )
+	Supervisora.h
+	PedidosPorAtender.cpp
+	PedidosPorAtender.h)
 	
-add_executable(ConcuDelivery ${SOURCE_FILES})
+add_executable(ConcuDelivery ${SOURCE_FILES} )

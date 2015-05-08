@@ -3,6 +3,9 @@
 
 #include "LockFile.h"
 #include "MemoriaCompartida2.h"
+#include <string>
+
+using namespace std;
 
 template<class T>
 class MemoriaCompartidaConcurrente {
@@ -31,12 +34,12 @@ public:
 };
 
 template<class T>
-bool MemoriaCompartidaConcurrente<T>::tomarLockManualmente ()  {
+bool MemoriaCompartidaConcurrente<T>::tomarLockManualmente() {
     return (lockFile->tomarLock() == 0);
 }
 
 template<class T>
-void MemoriaCompartidaConcurrente<T>::liberarLockManualmente () {
+void MemoriaCompartidaConcurrente<T>::liberarLockManualmente() {
     lockFile->liberarLock();
 }
 

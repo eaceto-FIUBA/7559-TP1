@@ -4,25 +4,24 @@
 #include <sys/ipc.h>
 #include <sys/sem.h>
 #include <sys/types.h>
-#include "Logger.h"
+#include <string>
 
 class Semaforo {
 
 private:
     int id;
-    int inicializar (int valorInicial, unsigned int posicion);
+    int valorInicial;
+
+    int inicializar() const;
 
 public:
-    Semaforo();
-    explicit Semaforo (char* nombre,unsigned int cantidad=1);
-    explicit Semaforo (char* nombre, unsigned int valorInicial, unsigned int cantidad);
-    virtual ~Semaforo();
+    Semaforo(const std::string &nombre, const int valorInicial);
 
-    int p (unsigned int posicion=0); // decrementa
-    int v (unsigned int posicion=0); // incrementa
+    ~Semaforo();
 
-    void eliminar ();
-    int getValue(unsigned int posicion=0) const;
+    int p() const; // decrementa
+    int v() const; // incrementa
+    void eliminar() const;
 };
 
 #endif /* SEMAFORO_H_ */

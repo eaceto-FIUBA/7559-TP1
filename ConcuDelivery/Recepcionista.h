@@ -6,13 +6,15 @@
 #define CONCUDELIVERY_RECEPCIONISTA_H
 
 #include "Proceso.h"
-#include "MemoriaCompartidaConcurrente.h"
 #include <string>
+
+#include "PedidosPorAtender.h"
 
 class Recepcionista: public Proceso {
 
 public:
     Recepcionista();
+
     ~Recepcionista();
 
 private:

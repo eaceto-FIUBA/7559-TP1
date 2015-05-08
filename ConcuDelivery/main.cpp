@@ -10,9 +10,6 @@
 #include "Cadeta.h"
 #include "Supervisora.h"
 
-#include "MemoriaCompartida2.h"
-#include "MemoriaCompartidaConcurrente.h"
-
 using namespace std;
 
 #define kAppVersion "0.1"
@@ -32,10 +29,10 @@ using namespace std;
 #define kDefaultDebugMode       kDebugModeOFF
 
 bool            debugMode               = kDefaultDebugMode;
-long   recepcionistasCount     = kDefaultRecepcionistasCount;
-long   cadetasCount            = kDefaultCadetasCount;
-long   hornosCount             = kDefaultHornosCount;
-long   cocinerasCount          = kDefaultCocinerasCount;
+long recepcionistasCount = kDefaultRecepcionistasCount;
+long cadetasCount = kDefaultCadetasCount;
+long hornosCount = kDefaultHornosCount;
+long cocinerasCount = kDefaultCocinerasCount;
 
 long            simulacionCount         = kDefaultSimulacionCount;
 
@@ -252,12 +249,12 @@ void comenzarTrabajo() {
     crearCocineras(cocineras);
     crearCadetas(cadetas);
 
-    bool working = true;
-
     int cantidadDePedidosEntregados = 0;
     int cantidadDePedidosRealizados = 0;
 
-    while (sigint_handler.getGracefulQuit() == 0 && working && cantidadDePedidosRealizados < simulacionCount) {
+    PedidosPorAtender *pedidosPorAtender = PedidosPorAtender::getInstance();
+
+    while (sigint_handler.getGracefulQuit() == 0 && cantidadDePedidosRealizados < simulacionCount) {
 
         // hacer nuevo pedido
         bool pedidoRealizado = realizarPedido(pedidosEnCurso);
@@ -295,6 +292,8 @@ void comenzarTrabajo() {
     cocineras.clear();
     cadetas.clear();
     Proceso::parar(supervisora);
+
+    PedidosPorAtender::destroy();
 
     SignalHandler::destruir();
 

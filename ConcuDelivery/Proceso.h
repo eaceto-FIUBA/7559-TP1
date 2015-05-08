@@ -18,7 +18,14 @@
 #include "SignalHandler.h"
 #include "Logger.h"
 
+#include "Semaforo.h"
+#include "MemoriaCompartida2.h"
+
 using namespace std;
+
+#define kFILE_SEMAFORO_PEDIDOS_POR_ATENDER  "pedidosPorAtender.smf"
+#define kFILE_SEMAFORO_PEDIDOS_RECIBIDOS  "pedidosRecibidos.smf"
+
 
 class Proceso: public SIGINT_Handler {
 
