@@ -1,7 +1,3 @@
-//
-// Created by kimi on 03/05/15.
-//
-
 #ifndef CONCUDELIVERY_MEMORIACOMPARTIDACONCURRENTE_H
 #define CONCUDELIVERY_MEMORIACOMPARTIDACONCURRENTE_H
 
@@ -15,6 +11,7 @@ private:
     MemoriaCompartida2<T> *buffer = NULL;
     char letra = 0;
     LockFile *lockFile;
+
 
 public:
     MemoriaCompartidaConcurrente(const std::string &archivo, const char letra);
@@ -34,9 +31,29 @@ public:
 };
 
 template<class T>
+bool MemoriaCompartidaConcurrente<T>::tomarLockManualmente ()  {
+    return (lockFile->tomarLock() == 0);
+}
+
+template<class T>
+void MemoriaCompartidaConcurrente<T>::liberarLockManualmente () {
+    lockFile->liberarLock();
+}
+
+template<class T>
+void MemoriaCompartidaConcurrente<T>::escribirInseguro(const T &dato) {
+    buffer->escribir(dato);
+}
+
+template<class T>
+T MemoriaCompartidaConcurrente<T>::leerInseguro() const {
+    T dato = buffer->leer();
+    return dato;
+}
+
+template<class T>
 void MemoriaCompartidaConcurrente<T>::escribir(const T &dato) {
     if (lockFile->tomarLock() == 0) {
-
         escribirInseguro(dato);
 
         lockFile->liberarLock();
@@ -51,7 +68,6 @@ template<class T>
 T MemoriaCompartidaConcurrente<T>::leer() const {
     T dato;
     if (lockFile->tomarLock() == 0) {
-
         dato = leerInseguro();
 
         lockFile->liberarLock();
@@ -62,28 +78,6 @@ T MemoriaCompartidaConcurrente<T>::leer() const {
     }
 
     return dato;
-}
-
-
-template<class T>
-void MemoriaCompartidaConcurrente<T>::escribirInseguro(const T &dato) {
-    this->buffer->escribir(dato);
-}
-
-template<class T>
-T MemoriaCompartidaConcurrente<T>::leerInseguro() const {
-    T dato = this->buffer->leer();
-    return dato;
-}
-
-template<class T>
-bool MemoriaCompartidaConcurrente<T>::tomarLockManualmente() {
-    return lockFile->tomarLock() == 0;
-}
-
-template<class T>
-void MemoriaCompartidaConcurrente<T>::liberarLockManualmente() {
-    lockFile->liberarLock();
 }
 
 template<class T>

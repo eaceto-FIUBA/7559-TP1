@@ -10,37 +10,18 @@
 #include <string>
 
 class Recepcionista: public Proceso {
+
+public:
+    Recepcionista();
+    ~Recepcionista();
+
 private:
 
-    MemoriaCompartidaConcurrente<unsigned long> pedidosEnCurso;
-
-    bool hayLlamadaEntrante() {
-        bool nuevoLlamado = false;
-        if (pedidosEnCurso.tomarLockManualmente()) {
-            unsigned long cantDePedidosActuales = pedidosEnCurso.leerInseguro();
-            if (cantDePedidosActuales > 0) {
-                cantDePedidosActuales--;
-                nuevoLlamado = true;
-                pedidosEnCurso.escribirInseguro(cantDePedidosActuales);
-            }
-            pedidosEnCurso.liberarLockManualmente();
-        }
-        return nuevoLlamado;
-    }
-
-
-    void realizarTarea() {
-
-    }
+    void realizarTarea();
 
     string nombre() {
         return "Recepcionista";
     };
-public:
-
-    Recepcionista() : pedidosEnCurso("pedidosEntrantes.shm", 'A') {
-
-    }
 };
 
 

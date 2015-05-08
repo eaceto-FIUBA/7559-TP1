@@ -3,3 +3,15 @@
 //
 
 #include "Recepcionista.h"
+
+Recepcionista::Recepcionista() {
+
+}
+
+Recepcionista::~Recepcionista() {
+
+}
+
+void Recepcionista::realizarTarea() {
+    cout << "TAREA Recepcionista" << endl;
+}

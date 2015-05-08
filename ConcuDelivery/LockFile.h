@@ -18,7 +18,7 @@ public:
 
 	std::string nombreArchivo() const;
 
-	int tomarLock ();
+	int tomarLock () ;
 	int liberarLock ();
 	ssize_t escribir ( const void* buffer,const ssize_t buffsize ) const;
 };

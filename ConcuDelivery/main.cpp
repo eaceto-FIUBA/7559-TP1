@@ -10,6 +10,9 @@
 #include "Cadeta.h"
 #include "Supervisora.h"
 
+#include "MemoriaCompartida2.h"
+#include "MemoriaCompartidaConcurrente.h"
+
 using namespace std;
 
 #define kAppVersion "0.1"
@@ -29,10 +32,10 @@ using namespace std;
 #define kDefaultDebugMode       kDebugModeOFF
 
 bool            debugMode               = kDefaultDebugMode;
-unsigned long   recepcionistasCount     = kDefaultRecepcionistasCount;
-unsigned long   cadetasCount            = kDefaultCadetasCount;
-unsigned long   hornosCount             = kDefaultHornosCount;
-unsigned long   cocinerasCount          = kDefaultCocinerasCount;
+long   recepcionistasCount     = kDefaultRecepcionistasCount;
+long   cadetasCount            = kDefaultCadetasCount;
+long   hornosCount             = kDefaultHornosCount;
+long   cocinerasCount          = kDefaultCocinerasCount;
 
 long            simulacionCount         = kDefaultSimulacionCount;
 
