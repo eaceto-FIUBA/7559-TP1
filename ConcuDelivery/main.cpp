@@ -205,18 +205,8 @@ void pararTodas(vector<pid_t>& pids) {
     }
 }
 
-bool realizarPedido(MemoriaCompartidaConcurrente<unsigned long> &pedidosEnCurso) {
-
-    if (pedidosEnCurso.tomarLockManualmente()) {
-        unsigned long cantidadActualDeLlamados = pedidosEnCurso.leerInseguro();
-        if (cantidadActualDeLlamados < recepcionistasCount) {
-            cantidadActualDeLlamados++;
-            pedidosEnCurso.escribirInseguro(cantidadActualDeLlamados);
-        }
-        pedidosEnCurso.liberarLockManualmente();
-        return true;
-    }
-    return false;
+bool realizarPedido(PedidosPorAtender *pedidosPorAtender) {
+    return pedidosPorAtender->ingresarNuevoPedido() == 0;
 }
 
 void comenzarTrabajo() {
@@ -226,18 +216,19 @@ void comenzarTrabajo() {
     SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
     SignalHandler::getInstance()->registrarHandler(SIGTERM, &sigint_handler);
 
-    // crear recursos
+    //1. crear recursos
+    /// Pedidos por atender
+    int cantidadDePedidosRealizados = 0;
+    PedidosPorAtender *pedidosPorAtender = PedidosPorAtender::getInstance();
 
 
-    /// memoria compartida donde se almacena el contador de pedidos entregados
-    MemoriaCompartidaConcurrente<unsigned long> pedidosEntregados("pedidosEntregados.shm", 'A');
-    pedidosEntregados.escribir(0);
+    /// Pedidos entregados y cobrados
+    int cantidadDePedidosEntregados = 0;
 
-    /// memoria compartida donde se almacena la cantidad pedidos entrantes (llamadas)
-    MemoriaCompartidaConcurrente<unsigned long> pedidosEnCurso("pedidosEntrantes.shm", 'A');
-    pedidosEnCurso.escribir(0);
 
-    // crear empleadas
+
+
+    //2. Crear procesos
     log->log(logINFO,"Creando procesos");
     vector<pid_t> recepcionistas;
     vector<pid_t> cocineras;
@@ -249,19 +240,14 @@ void comenzarTrabajo() {
     crearCocineras(cocineras);
     crearCadetas(cadetas);
 
-    int cantidadDePedidosEntregados = 0;
-    int cantidadDePedidosRealizados = 0;
-
-    PedidosPorAtender *pedidosPorAtender = PedidosPorAtender::getInstance();
-
+    //3. iniciar la simulacion
     while (sigint_handler.getGracefulQuit() == 0 && cantidadDePedidosRealizados < simulacionCount) {
 
         // hacer nuevo pedido
-        bool pedidoRealizado = realizarPedido(pedidosEnCurso);
+        bool pedidoRealizado = realizarPedido(pedidosPorAtender);
 
         if (pedidoRealizado) {
             cantidadDePedidosRealizados++;
-
             log->log(logINFO,
                      "<< Nuevo pedido en curso. Cantidad de pedidos " + to_string(cantidadDePedidosRealizados));
         }
@@ -271,30 +257,23 @@ void comenzarTrabajo() {
         usleep(time_in_usec * 1000);
     }
 
-    // esperar a que se terminen de entregar todos los productos
+    //4. Eserar a que cantidad de pedidos cobrados == cantidadDePedidosRealizados
     do {
-        cantidadDePedidosEntregados = pedidosEntregados.leer();
-        cout << "Pedidos Realizados: " << cantidadDePedidosRealizados << " vs Entregados: " <<
-        cantidadDePedidosEntregados << endl;
 
-        // ESTO ES SIMULACION. LAS CADETAS DEBEN ESCRIBIR EN LA MEMORIA COMPARTIDA
-        pedidosEntregados.escribir(cantidadDePedidosEntregados + 1);
         sleep(1);
-
     } while (cantidadDePedidosEntregados < cantidadDePedidosRealizados);
 
+
+    //5. detener procesos y eliminar recursos
     log->log(logINFO,">> Deteniendo procesos...");
     pararTodas(recepcionistas);
     pararTodas(cocineras);
     pararTodas(cadetas);
-
     recepcionistas.clear();
     cocineras.clear();
     cadetas.clear();
     Proceso::parar(supervisora);
-
     PedidosPorAtender::destroy();
-
     SignalHandler::destruir();
 
     log->log(logDEBUG,"Simulacion terminada");
