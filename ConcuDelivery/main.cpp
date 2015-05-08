@@ -225,9 +225,6 @@ void comenzarTrabajo() {
     /// Pedidos entregados y cobrados
     int cantidadDePedidosEntregados = 0;
 
-
-
-
     //2. Crear procesos
     log->log(logINFO,"Creando procesos");
     vector<pid_t> recepcionistas;
@@ -249,7 +246,8 @@ void comenzarTrabajo() {
         if (pedidoRealizado) {
             cantidadDePedidosRealizados++;
             log->log(logINFO,
-                     "<< Nuevo pedido en curso. Cantidad de pedidos " + to_string(cantidadDePedidosRealizados));
+                     "<< Nuevo pedido en curso. Cantidad de pedidos realizados: " +
+                     to_string(cantidadDePedidosRealizados));
         }
 
         // sleep max 1seg
@@ -258,6 +256,7 @@ void comenzarTrabajo() {
     }
 
     //4. Eserar a que cantidad de pedidos cobrados == cantidadDePedidosRealizados
+
     do {
 
         sleep(1);
