@@ -13,7 +13,14 @@ Cadeta::~Cadeta() {
 }
 
 void Cadeta::realizarTarea() {
-    //Logger::getInstance()->log(logDEBUG, "Esperando nuevo pedido...");
+    // espera señal de pedido listo para entregar
+
+    // entrega y cobra
+    /// sumar costo de pizza a caja
+
+    /// marcar como entregada
+
+
 }
 
 string Cadeta::nombre() {

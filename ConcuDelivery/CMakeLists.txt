@@ -36,4 +36,4 @@ set(SOURCE_FILES
 	PedidosPorAtender.cpp
 	PedidosPorAtender.h)
 	
-add_executable(ConcuDelivery ${SOURCE_FILES} PedidosParaCocinar.cpp PedidosParaCocinar.h)
+add_executable(ConcuDelivery ${SOURCE_FILES} PedidosParaCocinar.cpp PedidosParaCocinar.h PedidosParaEntregar.cpp PedidosParaEntregar.h)

@@ -12,6 +12,7 @@
 
 #include "PedidosParaCocinar.h"
 #include "PedidosPorAtender.h"
+#include "PedidosParaEntregar.h"
 
 using namespace std;
 
@@ -224,10 +225,7 @@ void comenzarTrabajo() {
 
     /// Pedidos entregados y cobrados (Cadeta -> Cliente)
     int cantidadDePedidosEntregados = 0;
-    MemoriaCompartidaConcurrente<unsigned long> pedidosEntregados(
-            MEMORIA_PATH + "PedidosEntregados" + MEMORIA_EXTENSION, 'A');
-    pedidosEntregados.escribir(0);
-
+    PedidosParaEntregar *pedidosParaEntregar = PedidosParaEntregar::getInstance();
 
 
     //2. Crear procesos
@@ -264,7 +262,7 @@ void comenzarTrabajo() {
 
     //4. Eserar a que cantidad de pedidos entregados / cobrados == cantidadDePedidosRealizados
     do {
-        cantidadDePedidosEntregados = pedidosEntregados.leer();
+        cantidadDePedidosEntregados = pedidosParaEntregar->cantidadDePedidosEntregados();
         usleep(500 * 1000);
     } while (cantidadDePedidosEntregados < cantidadDePedidosRealizados);
 
@@ -282,6 +280,8 @@ void comenzarTrabajo() {
     Proceso::parar(supervisora);
 
     PedidosPorAtender::destroy();
+    PedidosParaCocinar::destroy();
+    PedidosParaEntregar::destroy();
 
     SignalHandler::destruir();
 
