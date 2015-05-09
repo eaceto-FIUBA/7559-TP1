@@ -8,15 +8,17 @@
 #include "Proceso.h"
 
 class Cadeta: public Proceso {
-    void realizarTarea() {
-        // Logger* log = Logger::getInstance();
-        // log->log(logDEBUG,"Cadeta. Trabajando.");
-        sleep(1);
-    }
+public:
+    Cadeta();
 
-    string nombre() {
-        return "Cadeta";
-    };
+    ~Cadeta();
+
+    void destruirRecursos();
+
+private:
+    void realizarTarea();
+
+    string nombre();
 };
 
 

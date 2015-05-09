@@ -11,40 +11,47 @@ bool Proceso::seguirCorriendo() {
 void Proceso::correr() {
     estadoProceso = CORRIENDO;
 
-    Logger* log = Logger::getInstance();
     while (seguirCorriendo()) {
         realizarTarea();
     }
 
-    log->log(logDEBUG,"Se ha detenido el proceso " + to_string(getpid()));
+    this->log(logDEBUG, "Se ha detenido el proceso " + to_string(getpid()));
 }
 
 Proceso::Proceso() {
-
 }
 
-pid_t Proceso::iniciar() {
+unsigned long Proceso::getID() {
+    return this->id;
+}
+
+pid_t Proceso::iniciar(unsigned long id) {
     Logger* log = Logger::getInstance();
-    log->log(logDEBUG,"Creando proceso");
+    log->log(logDEBUG, "Creando proceso " + to_string(id));
 
     pid_t idProceso = fork();
     if (idProceso == 0) {
+        this->id = id;
+
         idProceso = getpid(); // el proceso hijo obtiene su pid
-        cout << "idProcess " << to_string(idProceso) << endl;
+        //cout << "idProcess " << to_string(idProceso) << endl;
 
-        log->log(logDEBUG,"Proceso creado con PID: " + to_string(idProceso));
+        this->log(logDEBUG, "Proceso " + to_string(this->id) + " creado con PID: " + to_string(idProceso));
 
-        log->log(logDEBUG,"Registrando SignalHandler");
+        this->log(logDEBUG, "Registrando SignalHandler");
 
         SignalHandler::getInstance()->registrarHandler(SIGINT, &sigint_handler);
 
-        log->log(logDEBUG,"Corriendo");
+        this->log(logDEBUG, "Corriendo");
         this->correr();
 
-        log->log(logDEBUG,"Proceso detenido. Saliendo...");
+        this->log(logDEBUG, "Proceso detenido. Saliendo...");
 
         SignalHandler::getInstance()->removerHandler(SIGINT);
         SignalHandler::destruir();
+
+        this->destruirRecursos();
+
         Logger::destroy();
 
         exit ( 0 );
@@ -60,4 +67,8 @@ string Proceso::descripcion() { return this->nombre() + "[" + (this->estadoProce
 
 Proceso::~Proceso() {
     SignalHandler::destruir();
+}
+
+void Proceso::log(LogLevel level, string message) {
+    Logger::getInstance()->log(level, "[ " + this->nombre() + " ]\t" + message);
 }

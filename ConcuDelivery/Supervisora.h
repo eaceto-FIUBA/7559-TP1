@@ -8,14 +8,18 @@
 #include "Proceso.h"
 
 class Supervisora : public Proceso {
-private:
-    void realizarTarea() {
-        //cout << "TAREA Supervisora" << endl;
-    }
 
-    string nombre() {
-        return "Supervisora";
-    };
+public:
+    Supervisora();
+
+    ~Supervisora();
+
+    void destruirRecursos();
+
+private:
+    void realizarTarea();
+
+    string nombre();
 };
 
 

@@ -30,8 +30,6 @@ public:
 
     static void destroy();
 
-    unsigned long cantDePedidosPorAtender();
-
     int esperarNuevoPedido();  // ejecutado solo por recepcionistas
     int ingresarNuevoPedido(); // ejecutado solo por la simulacion
     bool tomarNuevoPedido();   // true si pudo tomar un nuevo pedido

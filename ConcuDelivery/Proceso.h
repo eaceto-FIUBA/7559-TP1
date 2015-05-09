@@ -36,6 +36,7 @@ class Proceso: public SIGINT_Handler {
     };
 
 private:
+    unsigned long id;
     SIGINT_Handler sigint_handler;
     EstadoProceso estadoProceso;
     void correr();
@@ -43,12 +44,19 @@ private:
     virtual void realizarTarea() = 0;
     virtual string nombre() = 0;
 
+protected:
+    void log(LogLevel level, string message);
+
 public:
     Proceso();
     virtual ~Proceso();
 
-    pid_t iniciar();
+    pid_t iniciar(unsigned long id);
     static bool parar(pid_t pid);
+
+    virtual void destruirRecursos() = 0;
+
+    unsigned long getID();
 
     string descripcion();
 };

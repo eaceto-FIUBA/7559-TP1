@@ -10,6 +10,9 @@
 #include "Cadeta.h"
 #include "Supervisora.h"
 
+#include "PedidosParaCocinar.h"
+#include "PedidosPorAtender.h"
+
 using namespace std;
 
 #define kAppVersion "0.1"
@@ -18,7 +21,7 @@ using namespace std;
 #define kDefaultCadetasCount        1
 #define kDefaultCocinerasCount      4
 #define kDefaultHornosCount         4
-#define kDefaultSimulacionCount     4
+#define kDefaultSimulacionCount     16
 
 #define kCLINoAargument         0
 #define kCLIRequiredArgument    1
@@ -156,9 +159,9 @@ void loggearParametros() {
 void crearRecepcionistas(vector<pid_t>& recepcionistas) {
     recepcionistas.reserve(cadetasCount);
     Logger* log = Logger::getInstance();
-    for (unsigned long i = 0; i < recepcionistasCount; i++) {
-        Recepcionista r;
-        pid_t rpid = r.iniciar();
+    Recepcionista r;
+    for (long i = 0; i < recepcionistasCount; i++) {
+        pid_t rpid = r.iniciar(i);
         log->log(logINFO,"Nueva recepcionista. PID: " + to_string(rpid));
         recepcionistas.push_back(rpid);
     }
@@ -169,8 +172,8 @@ void crearCocineras(vector<pid_t>& cocineras) {
     cocineras.reserve(cocinerasCount);
     Logger* log = Logger::getInstance();
     Cocinera c;
-    for (unsigned long i = 0; i < cocinerasCount; i++) {
-        pid_t rpid = c.iniciar();
+    for (long i = 0; i < cocinerasCount; i++) {
+        pid_t rpid = c.iniciar(i);
         log->log(logINFO,"Nueva Cocinera. PID: " + to_string(rpid));
         cocineras.push_back(rpid);
     }
@@ -181,17 +184,12 @@ void crearCadetas(vector<pid_t>& cadetas) {
     cadetas.reserve(cadetasCount);
     Logger* log = Logger::getInstance();
     Cadeta c;
-    for (unsigned long i = 0; i < cadetasCount; i++) {
-        pid_t rpid = c.iniciar();
+    for (long i = 0; i < cadetasCount; i++) {
+        pid_t rpid = c.iniciar(i);
         log->log(logINFO,"Nueva Cadeta. PID: " + to_string(rpid));
         cadetas.push_back(rpid);
     }
 }
-
-void crearHornos() {
-
-}
-
 
 void pararTodas(vector<pid_t>& pids) {
     Logger* log = Logger::getInstance();
@@ -217,13 +215,20 @@ void comenzarTrabajo() {
     SignalHandler::getInstance()->registrarHandler(SIGTERM, &sigint_handler);
 
     //1. crear recursos
-    /// Pedidos por atender
+    /// Pedidos por atender (Cliente -> Recepcionista)
     int cantidadDePedidosRealizados = 0;
     PedidosPorAtender *pedidosPorAtender = PedidosPorAtender::getInstance();
 
+    // Pedidos para cocinar (Recepcionista -> Cocinera)
+    PedidosParaCocinar *pedidosParaCocinar = PedidosParaCocinar::getInstance();
 
-    /// Pedidos entregados y cobrados
+    /// Pedidos entregados y cobrados (Cadeta -> Cliente)
     int cantidadDePedidosEntregados = 0;
+    MemoriaCompartidaConcurrente<unsigned long> pedidosEntregados(
+            MEMORIA_PATH + "PedidosEntregados" + MEMORIA_EXTENSION, 'A');
+    pedidosEntregados.escribir(0);
+
+
 
     //2. Crear procesos
     log->log(logINFO,"Creando procesos");
@@ -231,11 +236,13 @@ void comenzarTrabajo() {
     vector<pid_t> cocineras;
     vector<pid_t> cadetas;
     Supervisora s;
-    pid_t supervisora = s.iniciar();
+    pid_t supervisora = s.iniciar(0);
 
     crearRecepcionistas(recepcionistas);
     crearCocineras(cocineras);
     crearCadetas(cadetas);
+
+    sleep(3);
 
     //3. iniciar la simulacion
     while (sigint_handler.getGracefulQuit() == 0 && cantidadDePedidosRealizados < simulacionCount) {
@@ -255,24 +262,27 @@ void comenzarTrabajo() {
         usleep(time_in_usec * 1000);
     }
 
-    //4. Eserar a que cantidad de pedidos cobrados == cantidadDePedidosRealizados
-
+    //4. Eserar a que cantidad de pedidos entregados / cobrados == cantidadDePedidosRealizados
     do {
-
-        sleep(1);
+        cantidadDePedidosEntregados = pedidosEntregados.leer();
+        usleep(500 * 1000);
     } while (cantidadDePedidosEntregados < cantidadDePedidosRealizados);
 
 
     //5. detener procesos y eliminar recursos
     log->log(logINFO,">> Deteniendo procesos...");
+
     pararTodas(recepcionistas);
     pararTodas(cocineras);
     pararTodas(cadetas);
     recepcionistas.clear();
     cocineras.clear();
     cadetas.clear();
+
     Proceso::parar(supervisora);
+
     PedidosPorAtender::destroy();
+
     SignalHandler::destruir();
 
     log->log(logDEBUG,"Simulacion terminada");

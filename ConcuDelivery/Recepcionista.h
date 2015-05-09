@@ -8,8 +8,6 @@
 #include "Proceso.h"
 #include <string>
 
-#include "PedidosPorAtender.h"
-
 class Recepcionista: public Proceso {
 
 public:
@@ -17,13 +15,13 @@ public:
 
     ~Recepcionista();
 
+    void destruirRecursos();
+
 private:
 
     void realizarTarea();
 
-    string nombre() {
-        return "Recepcionista";
-    };
+    string nombre();
 };
 
 

@@ -8,15 +8,17 @@
 #include "Proceso.h"
 
 class Cocinera: public Proceso {
+public:
+    Cocinera();
+
+    ~Cocinera();
+
+    void destruirRecursos();
+
 private:
-    void realizarTarea() {
-        //cout << "TAREA Cocinera" << endl;
-    }
+    void realizarTarea();
 
-    string nombre() {
-        return "Cocinera";
-    };
+    string nombre();
 };
-
 
 #endif //CONCUDELIVERY_COCINERA_H

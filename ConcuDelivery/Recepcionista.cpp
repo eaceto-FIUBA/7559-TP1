@@ -4,6 +4,11 @@
 
 #include "Recepcionista.h"
 
+
+#include "PedidosPorAtender.h"
+#include "PedidosParaCocinar.h"
+
+
 Recepcionista::Recepcionista() {
 
 }
@@ -13,14 +18,29 @@ Recepcionista::~Recepcionista() {
 }
 
 void Recepcionista::realizarTarea() {
-    Logger::getInstance()->log(logDEBUG, "Esperando nuevo pedido...");
+    log(logDEBUG, "Esperando nuevo pedido...");
     if (PedidosPorAtender::getInstance()->esperarNuevoPedido() != 0) {
-        Logger::getInstance()->log(logERROR, "ERROR AL ESPERAR NUEVO PEDIDO");
+        this->log(logERROR, "ERROR AL ESPERAR NUEVO PEDIDO. - " + to_string(errno));
+        cout << ">>>>>>>> FATAL ERROR: " << strerror(errno) << " <<<<<<<<" << endl;
         assert(false); // error al realizar la espera!
     }
 
     if (PedidosPorAtender::getInstance()->tomarNuevoPedido()) {
-        Logger::getInstance()->log(logDEBUG, "recepcionando nuevo pedido...");
-
+        this->log(logDEBUG, "Tomando Nuevo pedido.");
+        PedidosParaCocinar::getInstance()->ingresarNuevoPedido();
+        this->log(logDEBUG, "Nuevo pedido ingresado en cocina.");
     }
+}
+
+string Recepcionista::nombre() {
+    return "Recepcionista " + to_string(getID());
+}
+
+void Recepcionista::destruirRecursos() {
+    this->log(logDEBUG, "Recepcionista. Fin del trabajo.");
+
+    // El logges es destruido por la clase Proceso
+
+    PedidosPorAtender::getInstance()->destroy();
+    PedidosParaCocinar::getInstance()->destroy();
 }
