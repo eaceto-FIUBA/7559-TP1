@@ -42,6 +42,14 @@ public:
 
     static void destroy();
 
+    void inicializarParaEscribir();
+
+    void inicializarParaLeer();
+
+    void finalizarParaEscribir();
+
+    void finalizarParaLeer();
+
     int esperarNuevoPedido();  // ejecutado solo por recepcionistas
     int ingresarNuevoPedido(Pedido &p); // ejecutado solo por la simulacion
     Pedido* tomarNuevoPedido();   // true si pudo tomar un nuevo pedido

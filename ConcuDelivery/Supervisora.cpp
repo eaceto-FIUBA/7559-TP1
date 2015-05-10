@@ -16,6 +16,10 @@ void Supervisora::realizarTarea() {
     //Logger::getInstance()->log(logDEBUG, "Esperando nuevo pedido...");
 }
 
+void Supervisora::inicializarProceso(unsigned long id) {
+
+}
+
 string Supervisora::nombre() {
     return "Supervisora " + to_string(getID());
 }

@@ -37,6 +37,10 @@ void Horno::realizarTarea() {
 //    }
 }
 
+void Horno::inicializarProceso(unsigned long id) {
+
+}
+
 string Horno::nombre() {
     return "Horno " + to_string(getID());
 }

@@ -54,6 +54,7 @@ public:
     pid_t iniciar(unsigned long id);
     static bool parar(pid_t pid);
 
+    virtual void inicializarProceso(unsigned long id) = 0;
     virtual void destruirRecursos() = 0;
 
     unsigned long getID();

@@ -18,6 +18,8 @@ public:
 private:
     void realizarTarea();
 
+    void inicializarProceso(unsigned long id);
+
     string nombre();
 };
 

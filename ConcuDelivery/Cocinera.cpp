@@ -47,6 +47,10 @@ void Cocinera::realizarTarea() {
 
 }
 
+void Cocinera::inicializarProceso(unsigned long id) {
+
+}
+
 string Cocinera::nombre() {
     return "Cocinera " + to_string(getID());
 }

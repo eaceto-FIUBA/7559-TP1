@@ -36,6 +36,10 @@ void Cadeta::realizarTarea() {
 
 }
 
+void Cadeta::inicializarProceso(unsigned long id) {
+
+}
+
 string Cadeta::nombre() {
     return "Cadeta " + to_string(getID());
 }

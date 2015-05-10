@@ -53,10 +53,14 @@ string Recepcionista::nombre() {
     return "Recepcionista " + to_string(getID());
 }
 
+void Recepcionista::inicializarProceso(unsigned long id) {
+    PedidosPorAtender::getInstance()->inicializarParaLeer();
+}
+
 void Recepcionista::destruirRecursos() {
     this->log(logDEBUG, "Recepcionista. Fin del trabajo.");
 
-    // El logges es destruido por la clase Proceso
+    PedidosPorAtender::getInstance()->finalizarParaLeer();
 
     PedidosPorAtender::getInstance()->destroy();
     PedidosParaCocinar::getInstance()->destroy();

@@ -36,6 +36,8 @@ pid_t Proceso::iniciar(unsigned long id) {
         idProceso = getpid(); // el proceso hijo obtiene su pid
         //cout << "idProcess " << to_string(idProceso) << endl;
 
+        this->inicializarProceso(id);
+
         this->log(logDEBUG, "Proceso " + to_string(this->id) + " creado con PID: " + to_string(idProceso));
 
         this->log(logDEBUG, "Registrando SignalHandler");

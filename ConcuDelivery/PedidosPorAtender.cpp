@@ -18,10 +18,6 @@ PedidosPorAtender::PedidosPorAtender() {
     fifoLecPedidosAAtender = new FifoLectura(aAtenderFileName);
     fifoEscPedidosAAtender = new FifoEscritura(aAtenderFileName);
 
-
-
-//    fifoEscPedidosAAtender->abrir();
-
 }
 
 PedidosPorAtender::~PedidosPorAtender() {
@@ -29,13 +25,29 @@ PedidosPorAtender::~PedidosPorAtender() {
     delete semaforo;
 //    delete memoria;
 
-    fifoLecPedidosAAtender->cerrar();
-    fifoEscPedidosAAtender->cerrar();
+
+
 
     fifoEscPedidosAAtender->eliminar();
 
     delete fifoLecPedidosAAtender;
     delete fifoEscPedidosAAtender;
+}
+
+void PedidosPorAtender::inicializarParaEscribir() {
+    fifoEscPedidosAAtender->abrir();
+}
+
+void PedidosPorAtender::inicializarParaLeer() {
+    fifoLecPedidosAAtender->abrir();
+}
+
+void PedidosPorAtender::finalizarParaEscribir() {
+    fifoEscPedidosAAtender->cerrar();
+}
+
+void PedidosPorAtender::finalizarParaLeer() {
+    fifoLecPedidosAAtender->cerrar();
 }
 
 PedidosPorAtender *PedidosPorAtender::getInstance() {
@@ -57,9 +69,10 @@ int PedidosPorAtender::esperarNuevoPedido() {
 
 int PedidosPorAtender::ingresarNuevoPedido(Pedido &p) {
     // incrementar cantidad de pedidos
-	fifoEscPedidosAAtender->abrir();
+    //fifoEscPedidosAAtender->abrir();
 	ssize_t bytesEscritos = fifoEscPedidosAAtender->escribir( static_cast< void* >(&p), sizeof(p) ) ;
 	assert(bytesEscritos - sizeof(Pedido) == 0);
+    //fifoEscPedidosAAtender->cerrar();
 
 	return semaforo->v();
 }
@@ -67,9 +80,10 @@ int PedidosPorAtender::ingresarNuevoPedido(Pedido &p) {
 Pedido* PedidosPorAtender::tomarNuevoPedido() {
 
 	Pedido *p = new Pedido();
-    fifoLecPedidosAAtender->abrir();
+    //fifoLecPedidosAAtender->abrir();
 	ssize_t bytesLeidos = fifoLecPedidosAAtender->leer( static_cast< void* >(p), sizeof(*p) ) ;
 	assert(bytesLeidos - sizeof(Pedido) == 0);
+    //fifoLecPedidosAAtender->cerrar();
 
     return p;
 }

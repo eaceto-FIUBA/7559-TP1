@@ -19,13 +19,13 @@
 
 using namespace std;
 
-#define kAppVersion "0.1"
+#define kAppVersion "0.2"
 
-#define kDefaultRecepcionistasCount 2
+#define kDefaultRecepcionistasCount 1
 #define kDefaultCadetasCount        1
-#define kDefaultCocinerasCount      4
-#define kDefaultHornosCount         4
-#define kDefaultSimulacionCount     16
+#define kDefaultCocinerasCount      1
+#define kDefaultHornosCount         1
+#define kDefaultSimulacionCount     4
 
 #define kCLINoAargument         0
 #define kCLIRequiredArgument    1
@@ -264,12 +264,13 @@ void comenzarTrabajo() {
     pid_t supervisora = s.iniciar(0);
 
     crearRecepcionistas(recepcionistas);
-    crearCocineras(cocineras);
-    crearHornos(hornos);
-    crearCadetas(cadetas);
+//    crearCocineras(cocineras);
+//    crearHornos(hornos);
+//    crearCadetas(cadetas);
 
     sleep(3);
 
+    pedidosPorAtender->inicializarParaEscribir();
 
     //3. iniciar la simulacion
     while (sigint_handler.getGracefulQuit() == 0 && cantidadDePedidosRealizados < simulacionCount) {
