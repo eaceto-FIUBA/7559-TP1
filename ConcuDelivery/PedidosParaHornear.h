@@ -42,6 +42,14 @@ public:
 
     void setCantHornos(const unsigned int cant_hornos);
 
+    void inicializarParaEscribir();
+
+    void inicializarParaLeer();
+
+    void finalizarParaEscribir();
+
+    void finalizarParaLeer();
+
     static void destroy();
 
     int esperarNuevoPedido();  // ejecutado solo por horno

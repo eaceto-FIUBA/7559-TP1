@@ -20,7 +20,7 @@ class PedidosPorAtender {
 
 private:
     Semaforo *semaforo;
-//    MemoriaCompartidaConcurrente<unsigned long> *memoria;
+    MemoriaCompartidaConcurrente<unsigned long> *memoria;
 
     /** Lectura y Escritura para los Pedidos A Atender **/
     FifoLectura *fifoLecPedidosAAtender;
@@ -28,7 +28,7 @@ private:
 
     static PedidosPorAtender *instance;
     static const string fileName;
-//    static const string memoriafileName;
+    static const string memoriafileName;
 
     /** fifo files **/
     static const string aAtenderFileName;

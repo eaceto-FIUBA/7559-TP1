@@ -50,6 +50,22 @@ void PedidosParaHornear::destroy() {
     }
 }
 
+void PedidosParaHornear::inicializarParaEscribir() {
+    fifoEscPedidosAHornear->abrir();
+}
+
+void PedidosParaHornear::inicializarParaLeer() {
+    fifoLecPedidosAHornear->abrir();
+}
+
+void PedidosParaHornear::finalizarParaEscribir() {
+    fifoEscPedidosAHornear->cerrar();
+}
+
+void PedidosParaHornear::finalizarParaLeer() {
+    fifoLecPedidosAHornear->cerrar();
+}
+
 int PedidosParaHornear::esperarNuevoPedido() {
     return semaforo->p();
 }

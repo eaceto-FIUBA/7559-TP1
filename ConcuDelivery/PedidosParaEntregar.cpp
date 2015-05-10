@@ -37,6 +37,22 @@ PedidosParaEntregar *PedidosParaEntregar::getInstance() {
     return instance;
 }
 
+void PedidosParaEntregar::inicializarParaEscribir() {
+    fifoEscPedidosAEntregar->abrir();
+}
+
+void PedidosParaEntregar::inicializarParaLeer() {
+    fifoLecPedidosAEntregar->abrir();
+}
+
+void PedidosParaEntregar::finalizarParaEscribir() {
+    fifoEscPedidosAEntregar->cerrar();
+}
+
+void PedidosParaEntregar::finalizarParaLeer() {
+    fifoLecPedidosAEntregar->cerrar();
+}
+
 void PedidosParaEntregar::destroy() {
     if (instance != NULL) {
         delete (instance);

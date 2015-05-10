@@ -48,7 +48,8 @@ void Cocinera::realizarTarea() {
 }
 
 void Cocinera::inicializarProceso(unsigned long id) {
-
+    PedidosParaCocinar::getInstance()->inicializarParaLeer();
+    PedidosParaHornear::getInstance()->inicializarParaEscribir();
 }
 
 string Cocinera::nombre() {

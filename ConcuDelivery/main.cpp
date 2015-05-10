@@ -21,11 +21,11 @@ using namespace std;
 
 #define kAppVersion "0.2"
 
-#define kDefaultRecepcionistasCount 1
+#define kDefaultRecepcionistasCount 2
 #define kDefaultCadetasCount        1
 #define kDefaultCocinerasCount      1
 #define kDefaultHornosCount         1
-#define kDefaultSimulacionCount     4
+#define kDefaultSimulacionCount     6
 
 #define kCLINoAargument         0
 #define kCLIRequiredArgument    1
@@ -237,6 +237,7 @@ void comenzarTrabajo() {
 
     int cantidadDePedidosRealizados = 0;
     PedidosPorAtender *pedidosPorAtender = PedidosPorAtender::getInstance();
+    pedidosPorAtender->inicializarParaEscribir();
     log->log(logINFO,"Buffer Pedidos para Atender creado.");
 
     // Pedidos para cocinar (Recepcionista -> Cocinera)
@@ -264,13 +265,12 @@ void comenzarTrabajo() {
     pid_t supervisora = s.iniciar(0);
 
     crearRecepcionistas(recepcionistas);
-//    crearCocineras(cocineras);
+    crearCocineras(cocineras);
 //    crearHornos(hornos);
 //    crearCadetas(cadetas);
 
     sleep(3);
 
-    pedidosPorAtender->inicializarParaEscribir();
 
     //3. iniciar la simulacion
     while (sigint_handler.getGracefulQuit() == 0 && cantidadDePedidosRealizados < simulacionCount) {

@@ -43,6 +43,14 @@ public:
 
     static void destroy();
 
+    void inicializarParaEscribir();
+
+    void inicializarParaLeer();
+
+    void finalizarParaEscribir();
+
+    void finalizarParaLeer();
+
     int esperarNuevoPedidoParaEntregar();  // ejecutado solo por las cadetas
     int nuevoPedidoListo(Pedido &p); // ejecutado solo por la cocinera / horno
     Pedido* tomarPedidoParaEntregar();   // true si pudo tomar un nuevo pedido para entregar

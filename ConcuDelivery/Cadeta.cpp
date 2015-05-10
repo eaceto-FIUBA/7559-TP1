@@ -5,6 +5,7 @@
 #include "Cadeta.h"
 
 #include "PedidosParaEntregar.h"
+#include "PedidosParaHornear.h"
 
 Cadeta::Cadeta() : Proceso() {
 
@@ -37,7 +38,8 @@ void Cadeta::realizarTarea() {
 }
 
 void Cadeta::inicializarProceso(unsigned long id) {
-
+    PedidosParaHornear::getInstance()->inicializarParaLeer();
+    PedidosParaEntregar::getInstance()->inicializarParaEscribir();
 }
 
 string Cadeta::nombre() {

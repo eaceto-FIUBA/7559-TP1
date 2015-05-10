@@ -3,6 +3,7 @@
 
 #include "PedidosParaHornear.h"
 #include "PedidosParaEntregar.h"
+#include "PedidosParaCocinar.h"
 
 Horno::Horno() {
 
@@ -38,7 +39,8 @@ void Horno::realizarTarea() {
 }
 
 void Horno::inicializarProceso(unsigned long id) {
-
+    PedidosParaCocinar::getInstance()->inicializarParaLeer();
+    PedidosParaHornear::getInstance()->inicializarParaEscribir();
 }
 
 string Horno::nombre() {
