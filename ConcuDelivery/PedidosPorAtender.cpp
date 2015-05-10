@@ -69,11 +69,11 @@ int PedidosPorAtender::ingresarNuevoPedido(Pedido &p) {
         unsigned long cantidad = memoria->leerInseguro();
         cantidad++;
         memoria->escribirInseguro(cantidad);
-        memoria->liberarLockManualmente();
 
         ssize_t bytesEscritos = fifoEscPedidosAAtender->escribir(static_cast< void * >(&p), sizeof(p));
         assert(bytesEscritos - sizeof(Pedido) == 0);
 
+        memoria->liberarLockManualmente();
         return semaforo->v();
     }
     return -1;
