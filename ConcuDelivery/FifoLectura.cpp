@@ -1,3 +1,5 @@
+#include "FifoLectura.h"
+
 FifoLectura::FifoLectura(const std::string nombre) : Fifo(nombre) {
 }
 

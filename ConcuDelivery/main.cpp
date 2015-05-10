@@ -9,10 +9,12 @@
 #include "Cocinera.h"
 #include "Cadeta.h"
 #include "Supervisora.h"
+#include "Horno.h"
 
 #include "PedidosParaCocinar.h"
 #include "PedidosPorAtender.h"
 #include "PedidosParaEntregar.h"
+#include "PedidosParaHornear.h"
 
 using namespace std;
 
@@ -42,7 +44,7 @@ long            simulacionCount         = kDefaultSimulacionCount;
 
 void print_version() {
     cout << "ConcuDelivery v" << kAppVersion << endl << endl;
-    cout << "[     ]\tOpromolla, Giovanni\t\tgiopromolla@gmail.com " << endl;
+    cout << "[87761]\tOpromolla, Giovanni\t\tgiopromolla@gmail.com " << endl;
     cout << "[84316]\tAceto, Ezequiel\t\tezequiel.aceto@gmail.com  " << endl;
 }
 
@@ -180,6 +182,16 @@ void crearCocineras(vector<pid_t>& cocineras) {
     }
 }
 
+void crearHornos(vector<pid_t>& hornos) {
+	hornos.reserve(hornosCount);
+    Logger* log = Logger::getInstance();
+    Horno h;
+    for (long i = 0; i < hornosCount; i++) {
+        pid_t rpid = h.iniciar(i);
+        log->log(logINFO,"Nuevo Horno. PID: " + to_string(rpid));
+        hornos.push_back(rpid);
+    }
+}
 
 void crearCadetas(vector<pid_t>& cadetas) {
     cadetas.reserve(cadetasCount);
@@ -223,6 +235,11 @@ void comenzarTrabajo() {
     // Pedidos para cocinar (Recepcionista -> Cocinera)
     PedidosParaCocinar *pedidosParaCocinar = PedidosParaCocinar::getInstance();
 
+    // Pedidos para hornear (Cocinera -> Horno)
+    PedidosParaHornear *pedidosParaHornear = PedidosParaHornear::getInstance();
+    /** Buffer de Pedidos para Hornear igual a la cantidad de Hornos **/
+    pedidosParaHornear->setCantHornos(hornosCount);
+
     /// Pedidos entregados y cobrados (Cadeta -> Cliente)
     int cantidadDePedidosEntregados = 0;
     PedidosParaEntregar *pedidosParaEntregar = PedidosParaEntregar::getInstance();
@@ -232,12 +249,14 @@ void comenzarTrabajo() {
     log->log(logINFO,"Creando procesos");
     vector<pid_t> recepcionistas;
     vector<pid_t> cocineras;
+    vector<pid_t> hornos;
     vector<pid_t> cadetas;
     Supervisora s;
     pid_t supervisora = s.iniciar(0);
 
     crearRecepcionistas(recepcionistas);
     crearCocineras(cocineras);
+    crearHornos(hornos);
     crearCadetas(cadetas);
 
     sleep(3);
@@ -272,15 +291,19 @@ void comenzarTrabajo() {
 
     pararTodas(recepcionistas);
     pararTodas(cocineras);
+    pararTodas(hornos);
     pararTodas(cadetas);
+
     recepcionistas.clear();
     cocineras.clear();
+    hornos.clear();
     cadetas.clear();
 
     Proceso::parar(supervisora);
 
     PedidosPorAtender::destroy();
     PedidosParaCocinar::destroy();
+    PedidosParaHornear::destroy();
     PedidosParaEntregar::destroy();
 
     SignalHandler::destruir();

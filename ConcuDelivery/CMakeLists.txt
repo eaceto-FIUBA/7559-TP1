@@ -13,7 +13,9 @@ set(SOURCE_FILES
 	Cadeta.cpp 
 	Cadeta.h 
 	Cocinera.cpp 
-	Cocinera.h 
+	Cocinera.h
+	Horno.cpp
+	Horno.h 
 	EventHandler.h
 	LockFile.cpp 
 	LockFile.h
@@ -34,6 +36,12 @@ set(SOURCE_FILES
 	Supervisora.cpp 
 	Supervisora.h
 	PedidosPorAtender.cpp
-	PedidosPorAtender.h)
+	PedidosPorAtender.h
+	PedidosParaCocinar.cpp
+	PedidosParaCocinar.h
+	PedidosParaEntregar.cpp
+	PedidosParaEntregar.h
+	PedidosParaHornear.cpp
+	PedidosParaEntregar.h)
 	
-add_executable(ConcuDelivery ${SOURCE_FILES} PedidosParaCocinar.cpp PedidosParaCocinar.h PedidosParaEntregar.cpp PedidosParaEntregar.h)
+add_executable(ConcuDelivery ${SOURCE_FILES} )

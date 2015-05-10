@@ -4,6 +4,8 @@
 
 #include "Cadeta.h"
 
+#include "PedidosParaEntregar.h"
+
 Cadeta::Cadeta() {
 
 }
@@ -13,13 +15,20 @@ Cadeta::~Cadeta() {
 }
 
 void Cadeta::realizarTarea() {
-    // espera señal de pedido listo para entregar
 
-    // entrega y cobra
-    /// sumar costo de pizza a caja
+	/** Espera señal de pedido listo para entregar **/
+    log(logDEBUG, "Esperando nuevo pedido para entregar...");
+    if (PedidosParaEntregar::getInstance()->esperarNuevoPedidoParaEntregar() != 0) {
+        this->log(logERROR, "ERROR AL ESPERAR NUEVO PEDIDO PARA ENTREGAR. - " + to_string(errno));
+        cout << ">>>>>>>> FATAL ERROR: " << strerror(errno) << " <<<<<<<<" << endl;
+        assert(false); // error al realizar la espera!
+    }
 
-    /// marcar como entregada
+    /** Tomar pedido para entregar y cobrar**/
+    if (PedidosParaEntregar::getInstance()->tomarPedidoParaEntregar()) {
+        this->log(logDEBUG, "Tomando Nuevo pedido para entregar y cobrar.");
 
+    }
 
 }
 
