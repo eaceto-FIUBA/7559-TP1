@@ -9,7 +9,10 @@
 #define PEDIDOSPARAHORNEAR_H_
 
 #include "Semaforo.h"
-#include "MemoriaCompartidaConcurrente.h"
+//#include "MemoriaCompartidaConcurrente.h"
+#include "Pedido.h"
+#include "FifoEscritura.h"
+#include "FifoLectura.h"
 #include <string>
 
 using namespace std;
@@ -17,12 +20,19 @@ using namespace std;
 class PedidosParaHornear {
 private:
     Semaforo *semaforo;
-    MemoriaCompartidaConcurrente<unsigned long> *memoria;
+//    MemoriaCompartidaConcurrente<unsigned long> *memoria;
+
+    /** Lectura y Escritura para los Pedidos A Hornear **/
+    FifoLectura *fifoLecPedidosAHornear;
+    FifoEscritura *fifoEscPedidosAHornear;
 
     static PedidosParaHornear *instance;
     static const string fileName;
     static const string memoriafileName;
     unsigned int cant_hornos;
+
+    /** fifo files **/
+    static const string aHornearFileName;
 
 	PedidosParaHornear();
 	~PedidosParaHornear();
@@ -35,8 +45,8 @@ public:
     static void destroy();
 
     int esperarNuevoPedido();  // ejecutado solo por horno
-    int hornearPedido(); // ejecutado solo por cocinera
-    bool tomarNuevoPedido();   // true si pudo tomar un nuevo pedido para hornear
+    int hornearPedido(Pedido &p); // ejecutado solo por cocinera
+    Pedido* tomarNuevoPedido();   // true si pudo tomar un nuevo pedido para hornear
 };
 
 #endif /* PEDIDOSPARAHORNEAR_H_ */

@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
-#include "Constantes.h"
 #include "Utils.h"
 #include "LockFile.h"
 

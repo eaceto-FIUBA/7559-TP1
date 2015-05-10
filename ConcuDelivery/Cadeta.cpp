@@ -24,11 +24,15 @@ void Cadeta::realizarTarea() {
         assert(false); // error al realizar la espera!
     }
 
-    /** Tomar pedido para entregar y cobrar**/
-    if (PedidosParaEntregar::getInstance()->tomarPedidoParaEntregar()) {
-        this->log(logDEBUG, "Tomando Nuevo pedido para entregar y cobrar.");
+    Pedido *p = PedidosParaEntregar::getInstance()->tomarPedidoParaEntregar();
+    this->log(logDEBUG, "Tomando pedido para entregar y cobrar numero " + p->numero);
 
-    }
+
+//    /** Tomar pedido para entregar y cobrar**/
+//    if (PedidosParaEntregar::getInstance()->tomarPedidoParaEntregar()) {
+//        this->log(logDEBUG, "Tomando Nuevo pedido para entregar y cobrar.");
+//
+//    }
 
 }
 

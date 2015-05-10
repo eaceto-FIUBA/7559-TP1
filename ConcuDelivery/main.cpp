@@ -218,12 +218,10 @@ void pararTodas(vector<pid_t>& pids) {
 }
 
 bool realizarPedido(PedidosPorAtender *pedidosPorAtender, unsigned long count) {
-    Pedido p;
-    p.numero = count;
-    p.costo = 10.0;
-    p.estado = p.ESPERANDO;
 
-    return pedidosPorAtender->ingresarNuevoPedido(p) == 0;
+    Pedido *p = new Pedido(count, 10.0, Pedido::ESPERANDO);
+
+    return pedidosPorAtender->ingresarNuevoPedido(*p) == 0;
 }
 
 void comenzarTrabajo() {
@@ -234,22 +232,27 @@ void comenzarTrabajo() {
     SignalHandler::getInstance()->registrarHandler(SIGTERM, &sigint_handler);
 
     //1. crear recursos
+    log->log(logINFO,"Creando recursos");
     /// Pedidos por atender (Cliente -> Recepcionista)
+
     int cantidadDePedidosRealizados = 0;
     PedidosPorAtender *pedidosPorAtender = PedidosPorAtender::getInstance();
+    log->log(logINFO,"Buffer Pedidos para Atender creado.");
 
     // Pedidos para cocinar (Recepcionista -> Cocinera)
     PedidosParaCocinar *pedidosParaCocinar = PedidosParaCocinar::getInstance();
+    log->log(logINFO,"Buffer Pedidos para Cocinar creado.");
 
     // Pedidos para hornear (Cocinera -> Horno)
     PedidosParaHornear *pedidosParaHornear = PedidosParaHornear::getInstance();
     /** Buffer de Pedidos para Hornear igual a la cantidad de Hornos **/
     pedidosParaHornear->setCantHornos(hornosCount);
+    log->log(logINFO,"Buffer Pedidos para Hornear creado.");
 
     /// Pedidos entregados y cobrados (Cadeta -> Cliente)
     int cantidadDePedidosEntregados = 0;
     PedidosParaEntregar *pedidosParaEntregar = PedidosParaEntregar::getInstance();
-
+    log->log(logINFO,"Buffer Pedidos para Entregar y Cobrar creado.");
 
     //2. Crear procesos
     log->log(logINFO,"Creando procesos");
@@ -266,6 +269,7 @@ void comenzarTrabajo() {
     crearCadetas(cadetas);
 
     sleep(3);
+
 
     //3. iniciar la simulacion
     while (sigint_handler.getGracefulQuit() == 0 && cantidadDePedidosRealizados < simulacionCount) {
@@ -287,7 +291,8 @@ void comenzarTrabajo() {
 
     //4. Eserar a que cantidad de pedidos entregados / cobrados == cantidadDePedidosRealizados
     do {
-        cantidadDePedidosEntregados = pedidosParaEntregar->cantidadDePedidosEntregados();
+//        cantidadDePedidosEntregados = pedidosParaEntregar->cantidadDePedidosEntregados();
+    	cantidadDePedidosEntregados = cantidadDePedidosRealizados; //FIXME
         usleep(500 * 1000);
     } while (cantidadDePedidosEntregados < cantidadDePedidosRealizados);
 

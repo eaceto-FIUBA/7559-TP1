@@ -20,24 +20,30 @@ void Cocinera::realizarTarea() {
 
 	/** Esperar pedido para cocinar **/
     log(logDEBUG, "Esperando nuevo pedido para cocinar...");
-    if (PedidosParaCocinar::getInstance()->esperarNuevoPedido() != 0) {
+    if (PedidosParaCocinar::getInstance()->esperarPedidoACocinar() != 0) {
         this->log(logERROR, "ERROR AL ESPERAR NUEVO PEDIDO PARA COCINAR. - " + to_string(errno));
         cout << ">>>>>>>> FATAL ERROR: " << strerror(errno) << " <<<<<<<<" << endl;
         assert(false); // error al realizar la espera!
     }
 
-    /** Tomar pedido para cocinar **/
-    if (PedidosParaCocinar::getInstance()->tomarNuevoPedido()) {
-    	//TODO
-        this->log(logDEBUG, "Tomando Nuevo pedido para cocinar.");
 
-        /** Esperar PedidosParaHornear disponible**/
-        //TODO Lock si no hay hornos disponibles
+    Pedido *p = PedidosParaCocinar::getInstance()->tomarPedidoACocinar();
+    this->log(logDEBUG, "Tomando pedido para cocinar numero " + p->numero);
+    PedidosParaHornear::getInstance()->hornearPedido(*p);
+    this->log(logDEBUG, "Nuevo pedido ingresado en horno.");
 
-        /** AgregarPedido para Hornear **/
-        PedidosParaHornear::getInstance()->hornearPedido();
-        this->log(logDEBUG, "Nuevo pedido listo para entregar.");
-    }
+//    /** Tomar pedido para cocinar **/
+//    if (PedidosParaCocinar::getInstance()->tomarPedidoACocinar()) {
+//    	//TODO
+//        this->log(logDEBUG, "Tomando Nuevo pedido para cocinar.");
+//
+//        /** Esperar PedidosParaHornear disponible**/
+//        //TODO Lock si no hay hornos disponibles
+//
+//        /** AgregarPedido para Hornear **/
+//        PedidosParaHornear::getInstance()->hornearPedido();
+//        this->log(logDEBUG, "Nuevo pedido listo para entregar.");
+//    }
 
 }
 

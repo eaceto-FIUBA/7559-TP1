@@ -1,12 +1,9 @@
-//
-// Created by kimi on 10/05/15.
-//
 
 #ifndef CONCUDELIVERY_PEDIDO_H
 #define CONCUDELIVERY_PEDIDO_H
 
 
-struct Pedido {
+class Pedido {
 
 public:
 
@@ -17,6 +14,10 @@ public:
         COCINADO = 3,
         ENTREGADO_Y_COBRADO = 4
     };
+
+    Pedido();
+    Pedido(unsigned long n, double c, Estado e);
+    ~Pedido();
 
     unsigned long numero;
     double costo;

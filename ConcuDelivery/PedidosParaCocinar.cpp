@@ -3,22 +3,34 @@
 //
 
 #include "PedidosParaCocinar.h"
-
+#include <assert.h>
 #include "Constantes.h"
 
 PedidosParaCocinar *PedidosParaCocinar::instance = NULL;
 const string PedidosParaCocinar::fileName = SEMAFOROS_PATH + "PedidosParaCocinar" + SEMAFOROS_EXTENSION;
-const string PedidosParaCocinar::memoriafileName = MEMORIA_PATH + "PedidosParaCocinar" + MEMORIA_EXTENSION;
+const string PedidosParaCocinar::aCocinarFileName = MEMORIA_PATH + FIFO_A_COCINAR + FIFO_EXTENSION;
 
 PedidosParaCocinar::PedidosParaCocinar() {
     semaforo = new Semaforo(fileName, 0);
-    memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
+    //memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
+
+    fifoLecPedidosACocinar =  new FifoLectura(aCocinarFileName);
+    fifoEscPedidosACocinar = new FifoEscritura(aCocinarFileName);
+
+
+
 }
 
 PedidosParaCocinar::~PedidosParaCocinar() {
     semaforo->eliminar();
     delete semaforo;
-    delete memoria;
+
+    fifoLecPedidosACocinar->cerrar();
+    fifoEscPedidosACocinar->cerrar();
+
+	fifoEscPedidosACocinar->eliminar();
+
+    //delete memoria;
 }
 
 PedidosParaCocinar *PedidosParaCocinar::getInstance() {
@@ -34,39 +46,30 @@ void PedidosParaCocinar::destroy() {
     }
 }
 
-int PedidosParaCocinar::esperarNuevoPedido() {
+int PedidosParaCocinar::esperarPedidoACocinar() {
     return semaforo->p();
 }
 
-int PedidosParaCocinar::ingresarNuevoPedido() {
+int PedidosParaCocinar::ingresarPedidoACocinar(Pedido &p) {
     // incrementar cantidad de pedidos
-    if (memoria->tomarLockManualmente()) {
-        unsigned long cantDePedidos = memoria->leerInseguro();
-        cantDePedidos++;
-        memoria->escribirInseguro(cantDePedidos);
-        memoria->liberarLockManualmente();
-        return semaforo->v();
-    }
-    return -1;
+	fifoEscPedidosACocinar->abrir();
+	ssize_t bytesEscritos = fifoEscPedidosACocinar->escribir( static_cast< void* >(&p), sizeof(p) ) ;
+	assert(bytesEscritos - sizeof(Pedido) == 0);
+
+    return semaforo->v();
+//    return -1;
 }
 
-bool PedidosParaCocinar::tomarNuevoPedido() {
-    if (memoria->tomarLockManualmente()) {
-        bool tomado = false;
+Pedido* PedidosParaCocinar::tomarPedidoACocinar() {
 
-        unsigned long cantDePedidos = memoria->leerInseguro();
-        if (cantDePedidos > 0) {
-            tomado = true;
-            cantDePedidos--;
-            memoria->escribirInseguro(cantDePedidos);
-        }
+	Pedido *p = new Pedido();
+    fifoLecPedidosACocinar->abrir();
+	ssize_t bytesLeidos = fifoLecPedidosACocinar->leer( static_cast< void* >(p), sizeof(*p) ) ;
+	assert(bytesLeidos - sizeof(Pedido) == 0);
 
-        memoria->liberarLockManualmente();
-        return tomado;
-    }
-    return false;
+    return p;
 }
 
-unsigned long PedidosParaCocinar::cantidadDePedidosParaCocinar() {
-    return memoria->leer();
-}
+//unsigned long PedidosParaCocinar::cantidadDePedidosParaCocinar() {
+//    return memoria->leer();
+//}

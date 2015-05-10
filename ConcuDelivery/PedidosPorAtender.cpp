@@ -4,31 +4,38 @@
 
 #include "PedidosPorAtender.h"
 #include "Constantes.h"
+#include <assert.h>
 
 PedidosPorAtender *PedidosPorAtender::instance = NULL;
 const string PedidosPorAtender::fileName = SEMAFOROS_PATH + "PedidosPorAtender" + SEMAFOROS_EXTENSION;
-const string PedidosPorAtender::memoriafileName = MEMORIA_PATH + "PedidosPorAtender" + MEMORIA_EXTENSION;
+
+const string PedidosPorAtender::aAtenderFileName = MEMORIA_PATH + FIFO_A_ATENDER + FIFO_EXTENSION;
 
 PedidosPorAtender::PedidosPorAtender() {
     semaforo = new Semaforo(fileName, 0);
-    memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
+//    memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
 
-    fifoEscritura = new FifoEscritura(MEMORIA_PATH + "PedidosPorAtender.fifo");
-    //fifoEscritura->abrir();
+    fifoLecPedidosAAtender = new FifoLectura(aAtenderFileName);
+    fifoEscPedidosAAtender = new FifoEscritura(aAtenderFileName);
 
-    fifoLectura = new FifoLectura(MEMORIA_PATH + "PedidosPorAtender.fifo");
-    // fifoLectura->abrir();
+
+
+//    fifoEscPedidosAAtender->abrir();
+
 }
 
 PedidosPorAtender::~PedidosPorAtender() {
     semaforo->eliminar();
     delete semaforo;
-    delete memoria;
-    fifoLectura->cerrar();
-    fifoEscritura->cerrar();
-    fifoEscritura->eliminar();
-    delete fifoEscritura;
-    delete fifoLectura;
+//    delete memoria;
+
+    fifoLecPedidosAAtender->cerrar();
+    fifoEscPedidosAAtender->cerrar();
+
+    fifoEscPedidosAAtender->eliminar();
+
+    delete fifoLecPedidosAAtender;
+    delete fifoEscPedidosAAtender;
 }
 
 PedidosPorAtender *PedidosPorAtender::getInstance() {
@@ -48,41 +55,22 @@ int PedidosPorAtender::esperarNuevoPedido() {
     return semaforo->p();
 }
 
-int PedidosPorAtender::ingresarNuevoPedido(Pedido p) {
+int PedidosPorAtender::ingresarNuevoPedido(Pedido &p) {
     // incrementar cantidad de pedidos
-    if (memoria->tomarLockManualmente()) {
+	fifoEscPedidosAAtender->abrir();
+	ssize_t bytesEscritos = fifoEscPedidosAAtender->escribir( static_cast< void* >(&p), sizeof(p) ) ;
+	assert(bytesEscritos - sizeof(Pedido) == 0);
 
-        /*
-        ssize_t check = fifoEscritura->escribir((const void*)(&p),sizeof(p));
-        cout << "CHK " << to_string(check);
-        cout << "PEDIDO " << to_string(sizeof(Pedido));
-        assert(check == sizeof(Pedido));
-*/
-        unsigned long cantDePedidos = memoria->leerInseguro();
-        cantDePedidos++;
-        memoria->escribirInseguro(cantDePedidos);
-        memoria->liberarLockManualmente();
-
-        return semaforo->v();
-
-    }
-    return -1;
+	return semaforo->v();
 }
 
-bool PedidosPorAtender::tomarNuevoPedido() {
-    if (memoria->tomarLockManualmente()) {
-        bool tomado = false;
+Pedido* PedidosPorAtender::tomarNuevoPedido() {
 
-        unsigned long cantDePedidos = memoria->leerInseguro();
-        if (cantDePedidos > 0) {
-            tomado = true;
-            cantDePedidos--;
-            memoria->escribirInseguro(cantDePedidos);
-        }
+	Pedido *p = new Pedido();
+    fifoLecPedidosAAtender->abrir();
+	ssize_t bytesLeidos = fifoLecPedidosAAtender->leer( static_cast< void* >(p), sizeof(*p) ) ;
+	assert(bytesLeidos - sizeof(Pedido) == 0);
 
-        memoria->liberarLockManualmente();
-        return tomado;
-    }
-    return false;
+    return p;
 }
 

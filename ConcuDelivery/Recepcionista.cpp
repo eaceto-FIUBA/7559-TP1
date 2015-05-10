@@ -30,17 +30,23 @@ void Recepcionista::realizarTarea() {
     // las recepcionistas dejan de atender los tel ́efonos hasta tant
     // o se procese al menos un pedido de los pendientes.
 
-    unsigned long cantDePedidosParaCocinar =
-            PedidosParaCocinar::getInstance()->cantidadDePedidosParaCocinar();
+
+    Pedido *p = PedidosPorAtender::getInstance()->tomarNuevoPedido();
+    this->log(logDEBUG, "Tomando nuevo pedido numero " + p->numero);
+    PedidosParaCocinar::getInstance()->ingresarPedidoACocinar(*p);
+    this->log(logDEBUG, "Nuevo pedido ingresado en cocina.");
+
+//    unsigned long cantDePedidosParaCocinar =
+//            PedidosParaCocinar::getInstance()->cantidadDePedidosParaCocinar();
 
 
-    if (cantDePedidosParaCocinar <= 2 * cantDeCocinerasDisponibles) {
-        if (PedidosPorAtender::getInstance()->tomarNuevoPedido()) {
-            this->log(logDEBUG, "Tomando Nuevo pedido.");
-            PedidosParaCocinar::getInstance()->ingresarNuevoPedido();
-            this->log(logDEBUG, "Nuevo pedido ingresado en cocina.");
-        }
-    }
+//    if (cantDePedidosParaCocinar <= 2 * cantDeCocinerasDisponibles) {
+//        if (PedidosPorAtender::getInstance()->tomarNuevoPedido()) {
+//            this->log(logDEBUG, "Tomando Nuevo pedido.");
+//            PedidosParaCocinar::getInstance()->ingresarPedidoACocinar();
+//            this->log(logDEBUG, "Nuevo pedido ingresado en cocina.");
+//        }
+//    }
 }
 
 string Recepcionista::nombre() {

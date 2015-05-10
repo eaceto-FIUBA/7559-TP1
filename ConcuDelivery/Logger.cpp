@@ -1,4 +1,5 @@
 #include "Logger.h"
+#include "Constantes.h"
 
 Logger* Logger::instance = NULL;
 const string Logger::fileName = LOG_PATH + getDateTime() + LOG_EXTENSION;

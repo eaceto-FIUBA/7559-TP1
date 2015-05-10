@@ -5,22 +5,34 @@
 #ifndef CONCUDELIVERY_PEDIDOSPARAENTREGAR_H
 #define CONCUDELIVERY_PEDIDOSPARAENTREGAR_H
 
+
 #include "Semaforo.h"
 #include "MemoriaCompartidaConcurrente.h"
 #include <string>
+#include "Pedido.h"
+
+#include "FifoEscritura.h"
+#include "FifoLectura.h"
 
 using namespace std;
 
 class PedidosParaEntregar {
 private:
     Semaforo *semaforo;
-    MemoriaCompartidaConcurrente<unsigned long> *memoria;
-    MemoriaCompartidaConcurrente<unsigned long> *pedidosEntregados;
+//    MemoriaCompartidaConcurrente<unsigned long> *memoria;
+//    MemoriaCompartidaConcurrente<unsigned long> *pedidosEntregados;
+
+    /** Lectura y Escritura para los Pedidos A Entregar **/
+    FifoLectura *fifoLecPedidosAEntregar;
+    FifoEscritura *fifoEscPedidosAEntregar;
 
     static PedidosParaEntregar *instance;
     static const string fileName;
     static const string memoriafileName;
     static const string pedidosFilename;
+
+    /** fifo files **/
+    static const string aEntregarFileName;
 
     PedidosParaEntregar();
 
@@ -32,10 +44,10 @@ public:
     static void destroy();
 
     int esperarNuevoPedidoParaEntregar();  // ejecutado solo por las cadetas
-    int nuevoPedidoListo(); // ejecutado solo por la cocinera / horno
-    bool tomarPedidoParaEntregar();   // true si pudo tomar un nuevo pedido para entregar
+    int nuevoPedidoListo(Pedido &p); // ejecutado solo por la cocinera / horno
+    Pedido* tomarPedidoParaEntregar();   // true si pudo tomar un nuevo pedido para entregar
 
-    unsigned long cantidadDePedidosEntregados();
+//    unsigned long cantidadDePedidosEntregados();
 
 };
 

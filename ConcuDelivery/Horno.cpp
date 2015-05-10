@@ -21,13 +21,20 @@ void Horno::realizarTarea() {
         assert(false); // error al realizar la espera!
     }
 
-    if (PedidosParaHornear::getInstance()->tomarNuevoPedido()) {
 
-    	this->log(logDEBUG, "Tomando Nuevo pedido para hornear.");
+    Pedido *p = PedidosParaHornear::getInstance()->tomarNuevoPedido();
+    this->log(logDEBUG, "Tomando pedido para hornear numero " + p->numero);
+    PedidosParaEntregar::getInstance()->nuevoPedidoListo(*p);
+    this->log(logDEBUG, "Nuevo pedido listo para ser entregado.");
 
-        PedidosParaEntregar::getInstance()->nuevoPedidoListo();
-        this->log(logDEBUG, "Nuevo pedido listo para entregar.");
-    }
+//
+//    if (PedidosParaHornear::getInstance()->tomarNuevoPedido()) {
+//
+//    	this->log(logDEBUG, "Tomando Nuevo pedido para hornear.");
+//
+//        PedidosParaEntregar::getInstance()->nuevoPedidoListo();
+//        this->log(logDEBUG, "Nuevo pedido listo para entregar.");
+//    }
 }
 
 string Horno::nombre() {

@@ -6,23 +6,31 @@
  */
 
 #include "PedidosParaHornear.h"
-
+#include <assert.h>
 #include "Constantes.h"
 
 PedidosParaHornear *PedidosParaHornear::instance = NULL;
 const string PedidosParaHornear::fileName = SEMAFOROS_PATH + "PedidosParaHornear" + SEMAFOROS_EXTENSION;
-const string PedidosParaHornear::memoriafileName = MEMORIA_PATH + "PedidosParaHornear" + MEMORIA_EXTENSION;
+const string PedidosParaHornear::aHornearFileName = MEMORIA_PATH + FIFO_A_HORNEAR + FIFO_EXTENSION;
 
 PedidosParaHornear::PedidosParaHornear() {
     semaforo = new Semaforo(fileName, 0);
-    memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
+//    memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
     cant_hornos = 0;
+
+    fifoLecPedidosAHornear =  new FifoLectura(aHornearFileName);
+    fifoEscPedidosAHornear = new FifoEscritura(aHornearFileName);
 }
 
 PedidosParaHornear::~PedidosParaHornear() {
     semaforo->eliminar();
     delete semaforo;
-    delete memoria;
+//    delete memoria;
+
+    fifoLecPedidosAHornear->cerrar();
+    fifoEscPedidosAHornear->cerrar();
+
+    fifoEscPedidosAHornear->eliminar();
 }
 
 void PedidosParaHornear::setCantHornos(const unsigned int cant_hornos){
@@ -46,34 +54,24 @@ int PedidosParaHornear::esperarNuevoPedido() {
     return semaforo->p();
 }
 
-int PedidosParaHornear::hornearPedido() {
+int PedidosParaHornear::hornearPedido(Pedido &p) {
 	//TODO
 	//Lock if (memoria->size() < cant_hornos)
 
     // incrementar cantidad de pedidos
-    if (memoria->tomarLockManualmente()) {
-        unsigned long cantDePedidos = memoria->leerInseguro();
-        cantDePedidos++;
-        memoria->escribirInseguro(cantDePedidos);
-        memoria->liberarLockManualmente();
-        return semaforo->v();
-    }
-    return -1;
+    fifoEscPedidosAHornear->abrir();
+	ssize_t bytesEscritos = fifoEscPedidosAHornear->escribir( static_cast< void* >(&p), sizeof(p) ) ;
+	assert(bytesEscritos - sizeof(Pedido) == 0);
+
+    return semaforo->v();
 }
 
-bool PedidosParaHornear::tomarNuevoPedido() {
-    if (memoria->tomarLockManualmente()) {
-        bool tomado = false;
+Pedido* PedidosParaHornear::tomarNuevoPedido() {
 
-        unsigned long cantDePedidos = memoria->leerInseguro();
-        if (cantDePedidos > 0) {
-            tomado = true;
-            cantDePedidos--;
-            memoria->escribirInseguro(cantDePedidos);
-        }
+	Pedido* p = new Pedido();
+	fifoLecPedidosAHornear->abrir();
+	ssize_t bytesLeidos = fifoLecPedidosAHornear->leer( static_cast< void* >(p), sizeof(*p) ) ;
+	assert(bytesLeidos - sizeof(Pedido) == 0);
 
-        memoria->liberarLockManualmente();
-        return tomado;
-    }
-    return false;
+	return p;
 }
