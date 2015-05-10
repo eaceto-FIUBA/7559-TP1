@@ -29,7 +29,7 @@ void Cocinera::realizarTarea() {
 
     Pedido *p = PedidosParaCocinar::getInstance()->tomarPedidoACocinar();
     if (p != NULL) {
-        this->log(logDEBUG, "Tomando pedido para cocinar numero " + p->numero);
+        this->log(logDEBUG, "Tomando pedido para cocinar numero " + to_string(p->numero));
         PedidosParaHornear::getInstance()->hornearPedido(*p);
         this->log(logDEBUG, "Nuevo pedido ingresado en horno.");
     }

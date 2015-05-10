@@ -25,7 +25,7 @@ void Horno::realizarTarea() {
 
     Pedido *p = PedidosParaHornear::getInstance()->tomarNuevoPedido();
     if (p != NULL) {
-        this->log(logDEBUG, "Tomando pedido para hornear numero " + p->numero);
+        this->log(logDEBUG, "Tomando pedido para hornear numero " + to_string(p->numero));
         PedidosParaEntregar::getInstance()->nuevoPedidoListo(*p);
         this->log(logDEBUG, "Nuevo pedido listo para ser entregado.");
     }
@@ -40,8 +40,8 @@ void Horno::realizarTarea() {
 }
 
 void Horno::inicializarProceso(unsigned long id) {
-    PedidosParaCocinar::getInstance()->inicializarParaLeer();
-    PedidosParaHornear::getInstance()->inicializarParaEscribir();
+	PedidosParaHornear::getInstance()->inicializarParaLeer();
+    PedidosParaEntregar::getInstance()->inicializarParaEscribir();
 }
 
 string Horno::nombre() {

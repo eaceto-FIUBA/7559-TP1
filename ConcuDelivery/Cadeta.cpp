@@ -27,7 +27,7 @@ void Cadeta::realizarTarea() {
 
     Pedido *p = PedidosParaEntregar::getInstance()->tomarPedidoParaEntregar();
     if (p != NULL) {
-        this->log(logDEBUG, "Tomando pedido para entregar y cobrar numero " + p->numero);
+        this->log(logDEBUG, "Tomando pedido para entregar y cobrar numero " + to_string(p->numero));
     }
 
 //    /** Tomar pedido para entregar y cobrar**/
@@ -39,8 +39,7 @@ void Cadeta::realizarTarea() {
 }
 
 void Cadeta::inicializarProceso(unsigned long id) {
-    PedidosParaHornear::getInstance()->inicializarParaLeer();
-    PedidosParaEntregar::getInstance()->inicializarParaEscribir();
+	PedidosParaEntregar::getInstance()->inicializarParaLeer();
 }
 
 string Cadeta::nombre() {
