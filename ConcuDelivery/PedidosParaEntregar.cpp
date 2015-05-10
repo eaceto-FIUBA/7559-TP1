@@ -6,24 +6,23 @@
 PedidosParaEntregar *PedidosParaEntregar::instance = NULL;
 const string PedidosParaEntregar::fileName = SEMAFOROS_PATH + "PedidosPorEntregar" + SEMAFOROS_EXTENSION;
 //const string PedidosParaEntregar::memoriafileName = MEMORIA_PATH + "PedidosPorEntregar" + MEMORIA_EXTENSION;
-//const string PedidosParaEntregar::pedidosFilename = MEMORIA_PATH + "PedidosEntregados" + MEMORIA_EXTENSION;
+const string PedidosParaEntregar::pedidosFilename = MEMORIA_PATH + "PedidosEntregados" + MEMORIA_EXTENSION;
 const string PedidosParaEntregar::aEntregarFileName = MEMORIA_PATH + FIFO_A_ENTREGAR + FIFO_EXTENSION;
 
 PedidosParaEntregar::PedidosParaEntregar() {
     semaforo = new Semaforo(fileName, 0);
 //    memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
-//    pedidosEntregados = new MemoriaCompartidaConcurrente<unsigned long>(pedidosFilename, 'A');
+
+    pedidosEntregados = new MemoriaCompartidaConcurrente<unsigned long>(pedidosFilename, 'A');
 
     fifoLecPedidosAEntregar =  new FifoLectura(aEntregarFileName);
     fifoEscPedidosAEntregar = new FifoEscritura(aEntregarFileName);
-
-
 }
 
 PedidosParaEntregar::~PedidosParaEntregar() {
     semaforo->eliminar();
     delete semaforo;
-//    delete memoria;
+    delete pedidosEntregados;
 
     fifoLecPedidosAEntregar->cerrar();
     fifoEscPedidosAEntregar->cerrar();
@@ -88,6 +87,15 @@ Pedido* PedidosParaEntregar::tomarPedidoParaEntregar() {
 
 }
 
-//unsigned long PedidosParaEntregar::cantidadDePedidosEntregados() {
-//    return pedidosEntregados->leer();
-//}
+void PedidosParaEntregar::marcarPedidoComoEntregado(Pedido &p) {
+    if (pedidosEntregados->tomarLockManualmente()) {
+        unsigned long cant = pedidosEntregados->leerInseguro();
+        cant++;
+        pedidosEntregados->escribirInseguro(cant);
+        pedidosEntregados->liberarLockManualmente();
+    }
+}
+
+unsigned long PedidosParaEntregar::cantidadDePedidosEntregados() {
+    return pedidosEntregados->leer();
+}

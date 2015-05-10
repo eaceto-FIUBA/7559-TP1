@@ -5,7 +5,6 @@
 #include "Cadeta.h"
 
 #include "PedidosParaEntregar.h"
-#include "PedidosParaHornear.h"
 
 Cadeta::Cadeta() : Proceso() {
 
@@ -28,14 +27,8 @@ void Cadeta::realizarTarea() {
     Pedido *p = PedidosParaEntregar::getInstance()->tomarPedidoParaEntregar();
     if (p != NULL) {
         this->log(logDEBUG, "Tomando pedido para entregar y cobrar numero " + to_string(p->numero));
+        PedidosParaEntregar::getInstance()->marcarPedidoComoEntregado(*p);
     }
-
-//    /** Tomar pedido para entregar y cobrar**/
-//    if (PedidosParaEntregar::getInstance()->tomarPedidoParaEntregar()) {
-//        this->log(logDEBUG, "Tomando Nuevo pedido para entregar y cobrar.");
-//
-//    }
-
 }
 
 void Cadeta::inicializarProceso(unsigned long id) {

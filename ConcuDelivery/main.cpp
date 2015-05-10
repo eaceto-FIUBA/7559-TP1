@@ -237,6 +237,7 @@ void comenzarTrabajo() {
 
     int cantidadDePedidosRealizados = 0;
     PedidosPorAtender *pedidosPorAtender = PedidosPorAtender::getInstance();
+    pedidosPorAtender->inicializarParaEscribir();
     log->log(logINFO,"Buffer Pedidos para Atender creado.");
 
     // Pedidos para cocinar (Recepcionista -> Cocinera)
@@ -270,8 +271,6 @@ void comenzarTrabajo() {
 
     sleep(3);
 
-    pedidosPorAtender->inicializarParaEscribir();
-
     //3. iniciar la simulacion
     while (sigint_handler.getGracefulQuit() == 0 && cantidadDePedidosRealizados < simulacionCount) {
 
@@ -292,8 +291,7 @@ void comenzarTrabajo() {
 
     //4. Eserar a que cantidad de pedidos entregados / cobrados == cantidadDePedidosRealizados
     do {
-//        cantidadDePedidosEntregados = pedidosParaEntregar->cantidadDePedidosEntregados();
-    	cantidadDePedidosEntregados = cantidadDePedidosRealizados; //FIXME
+        cantidadDePedidosEntregados = pedidosParaEntregar->cantidadDePedidosEntregados();
         usleep(500 * 1000);
     } while (cantidadDePedidosEntregados < cantidadDePedidosRealizados);
 
