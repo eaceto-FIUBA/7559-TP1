@@ -12,12 +12,23 @@ const string PedidosPorAtender::memoriafileName = MEMORIA_PATH + "PedidosPorAten
 PedidosPorAtender::PedidosPorAtender() {
     semaforo = new Semaforo(fileName, 0);
     memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
+
+    fifoEscritura = new FifoEscritura(MEMORIA_PATH + "PedidosPorAtender.fifo");
+    //fifoEscritura->abrir();
+
+    fifoLectura = new FifoLectura(MEMORIA_PATH + "PedidosPorAtender.fifo");
+    // fifoLectura->abrir();
 }
 
 PedidosPorAtender::~PedidosPorAtender() {
     semaforo->eliminar();
     delete semaforo;
     delete memoria;
+    fifoLectura->cerrar();
+    fifoEscritura->cerrar();
+    fifoEscritura->eliminar();
+    delete fifoEscritura;
+    delete fifoLectura;
 }
 
 PedidosPorAtender *PedidosPorAtender::getInstance() {
@@ -37,14 +48,23 @@ int PedidosPorAtender::esperarNuevoPedido() {
     return semaforo->p();
 }
 
-int PedidosPorAtender::ingresarNuevoPedido() {
+int PedidosPorAtender::ingresarNuevoPedido(Pedido p) {
     // incrementar cantidad de pedidos
     if (memoria->tomarLockManualmente()) {
+
+        /*
+        ssize_t check = fifoEscritura->escribir((const void*)(&p),sizeof(p));
+        cout << "CHK " << to_string(check);
+        cout << "PEDIDO " << to_string(sizeof(Pedido));
+        assert(check == sizeof(Pedido));
+*/
         unsigned long cantDePedidos = memoria->leerInseguro();
         cantDePedidos++;
         memoria->escribirInseguro(cantDePedidos);
         memoria->liberarLockManualmente();
+
         return semaforo->v();
+
     }
     return -1;
 }

@@ -11,6 +11,7 @@
 #include "Supervisora.h"
 #include "Horno.h"
 
+#include "Pedido.h"
 #include "PedidosParaCocinar.h"
 #include "PedidosPorAtender.h"
 #include "PedidosParaEntregar.h"
@@ -216,8 +217,13 @@ void pararTodas(vector<pid_t>& pids) {
     }
 }
 
-bool realizarPedido(PedidosPorAtender *pedidosPorAtender) {
-    return pedidosPorAtender->ingresarNuevoPedido() == 0;
+bool realizarPedido(PedidosPorAtender *pedidosPorAtender, unsigned long count) {
+    Pedido p;
+    p.numero = count;
+    p.costo = 10.0;
+    p.estado = p.ESPERANDO;
+
+    return pedidosPorAtender->ingresarNuevoPedido(p) == 0;
 }
 
 void comenzarTrabajo() {
@@ -265,7 +271,7 @@ void comenzarTrabajo() {
     while (sigint_handler.getGracefulQuit() == 0 && cantidadDePedidosRealizados < simulacionCount) {
 
         // hacer nuevo pedido
-        bool pedidoRealizado = realizarPedido(pedidosPorAtender);
+        bool pedidoRealizado = realizarPedido(pedidosPorAtender, cantidadDePedidosRealizados + 1);
 
         if (pedidoRealizado) {
             cantidadDePedidosRealizados++;

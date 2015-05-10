@@ -5,13 +5,13 @@
 
 class FifoLectura : public Fifo {
 public:
-    FifoLectura(const std::string nombre);
+	FifoLectura(const std::string nombre);
 
-    ~FifoLectura();
+	~FifoLectura();
 
-    void abrir();
+	void abrir();
 
-    ssize_t leer(void *buffer, const ssize_t buffsize) const;
+	ssize_t leer(void *buffer, const ssize_t buffsize) const;
 };
 
 #endif /* FIFOLECTURA_H_ */

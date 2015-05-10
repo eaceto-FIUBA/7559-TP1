@@ -5,13 +5,13 @@
 
 class FifoEscritura : public Fifo {
 public:
-    FifoEscritura(const std::string nombre);
+	FifoEscritura(const std::string nombre);
 
-    ~FifoEscritura();
+	~FifoEscritura();
 
-    void abrir();
+	void abrir();
 
-    ssize_t escribir(const void *buffer, const ssize_t buffsize) const;
+	ssize_t escribir(const void *buffer, const ssize_t buffsize) const;
 };
 
 #endif /* FIFOESCRITURA_H_ */

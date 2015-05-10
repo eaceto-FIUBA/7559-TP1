@@ -21,6 +21,12 @@ set(SOURCE_FILES
 	LockFile.h
 	MemoriaCompartida2.h
     MemoriaCompartidaConcurrente.h
+    Fifo.h
+    Fifo.cpp
+    FifoEscritura.h
+    FifoEscritura.cpp
+    FifoLectura.h
+    FifoLectura.cpp
 	Logger.cpp
 	Logger.h		 
 	main.cpp

@@ -9,19 +9,19 @@
 
 class Fifo {
 public:
-    Fifo(const std::string nombre);
+	Fifo(const std::string nombre);
 
-    virtual ~Fifo();
+	virtual ~Fifo();
 
-    virtual void abrir() = 0;
+	virtual void abrir() = 0;
 
-    void cerrar();
+	void cerrar();
 
-    void eliminar() const;
+	void eliminar() const;
 
 protected:
-    std::string nombre;
-    int fd;
+	std::string nombre;
+	int fd;
 };
 
 #endif /* FIFO_H_ */
