@@ -9,7 +9,7 @@ FifoLectura::~FifoLectura() {
 }
 
 void FifoLectura::abrir() {
-	fd = open(nombre.c_str(), O_RDONLY | O_NONBLOCK);
+	fd = open(nombre.c_str(), O_RDONLY);
 	if (fd == -1) {
 		std::cout << "open error: " << std::to_string(errno) << " " << strerror(errno) << std::endl;
 	}

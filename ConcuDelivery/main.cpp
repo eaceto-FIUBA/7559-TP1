@@ -301,6 +301,8 @@ void comenzarTrabajo() {
     //5. detener procesos y eliminar recursos
     log->log(logINFO,">> Deteniendo procesos...");
 
+    pedidosPorAtender->finalizarParaEscribir();
+
     pararTodas(recepcionistas);
     pararTodas(cocineras);
     pararTodas(hornos);

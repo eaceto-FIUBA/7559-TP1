@@ -42,6 +42,14 @@ public:
 
     static void destroy();
 
+    void inicializarParaEscribir();
+
+    void inicializarParaLeer();
+
+    void finalizarParaEscribir();
+
+    void finalizarParaLeer();
+
     int esperarPedidoACocinar();  // ejecutado solo por cocinera
     int ingresarPedidoACocinar(Pedido &p); // ejecutado solo por recepcionista
     Pedido* tomarPedidoACocinar();   // true si pudo tomar un nuevo pedido para cocinar

@@ -55,12 +55,14 @@ string Recepcionista::nombre() {
 
 void Recepcionista::inicializarProceso(unsigned long id) {
     PedidosPorAtender::getInstance()->inicializarParaLeer();
+    PedidosParaCocinar::getInstance()->inicializarParaEscribir();
 }
 
 void Recepcionista::destruirRecursos() {
     this->log(logDEBUG, "Recepcionista. Fin del trabajo.");
 
     PedidosPorAtender::getInstance()->finalizarParaLeer();
+    PedidosParaCocinar::getInstance()->finalizarParaEscribir();
 
     PedidosPorAtender::getInstance()->destroy();
     PedidosParaCocinar::getInstance()->destroy();

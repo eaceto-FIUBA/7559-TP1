@@ -60,6 +60,22 @@ int PedidosParaCocinar::ingresarPedidoACocinar(Pedido &p) {
 //    return -1;
 }
 
+void PedidosParaCocinar::inicializarParaEscribir() {
+    fifoEscPedidosACocinar->abrir();
+}
+
+void PedidosParaCocinar::inicializarParaLeer() {
+    fifoLecPedidosACocinar->abrir();
+}
+
+void PedidosParaCocinar::finalizarParaEscribir() {
+    fifoEscPedidosACocinar->cerrar();
+}
+
+void PedidosParaCocinar::finalizarParaLeer() {
+    fifoLecPedidosACocinar->cerrar();
+}
+
 Pedido* PedidosParaCocinar::tomarPedidoACocinar() {
 
 	Pedido *p = new Pedido();
