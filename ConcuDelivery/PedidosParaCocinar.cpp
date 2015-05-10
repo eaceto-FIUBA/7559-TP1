@@ -66,3 +66,7 @@ bool PedidosParaCocinar::tomarNuevoPedido() {
     }
     return false;
 }
+
+unsigned long PedidosParaCocinar::cantidadDePedidosParaCocinar() {
+    return memoria->leer();
+}

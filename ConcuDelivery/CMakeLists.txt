@@ -44,4 +44,4 @@ set(SOURCE_FILES
 	PedidosParaHornear.cpp
 	PedidosParaEntregar.h)
 	
-add_executable(ConcuDelivery ${SOURCE_FILES} )
+add_executable(ConcuDelivery ${SOURCE_FILES} Pedido.cpp Pedido.h)

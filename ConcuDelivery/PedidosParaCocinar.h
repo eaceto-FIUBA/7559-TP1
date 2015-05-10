@@ -35,6 +35,7 @@ public:
     int ingresarNuevoPedido(); // ejecutado solo por recepcionista
     bool tomarNuevoPedido();   // true si pudo tomar un nuevo pedido para cocinar
 
+    unsigned long cantidadDePedidosParaCocinar();
 
 };
 

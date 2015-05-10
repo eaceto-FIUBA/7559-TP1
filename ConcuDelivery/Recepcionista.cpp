@@ -9,8 +9,8 @@
 #include "PedidosParaCocinar.h"
 
 
-Recepcionista::Recepcionista() {
-
+Recepcionista::Recepcionista(unsigned long cocinerasDisponibles) : Proceso() {
+    this->cantDeCocinerasDisponibles = cocinerasDisponibles;
 }
 
 Recepcionista::~Recepcionista() {
@@ -25,10 +25,21 @@ void Recepcionista::realizarTarea() {
         assert(false); // error al realizar la espera!
     }
 
-    if (PedidosPorAtender::getInstance()->tomarNuevoPedido()) {
-        this->log(logDEBUG, "Tomando Nuevo pedido.");
-        PedidosParaCocinar::getInstance()->ingresarNuevoPedido();
-        this->log(logDEBUG, "Nuevo pedido ingresado en cocina.");
+    // 8. Cuando la cantidad pedidos que aun no fueron tomados ́
+    // por las cocineras es mayor al doble de la cantidad de cocineras,
+    // las recepcionistas dejan de atender los tel ́efonos hasta tant
+    // o se procese al menos un pedido de los pendientes.
+
+    unsigned long cantDePedidosParaCocinar =
+            PedidosParaCocinar::getInstance()->cantidadDePedidosParaCocinar();
+
+
+    if (cantDePedidosParaCocinar <= 2 * cantDeCocinerasDisponibles) {
+        if (PedidosPorAtender::getInstance()->tomarNuevoPedido()) {
+            this->log(logDEBUG, "Tomando Nuevo pedido.");
+            PedidosParaCocinar::getInstance()->ingresarNuevoPedido();
+            this->log(logDEBUG, "Nuevo pedido ingresado en cocina.");
+        }
     }
 }
 

@@ -4,7 +4,7 @@
 
 #include "Supervisora.h"
 
-Supervisora::Supervisora() {
+Supervisora::Supervisora() : Proceso() {
 
 }
 

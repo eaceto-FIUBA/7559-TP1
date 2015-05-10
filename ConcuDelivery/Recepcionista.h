@@ -11,13 +11,15 @@
 class Recepcionista: public Proceso {
 
 public:
-    Recepcionista();
+    Recepcionista(unsigned long cocinerasDisponibles);
 
     ~Recepcionista();
 
     void destruirRecursos();
 
 private:
+
+    unsigned long cantDeCocinerasDisponibles;
 
     void realizarTarea();
 

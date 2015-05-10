@@ -6,7 +6,7 @@
 
 #include "PedidosParaEntregar.h"
 
-Cadeta::Cadeta() {
+Cadeta::Cadeta() : Proceso() {
 
 }
 

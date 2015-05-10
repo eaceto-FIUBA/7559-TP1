@@ -162,7 +162,7 @@ void loggearParametros() {
 void crearRecepcionistas(vector<pid_t>& recepcionistas) {
     recepcionistas.reserve(cadetasCount);
     Logger* log = Logger::getInstance();
-    Recepcionista r;
+    Recepcionista r(cocinerasCount);
     for (long i = 0; i < recepcionistasCount; i++) {
         pid_t rpid = r.iniciar(i);
         log->log(logINFO,"Nueva recepcionista. PID: " + to_string(rpid));

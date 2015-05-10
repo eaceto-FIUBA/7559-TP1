@@ -4,7 +4,7 @@
 #include "PedidosParaCocinar.h"
 #include "PedidosParaHornear.h"
 
-Cocinera::Cocinera() {
+Cocinera::Cocinera() : Proceso() {
 
 }
 
@@ -13,6 +13,10 @@ Cocinera::~Cocinera() {
 }
 
 void Cocinera::realizarTarea() {
+
+    // Gio: considerar enunciado del TP:
+    // 7. Para preparar un pedido, la cocinera debe amasar la mezcla, esperar un horno libre y poner a
+    //    cocinar la pizza.
 
 	/** Esperar pedido para cocinar **/
     log(logDEBUG, "Esperando nuevo pedido para cocinar...");
