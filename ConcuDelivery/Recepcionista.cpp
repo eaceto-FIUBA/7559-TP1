@@ -32,10 +32,11 @@ void Recepcionista::realizarTarea() {
 
 
     Pedido *p = PedidosPorAtender::getInstance()->tomarNuevoPedido();
-    this->log(logDEBUG, "Tomando nuevo pedido numero " + to_string(p->numero));
-    PedidosParaCocinar::getInstance()->ingresarPedidoACocinar(*p);
-    this->log(logDEBUG, "Nuevo pedido ingresado en cocina.");
-
+    if (p != NULL) {
+        this->log(logDEBUG, "Tomando nuevo pedido numero " + to_string(p->numero));
+        PedidosParaCocinar::getInstance()->ingresarPedidoACocinar(*p);
+        this->log(logDEBUG, "Nuevo pedido ingresado en cocina.");
+    }
 //    unsigned long cantDePedidosParaCocinar =
 //            PedidosParaCocinar::getInstance()->cantidadDePedidosParaCocinar();
 

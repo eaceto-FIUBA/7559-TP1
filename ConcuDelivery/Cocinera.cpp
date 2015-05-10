@@ -18,7 +18,7 @@ void Cocinera::realizarTarea() {
     // 7. Para preparar un pedido, la cocinera debe amasar la mezcla, esperar un horno libre y poner a
     //    cocinar la pizza.
 
-	/** Esperar pedido para cocinar **/
+    /** Esperar pedido para cocinar **/
     log(logDEBUG, "Esperando nuevo pedido para cocinar...");
     if (PedidosParaCocinar::getInstance()->esperarPedidoACocinar() != 0) {
         this->log(logERROR, "ERROR AL ESPERAR NUEVO PEDIDO PARA COCINAR. - " + to_string(errno));
@@ -28,9 +28,11 @@ void Cocinera::realizarTarea() {
 
 
     Pedido *p = PedidosParaCocinar::getInstance()->tomarPedidoACocinar();
-    this->log(logDEBUG, "Tomando pedido para cocinar numero " + p->numero);
-    PedidosParaHornear::getInstance()->hornearPedido(*p);
-    this->log(logDEBUG, "Nuevo pedido ingresado en horno.");
+    if (p != NULL) {
+        this->log(logDEBUG, "Tomando pedido para cocinar numero " + p->numero);
+        PedidosParaHornear::getInstance()->hornearPedido(*p);
+        this->log(logDEBUG, "Nuevo pedido ingresado en horno.");
+    }
 
 //    /** Tomar pedido para cocinar **/
 //    if (PedidosParaCocinar::getInstance()->tomarPedidoACocinar()) {

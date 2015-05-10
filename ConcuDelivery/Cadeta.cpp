@@ -26,8 +26,9 @@ void Cadeta::realizarTarea() {
     }
 
     Pedido *p = PedidosParaEntregar::getInstance()->tomarPedidoParaEntregar();
-    this->log(logDEBUG, "Tomando pedido para entregar y cobrar numero " + p->numero);
-
+    if (p != NULL) {
+        this->log(logDEBUG, "Tomando pedido para entregar y cobrar numero " + p->numero);
+    }
 
 //    /** Tomar pedido para entregar y cobrar**/
 //    if (PedidosParaEntregar::getInstance()->tomarPedidoParaEntregar()) {

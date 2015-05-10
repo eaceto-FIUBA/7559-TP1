@@ -82,7 +82,6 @@ int PedidosPorAtender::ingresarNuevoPedido(Pedido &p) {
 Pedido* PedidosPorAtender::tomarNuevoPedido() {
 
     if (memoria->tomarLockManualmente()) {
-
         unsigned long cantidad = memoria->leerInseguro();
 
         if (cantidad == 0) {

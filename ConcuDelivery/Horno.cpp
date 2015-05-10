@@ -24,10 +24,11 @@ void Horno::realizarTarea() {
 
 
     Pedido *p = PedidosParaHornear::getInstance()->tomarNuevoPedido();
-    this->log(logDEBUG, "Tomando pedido para hornear numero " + p->numero);
-    PedidosParaEntregar::getInstance()->nuevoPedidoListo(*p);
-    this->log(logDEBUG, "Nuevo pedido listo para ser entregado.");
-
+    if (p != NULL) {
+        this->log(logDEBUG, "Tomando pedido para hornear numero " + p->numero);
+        PedidosParaEntregar::getInstance()->nuevoPedidoListo(*p);
+        this->log(logDEBUG, "Nuevo pedido listo para ser entregado.");
+    }
 //
 //    if (PedidosParaHornear::getInstance()->tomarNuevoPedido()) {
 //
