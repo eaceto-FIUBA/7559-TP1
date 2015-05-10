@@ -9,7 +9,7 @@
 #define PEDIDOSPARAHORNEAR_H_
 
 #include "Semaforo.h"
-//#include "MemoriaCompartidaConcurrente.h"
+#include "MemoriaCompartidaConcurrente.h"
 #include "Pedido.h"
 #include "FifoEscritura.h"
 #include "FifoLectura.h"
@@ -20,7 +20,7 @@ using namespace std;
 class PedidosParaHornear {
 private:
     Semaforo *semaforo;
-//    MemoriaCompartidaConcurrente<unsigned long> *memoria;
+    MemoriaCompartidaConcurrente<unsigned long> *memoria;
 
     /** Lectura y Escritura para los Pedidos A Hornear **/
     FifoLectura *fifoLecPedidosAHornear;

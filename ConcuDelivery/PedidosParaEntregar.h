@@ -19,7 +19,7 @@ using namespace std;
 class PedidosParaEntregar {
 private:
     Semaforo *semaforo;
-//    MemoriaCompartidaConcurrente<unsigned long> *memoria;
+    MemoriaCompartidaConcurrente<unsigned long> *memoria;
     MemoriaCompartidaConcurrente<unsigned long> *pedidosEntregados;
 
     /** Lectura y Escritura para los Pedidos A Entregar **/

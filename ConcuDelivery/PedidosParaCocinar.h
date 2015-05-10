@@ -6,7 +6,7 @@
 #define CONCUDELIVERY_PEDIDOSPARACOCINAR_H
 
 #include "Semaforo.h"
-//#include "MemoriaCompartidaConcurrente.h"
+#include "MemoriaCompartidaConcurrente.h"
 #include "FifoEscritura.h"
 #include "FifoLectura.h"
 #include "Pedido.h"
@@ -20,7 +20,7 @@ class PedidosParaCocinar {
 
 private:
     Semaforo *semaforo;
-    //MemoriaCompartidaConcurrente<unsigned long> *memoria;
+    MemoriaCompartidaConcurrente<unsigned long> *memoria;
 
     /** Lectura y Escritura para los Pedidos A Cocinar **/
     FifoLectura *fifoLecPedidosACocinar;

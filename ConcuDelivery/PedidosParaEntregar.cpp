@@ -4,14 +4,14 @@
 #include <assert.h>
 
 PedidosParaEntregar *PedidosParaEntregar::instance = NULL;
-const string PedidosParaEntregar::fileName = SEMAFOROS_PATH + "PedidosPorEntregar" + SEMAFOROS_EXTENSION;
-//const string PedidosParaEntregar::memoriafileName = MEMORIA_PATH + "PedidosPorEntregar" + MEMORIA_EXTENSION;
+const string PedidosParaEntregar::fileName = SEMAFOROS_PATH + FIFO_A_ENTREGAR + SEMAFOROS_EXTENSION;
+const string PedidosParaEntregar::memoriafileName = MEMORIA_PATH + FIFO_A_ENTREGAR + MEMORIA_EXTENSION;
 const string PedidosParaEntregar::pedidosFilename = MEMORIA_PATH + "PedidosEntregados" + MEMORIA_EXTENSION;
 const string PedidosParaEntregar::aEntregarFileName = MEMORIA_PATH + FIFO_A_ENTREGAR + FIFO_EXTENSION;
 
 PedidosParaEntregar::PedidosParaEntregar() {
     semaforo = new Semaforo(fileName, 0);
-//    memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
+    memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
 
     pedidosEntregados = new MemoriaCompartidaConcurrente<unsigned long>(pedidosFilename, 'A');
 
@@ -22,12 +22,13 @@ PedidosParaEntregar::PedidosParaEntregar() {
 PedidosParaEntregar::~PedidosParaEntregar() {
     semaforo->eliminar();
     delete semaforo;
+    delete memoria;
     delete pedidosEntregados;
 
-    fifoLecPedidosAEntregar->cerrar();
-    fifoEscPedidosAEntregar->cerrar();
-
     fifoEscPedidosAEntregar->eliminar();
+
+    delete fifoLecPedidosAEntregar;
+    delete fifoEscPedidosAEntregar;
 }
 
 PedidosParaEntregar *PedidosParaEntregar::getInstance() {
@@ -64,27 +65,42 @@ int PedidosParaEntregar::esperarNuevoPedidoParaEntregar() {
 }
 
 int PedidosParaEntregar::nuevoPedidoListo(Pedido &p) {
-    // incrementar cantidad de pedidos
+	if (memoria->tomarLockManualmente()) {
+		unsigned long cantidad = memoria->leerInseguro();
+		cantidad++;
+		memoria->escribirInseguro(cantidad);
 
-    fifoEscPedidosAEntregar->abrir();
-	ssize_t bytesEscritos = fifoEscPedidosAEntregar->escribir( static_cast< void* >(&p), sizeof(p) ) ;
-	assert(bytesEscritos - sizeof(Pedido) == 0);
+		ssize_t bytesEscritos = fifoEscPedidosAEntregar->escribir( static_cast< void* >(&p), sizeof(p) ) ;
+		assert(bytesEscritos - sizeof(Pedido) == 0);
 
-
-    return semaforo->v();
+        memoria->liberarLockManualmente();
+        return semaforo->v();
+	}
+    return -1;
 }
 
 Pedido* PedidosParaEntregar::tomarPedidoParaEntregar() {
+	if (memoria->tomarLockManualmente()) {
+        unsigned long cantidad = memoria->leerInseguro();
 
-	Pedido* p = new Pedido();
-    fifoLecPedidosAEntregar->abrir();
-	ssize_t bytesLeidos = fifoLecPedidosAEntregar->leer( static_cast< void* >(p), sizeof(*p) ) ;
-	assert(bytesLeidos - sizeof(Pedido) == 0);
+        if (cantidad == 0) {
+            memoria->liberarLockManualmente();
+            return NULL;
+        }
 
-	//TODO Facturar pedido en memoria compartida
+        cantidad--;
 
-    return p;
+        Pedido* p = new Pedido();
 
+        ssize_t bytesLeidos = fifoLecPedidosAEntregar->leer( static_cast< void* >(p), sizeof(*p) ) ;
+        assert(bytesLeidos - sizeof(Pedido) == 0);
+        memoria->escribirInseguro(cantidad);
+
+        memoria->liberarLockManualmente();
+
+        return p;
+	}
+	return NULL;
 }
 
 void PedidosParaEntregar::marcarPedidoComoEntregado(Pedido &p) {
@@ -95,6 +111,8 @@ void PedidosParaEntregar::marcarPedidoComoEntregado(Pedido &p) {
         pedidosEntregados->liberarLockManualmente();
     }
 }
+
+
 
 unsigned long PedidosParaEntregar::cantidadDePedidosEntregados() {
     return pedidosEntregados->leer();

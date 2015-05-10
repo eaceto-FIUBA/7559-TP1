@@ -237,7 +237,6 @@ void comenzarTrabajo() {
 
     int cantidadDePedidosRealizados = 0;
     PedidosPorAtender *pedidosPorAtender = PedidosPorAtender::getInstance();
-    pedidosPorAtender->inicializarParaEscribir();
     log->log(logINFO,"Buffer Pedidos para Atender creado.");
 
     // Pedidos para cocinar (Recepcionista -> Cocinera)
@@ -269,7 +268,9 @@ void comenzarTrabajo() {
     crearHornos(hornos);
     crearCadetas(cadetas);
 
-    sleep(3);
+    pedidosPorAtender->inicializarParaEscribir();
+
+    //sleep(3);
 
     //3. iniciar la simulacion
     while (sigint_handler.getGracefulQuit() == 0 && cantidadDePedidosRealizados < simulacionCount) {
