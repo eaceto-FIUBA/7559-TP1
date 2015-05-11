@@ -18,6 +18,7 @@ PedidosParaHornear::PedidosParaHornear() {
     semaforo = new Semaforo(fileName, 0);
     memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
     cant_hornos = 0;
+    memoria->escribir(0);
 
     fifoLecPedidosAHornear =  new FifoLectura(aHornearFileName);
     fifoEscPedidosAHornear = new FifoEscritura(aHornearFileName);

@@ -12,8 +12,10 @@ const string PedidosParaEntregar::aEntregarFileName = MEMORIA_PATH + FIFO_A_ENTR
 PedidosParaEntregar::PedidosParaEntregar() {
     semaforo = new Semaforo(fileName, 0);
     memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
+    memoria->escribir(0);
 
     pedidosEntregados = new MemoriaCompartidaConcurrente<unsigned long>(pedidosFilename, 'A');
+    pedidosEntregados->escribir(0);
 
     fifoLecPedidosAEntregar =  new FifoLectura(aEntregarFileName);
     fifoEscPedidosAEntregar = new FifoEscritura(aEntregarFileName);

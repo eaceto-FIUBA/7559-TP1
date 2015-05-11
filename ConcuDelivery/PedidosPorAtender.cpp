@@ -14,6 +14,7 @@ const string PedidosPorAtender::aAtenderFileName = MEMORIA_PATH + FIFO_A_ATENDER
 PedidosPorAtender::PedidosPorAtender() {
     semaforo = new Semaforo(fileName, 0);
     memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
+    memoria->escribir(0);
 
     fifoLecPedidosAAtender = new FifoLectura(aAtenderFileName);
     fifoEscPedidosAAtender = new FifoEscritura(aAtenderFileName);

@@ -14,6 +14,7 @@ const string PedidosParaCocinar::aCocinarFileName = MEMORIA_PATH + FIFO_A_COCINA
 PedidosParaCocinar::PedidosParaCocinar() {
     semaforo = new Semaforo(fileName, 0);
     memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
+    memoria->escribir(0);
 
     fifoLecPedidosACocinar =  new FifoLectura(aCocinarFileName);
     fifoEscPedidosACocinar = new FifoEscritura(aCocinarFileName);

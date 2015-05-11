@@ -294,7 +294,7 @@ void comenzarTrabajo() {
     do {
         cantidadDePedidosEntregados = pedidosParaEntregar->cantidadDePedidosEntregados();
         usleep(500 * 1000);
-    } while (cantidadDePedidosEntregados < cantidadDePedidosRealizados);
+    } while (cantidadDePedidosEntregados <= cantidadDePedidosRealizados);
 
 
     //5. detener procesos y eliminar recursos
