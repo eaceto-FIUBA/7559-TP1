@@ -16,6 +16,9 @@ const string PedidosParaHornear::memoriafileName = MEMORIA_PATH + FIFO_A_HORNEAR
 const string PedidosParaHornear::aHornearFileName = MEMORIA_PATH + FIFO_A_HORNEAR + FIFO_EXTENSION;
 
 PedidosParaHornear::PedidosParaHornear() {
+
+    system(("touch " + fileName).c_str());
+
     semaforo = new Semaforo(fileName, 0);
     memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
     cant_hornos = 0;
@@ -83,6 +86,10 @@ int PedidosParaHornear::hornearPedido(Pedido &p) {
 		unsigned long cantidad = memoria->leerInseguro();
 		cantidad++;
 		memoria->escribirInseguro(cantidad);
+
+        Logger::getInstance()->log(logDEBUG,
+                                   " [ PedidosParaHornear ] \t\t pedidos en los hornos " + to_string(cantidad));
+
 
 		ssize_t bytesEscritos = fifoEscPedidosAHornear->escribir( static_cast< void* >(&p), sizeof(p) ) ;
 		assert(bytesEscritos - sizeof(Pedido) == 0);

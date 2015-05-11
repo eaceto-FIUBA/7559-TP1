@@ -13,6 +13,10 @@ const string PedidosParaEntregar::aEntregarFileName = MEMORIA_PATH + FIFO_A_ENTR
 const string PedidosParaEntregar::sEntregadosFileName = SEMAFOROS_PATH + "PedidosEntregados" + SEMAFOROS_EXTENSION;
 
 PedidosParaEntregar::PedidosParaEntregar() {
+
+    system(("touch " + fileName).c_str());
+    system(("touch " + sEntregadosFileName).c_str());
+
     semaforo = new Semaforo(fileName, 0);
 
     semaforoEntregados = new Semaforo(sEntregadosFileName, 0);
@@ -79,6 +83,10 @@ int PedidosParaEntregar::nuevoPedidoListo(Pedido &p) {
 		unsigned long cantidad = memoria->leerInseguro();
 		cantidad++;
 		memoria->escribirInseguro(cantidad);
+
+        Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar ] \t\t cantidad de pedidos para entregar ");
+
+        p.estado = Pedido::LISTO_PARA_ENTREGAR;
 
 		ssize_t bytesEscritos = fifoEscPedidosAEntregar->escribir( static_cast< void* >(&p), sizeof(p) ) ;
 		assert(bytesEscritos - sizeof(Pedido) == 0);

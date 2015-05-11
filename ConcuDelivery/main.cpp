@@ -21,11 +21,11 @@ using namespace std;
 
 #define kAppVersion "0.2"
 
-#define kDefaultRecepcionistasCount 2
+#define kDefaultRecepcionistasCount 1
 #define kDefaultCadetasCount        1
 #define kDefaultCocinerasCount      1
 #define kDefaultHornosCount         1
-#define kDefaultSimulacionCount     6
+#define kDefaultSimulacionCount     1
 
 #define kCLINoAargument         0
 #define kCLIRequiredArgument    1
@@ -266,10 +266,10 @@ void comenzarTrabajo() {
     Supervisora s;
     pid_t supervisora = s.iniciar(0);
 
-    crearCadetas(cadetas);
-    crearHornos(hornos);
-    crearCocineras(cocineras);
     crearRecepcionistas(recepcionistas);
+    crearCocineras(cocineras);
+    crearHornos(hornos);
+    crearCadetas(cadetas);
 
     pedidosPorAtender->inicializarParaEscribir();
 
@@ -310,7 +310,7 @@ void comenzarTrabajo() {
                  " [ SIMULACION ] \tSimulación detecto nuevo pedido entregado. Pedidos simulados entregados: " +
                  to_string(cantidadDePedidosEntregados));+*/
         sleep(1);
-    } while (cantidadDePedidosEntregados <= cantidadDePedidosRealizados);
+    } while (cantidadDePedidosEntregados < cantidadDePedidosRealizados);
 
     //5. detener procesos y eliminar recursos
     log->log(logINFO,">> Deteniendo procesos...");

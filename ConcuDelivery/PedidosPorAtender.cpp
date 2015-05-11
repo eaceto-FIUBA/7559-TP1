@@ -13,6 +13,9 @@ const string PedidosPorAtender::memoriafileName = MEMORIA_PATH + FIFO_A_ATENDER 
 const string PedidosPorAtender::aAtenderFileName = MEMORIA_PATH + FIFO_A_ATENDER + FIFO_EXTENSION;
 
 PedidosPorAtender::PedidosPorAtender() {
+
+    system(("touch " + fileName).c_str());
+
     semaforo = new Semaforo(fileName, 0);
     memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
     memoria->escribir(0);

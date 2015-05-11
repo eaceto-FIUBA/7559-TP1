@@ -27,7 +27,7 @@ void Horno::realizarTarea() {
         this->log(logDEBUG, "\t\t{Pedido " + to_string(p->numero) + "} ingresando al horno");
         int res = PedidosParaEntregar::getInstance()->nuevoPedidoListo(*p);
         if (res >= 0) {
-            this->log(logDEBUG, "\t\t{Pedido " + to_string(p->numero) + "} cocinador. listo para entregar.");
+            this->log(logDEBUG, "\t\t{Pedido " + to_string(p->numero) + "} cocinado. listo para entregar.");
         }
         else {
             this->log(logERROR, "\t\t{Pedido " + to_string(p->numero) + "} ERROR al cocinar pedido.");

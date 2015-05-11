@@ -13,6 +13,9 @@ const string PedidosParaCocinar::memoriafileName = MEMORIA_PATH + FIFO_A_COCINAR
 const string PedidosParaCocinar::aCocinarFileName = MEMORIA_PATH + FIFO_A_COCINAR + FIFO_EXTENSION;
 
 PedidosParaCocinar::PedidosParaCocinar() {
+
+    system(("touch " + fileName).c_str());
+
     semaforo = new Semaforo(fileName, 0);
     memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
     memoria->escribir(0);
@@ -73,6 +76,11 @@ int PedidosParaCocinar::ingresarPedidoACocinar(Pedido &p) {
 		unsigned long cantidad = memoria->leerInseguro();
 		cantidad++;
 		memoria->escribirInseguro(cantidad);
+
+        Logger::getInstance()->log(logDEBUG,
+                                   " [ PedidosParaCocinar ] \t\t pedidos en la cocina " + to_string(cantidad));
+
+        p.estado = Pedido::LISTO_PARA_COCINAR;
 
 		ssize_t bytesEscritos = fifoEscPedidosACocinar->escribir( static_cast< void* >(&p), sizeof(p) ) ;
 		assert(bytesEscritos - sizeof(Pedido) == 0);
