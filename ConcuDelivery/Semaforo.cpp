@@ -1,4 +1,5 @@
 #include "Semaforo.h"
+#include "Logger.h"
 
 Semaforo::Semaforo(const std::string &nombre, const int valorInicial) : valorInicial(valorInicial) {
     key_t clave = ftok(nombre.c_str(), 'a');
@@ -33,6 +34,9 @@ int Semaforo::p() const {
     operacion.sem_flg = SEM_UNDO;
 
     int resultado = semop ( this->id,&operacion,1 );
+
+    Logger::getInstance()->log(logDEBUG, "SEMAFORO " + to_string(this->id) + " - " + to_string(resultado));
+
     return resultado;
 }
 

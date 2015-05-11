@@ -296,11 +296,20 @@ void comenzarTrabajo() {
     //4. Eserar a que cantidad de pedidos entregados / cobrados == cantidadDePedidosRealizados
     log->log(logINFO, " [ SIMULACION ] \tEsperando finalizacion de pedidos...");
     do {
+        unsigned long c = PedidosParaEntregar::getInstance()->cantidadDePedidosEntregados();
+        if (c != cantidadDePedidosEntregados) {
+            cantidadDePedidosEntregados = c;
+            log->log(logINFO,
+                     " [ SIMULACION ] \tSimulación detecto nuevo pedido entregado. Pedidos simulados entregados: " +
+                     to_string(cantidadDePedidosEntregados));
+        }
+        /*
         PedidosParaEntregar::getInstance()->esperarNuevoPedidoEntregado();
         cantidadDePedidosEntregados++;
         log->log(logINFO,
                  " [ SIMULACION ] \tSimulación detecto nuevo pedido entregado. Pedidos simulados entregados: " +
-                 to_string(cantidadDePedidosEntregados));
+                 to_string(cantidadDePedidosEntregados));+*/
+        sleep(1);
     } while (cantidadDePedidosEntregados <= cantidadDePedidosRealizados);
 
     //5. detener procesos y eliminar recursos

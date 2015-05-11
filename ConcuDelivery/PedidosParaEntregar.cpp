@@ -137,7 +137,7 @@ int PedidosParaEntregar::marcarPedidoComoEntregado(Pedido &p) {
         int res = semaforoEntregados->v();
 
         Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t señal enviada " + to_string(res));
-        return 0;
+        return res;
     }
     Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t FALLO EL LOCK ");
     return -1;
@@ -146,8 +146,6 @@ int PedidosParaEntregar::marcarPedidoComoEntregado(Pedido &p) {
 void PedidosParaEntregar::esperarNuevoPedidoEntregado() {
     semaforoEntregados->p();
 }
-
-
 
 unsigned long PedidosParaEntregar::cantidadDePedidosEntregados() {
     return pedidosEntregados->leer();
