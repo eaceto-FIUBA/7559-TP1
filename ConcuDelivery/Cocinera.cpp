@@ -26,7 +26,6 @@ void Cocinera::realizarTarea() {
         assert(false); // error al realizar la espera!
     }
 
-
     Pedido *p = PedidosParaCocinar::getInstance()->tomarPedidoACocinar();
     if (p != NULL) {
         this->log(logDEBUG, "Tomando pedido para cocinar numero " + to_string(p->numero));
@@ -59,5 +58,11 @@ string Cocinera::nombre() {
 }
 
 void Cocinera::destruirRecursos() {
+    this->log(logDEBUG, "Cocinera. Fin del trabajo.");
 
+    PedidosParaCocinar::getInstance()->finalizarParaLeer();
+    PedidosParaHornear::getInstance()->finalizarParaEscribir();
+
+    PedidosParaCocinar::getInstance()->destroy();
+    PedidosParaHornear::getInstance()->destroy();
 }

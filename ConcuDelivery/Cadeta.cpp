@@ -39,6 +39,11 @@ string Cadeta::nombre() {
     return "Cadeta " + to_string(getID());
 }
 
-void Cadeta::destruirRecursos() {
 
+void Cadeta::destruirRecursos() {
+    this->log(logDEBUG, "Cadeta. Fin del trabajo.");
+
+    PedidosParaEntregar::getInstance()->finalizarParaLeer();
+
+    PedidosParaEntregar::getInstance()->destroy();
 }

@@ -49,5 +49,11 @@ string Horno::nombre() {
 }
 
 void Horno::destruirRecursos() {
+    this->log(logDEBUG, "Horno. Fin del trabajo.");
 
+    PedidosParaHornear::getInstance()->finalizarParaLeer();
+    PedidosParaEntregar::getInstance()->finalizarParaEscribir();
+
+    PedidosParaHornear::getInstance()->destroy();
+    PedidosParaEntregar::getInstance()->destroy();
 }
