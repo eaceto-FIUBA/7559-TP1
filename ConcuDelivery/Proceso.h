@@ -29,6 +29,7 @@ using namespace std;
 
 class Proceso: public SIGINT_Handler {
 
+public:
     enum EstadoProceso {
         INICIALIZADO = 0,
         CORRIENDO = 1,
@@ -58,6 +59,8 @@ public:
     virtual void destruirRecursos() = 0;
 
     unsigned long getID();
+
+    EstadoProceso getEstado();
 
     string descripcion();
 };

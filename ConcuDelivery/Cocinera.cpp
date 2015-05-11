@@ -21,6 +21,11 @@ void Cocinera::realizarTarea() {
     /** Esperar pedido para cocinar **/
     log(logDEBUG, "\t\tEsperando nuevo pedido para cocinar...");
     if (PedidosParaCocinar::getInstance()->esperarPedidoACocinar() != 0) {
+
+        if (errno == EINTR || getGracefulQuit() != 0 || this->getEstado() != Proceso::CORRIENDO) {
+            return;
+        }
+
         this->log(logERROR, "\t\tERROR AL ESPERAR NUEVO PEDIDO PARA COCINAR. - " + to_string(errno));
         cout << ">>>>>>>> FATAL ERROR: " << strerror(errno) << " <<<<<<<<" << endl;
         assert(false); // error al realizar la espera!

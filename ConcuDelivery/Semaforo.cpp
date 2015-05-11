@@ -35,8 +35,6 @@ int Semaforo::p() const {
 
     int resultado = semop ( this->id,&operacion,1 );
 
-    Logger::getInstance()->log(logDEBUG, "SEMAFORO " + to_string(this->id) + " - " + to_string(resultado));
-
     return resultado;
 }
 

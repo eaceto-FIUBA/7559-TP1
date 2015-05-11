@@ -20,6 +20,11 @@ Recepcionista::~Recepcionista() {
 void Recepcionista::realizarTarea() {
     log(logDEBUG, "\tEsperando nuevo pedido...");
     if (PedidosPorAtender::getInstance()->esperarNuevoPedido() != 0) {
+
+        if (errno == EINTR || getGracefulQuit() != 0 || this->getEstado() != Proceso::CORRIENDO) {
+            return;
+        }
+
         this->log(logERROR, "\tERROR AL ESPERAR NUEVO PEDIDO. - " + to_string(errno));
         cout << ">>>>>>>> FATAL ERROR: " << strerror(errno) << " <<<<<<<<" << endl;
         assert(false); // error al realizar la espera!

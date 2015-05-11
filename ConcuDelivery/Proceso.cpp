@@ -8,6 +8,10 @@ bool Proceso::seguirCorriendo() {
     return sigint_handler.getGracefulQuit() == 0 && estadoProceso == CORRIENDO;
 }
 
+Proceso::EstadoProceso Proceso::getEstado() {
+    return estadoProceso;
+}
+
 void Proceso::correr() {
     estadoProceso = CORRIENDO;
 
