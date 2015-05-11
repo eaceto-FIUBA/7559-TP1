@@ -60,5 +60,5 @@ void Cadeta::destruirRecursos() {
 
     PedidosParaEntregar::getInstance()->finalizarParaLeer();
 
-    PedidosParaEntregar::getInstance()->destroy();
+    // PedidosParaEntregar::getInstance()->destroy();
 }

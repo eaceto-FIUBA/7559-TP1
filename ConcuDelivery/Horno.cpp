@@ -66,6 +66,6 @@ void Horno::destruirRecursos() {
     PedidosParaHornear::getInstance()->finalizarParaLeer();
     PedidosParaEntregar::getInstance()->finalizarParaEscribir();
 
-    PedidosParaHornear::getInstance()->destroy();
-    PedidosParaEntregar::getInstance()->destroy();
+    // PedidosParaHornear::getInstance()->destroy();
+    // PedidosParaEntregar::getInstance()->destroy();
 }

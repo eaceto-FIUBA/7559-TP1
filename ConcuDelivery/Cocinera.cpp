@@ -76,6 +76,6 @@ void Cocinera::destruirRecursos() {
     PedidosParaCocinar::getInstance()->finalizarParaLeer();
     PedidosParaHornear::getInstance()->finalizarParaEscribir();
 
-    PedidosParaCocinar::getInstance()->destroy();
-    PedidosParaHornear::getInstance()->destroy();
+    // PedidosParaCocinar::getInstance()->destroy();
+    // PedidosParaHornear::getInstance()->destroy();
 }

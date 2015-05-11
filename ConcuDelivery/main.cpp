@@ -22,9 +22,9 @@ using namespace std;
 #define kAppVersion "0.2"
 
 #define kDefaultRecepcionistasCount 2
-#define kDefaultCadetasCount        1
-#define kDefaultCocinerasCount      1
-#define kDefaultHornosCount         1
+#define kDefaultCadetasCount        2
+#define kDefaultCocinerasCount      2
+#define kDefaultHornosCount         2
 #define kDefaultSimulacionCount     10
 
 #define kCLINoAargument         0
@@ -317,23 +317,23 @@ void comenzarTrabajo() {
 
     pedidosPorAtender->finalizarParaEscribir();
 
-    pararTodas(cadetas);
-    pararTodas(hornos);
-    pararTodas(cocineras);
     pararTodas(recepcionistas);
-
-    recepcionistas.clear();
-    cocineras.clear();
-    hornos.clear();
-    cadetas.clear();
-
-    Proceso::parar(supervisora);
-
     PedidosPorAtender::destroy();
-    PedidosParaCocinar::destroy();
-    PedidosParaHornear::destroy();
-    PedidosParaEntregar::destroy();
+    recepcionistas.clear();
 
+    pararTodas(cocineras);
+    PedidosParaCocinar::destroy();
+    cocineras.clear();
+    
+    pararTodas(hornos);
+    PedidosParaHornear::destroy();
+    hornos.clear();
+
+    pararTodas(cadetas);
+    cadetas.clear();
+    Proceso::parar(supervisora);
+    PedidosParaEntregar::destroy();
+    
     SignalHandler::destruir();
 
     log->log(logDEBUG,"Simulacion terminada");

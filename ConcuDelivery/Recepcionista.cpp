@@ -78,6 +78,6 @@ void Recepcionista::destruirRecursos() {
     PedidosPorAtender::getInstance()->finalizarParaLeer();
     PedidosParaCocinar::getInstance()->finalizarParaEscribir();
 
-    PedidosPorAtender::getInstance()->destroy();
-    PedidosParaCocinar::getInstance()->destroy();
+    // PedidosPorAtender::getInstance()->destroy();
+    // PedidosParaCocinar::getInstance()->destroy();
 }
