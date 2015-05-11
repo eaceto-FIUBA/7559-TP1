@@ -18,9 +18,9 @@ Recepcionista::~Recepcionista() {
 }
 
 void Recepcionista::realizarTarea() {
-    log(logDEBUG, "Esperando nuevo pedido...");
+    log(logDEBUG, "\tEsperando nuevo pedido...");
     if (PedidosPorAtender::getInstance()->esperarNuevoPedido() != 0) {
-        this->log(logERROR, "ERROR AL ESPERAR NUEVO PEDIDO. - " + to_string(errno));
+        this->log(logERROR, "\tERROR AL ESPERAR NUEVO PEDIDO. - " + to_string(errno));
         cout << ">>>>>>>> FATAL ERROR: " << strerror(errno) << " <<<<<<<<" << endl;
         assert(false); // error al realizar la espera!
     }
@@ -33,9 +33,17 @@ void Recepcionista::realizarTarea() {
 
     Pedido *p = PedidosPorAtender::getInstance()->tomarNuevoPedido();
     if (p != NULL) {
-        this->log(logDEBUG, "Tomando nuevo pedido numero " + to_string(p->numero));
-        PedidosParaCocinar::getInstance()->ingresarPedidoACocinar(*p);
-        this->log(logDEBUG, "Nuevo pedido ingresado en cocina.");
+        this->log(logDEBUG, "\t{Pedido " + to_string(p->numero) + "} tomando pedido");
+        int res = PedidosParaCocinar::getInstance()->ingresarPedidoACocinar(*p);
+        if (res >= 0) {
+            this->log(logDEBUG, "\t{Pedido " + to_string(p->numero) + "} ingresado a la cocina");
+        }
+        else {
+            this->log(logERROR, "\t{Pedido " + to_string(p->numero) + "} ERROR al ingresar a la cocina");
+        }
+    }
+    else {
+        this->log(logDEBUG, "\t{Pedido NULL +}");
     }
 //    unsigned long cantDePedidosParaCocinar =
 //            PedidosParaCocinar::getInstance()->cantidadDePedidosParaCocinar();
@@ -60,7 +68,7 @@ void Recepcionista::inicializarProceso(unsigned long id) {
 }
 
 void Recepcionista::destruirRecursos() {
-    this->log(logDEBUG, "Recepcionista. Fin del trabajo.");
+    this->log(logDEBUG, "\tRecepcionista. Fin del trabajo.");
 
     PedidosPorAtender::getInstance()->finalizarParaLeer();
     PedidosParaCocinar::getInstance()->finalizarParaEscribir();

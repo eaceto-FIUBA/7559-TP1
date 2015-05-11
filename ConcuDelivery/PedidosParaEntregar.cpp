@@ -1,7 +1,9 @@
 
 #include "PedidosParaEntregar.h"
+
 #include "Constantes.h"
 #include <assert.h>
+#include "Logger.h"
 
 PedidosParaEntregar *PedidosParaEntregar::instance = NULL;
 const string PedidosParaEntregar::fileName = SEMAFOROS_PATH + FIFO_A_ENTREGAR + SEMAFOROS_EXTENSION;
@@ -11,6 +13,9 @@ const string PedidosParaEntregar::aEntregarFileName = MEMORIA_PATH + FIFO_A_ENTR
 
 PedidosParaEntregar::PedidosParaEntregar() {
     semaforo = new Semaforo(fileName, 0);
+
+    semaforoEntregados = new Semaforo(SEMAFOROS_PATH + "PedidosEntregados" + SEMAFOROS_EXTENSION, 'A');
+
     memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
     memoria->escribir(0);
 
@@ -67,6 +72,8 @@ int PedidosParaEntregar::esperarNuevoPedidoParaEntregar() {
 }
 
 int PedidosParaEntregar::nuevoPedidoListo(Pedido &p) {
+
+    Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar ] \t\t esperando lock escritura... ");
 	if (memoria->tomarLockManualmente()) {
 		unsigned long cantidad = memoria->leerInseguro();
 		cantidad++;
@@ -78,14 +85,19 @@ int PedidosParaEntregar::nuevoPedidoListo(Pedido &p) {
         memoria->liberarLockManualmente();
         return semaforo->v();
 	}
+
+    Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t FALLO EL LOCK ESCRITURA");
     return -1;
 }
 
 Pedido* PedidosParaEntregar::tomarPedidoParaEntregar() {
+
+    Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar ] \t\t tomando lock manualmente... ");
 	if (memoria->tomarLockManualmente()) {
         unsigned long cantidad = memoria->leerInseguro();
-
+        Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar] \t\t cantidad " + to_string(cantidad));
         if (cantidad == 0) {
+            Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar ] \t\t sin pedido luego de tomar lock ");
             memoria->liberarLockManualmente();
             return NULL;
         }
@@ -96,22 +108,30 @@ Pedido* PedidosParaEntregar::tomarPedidoParaEntregar() {
 
         ssize_t bytesLeidos = fifoLecPedidosAEntregar->leer( static_cast< void* >(p), sizeof(*p) ) ;
         assert(bytesLeidos - sizeof(Pedido) == 0);
+
+        Logger::getInstance()->log(logDEBUG,
+                                   " [ PedidosParaEntregar ] \t\t nuevo pedido tomado: " + to_string(p->numero));
+
         memoria->escribirInseguro(cantidad);
 
         memoria->liberarLockManualmente();
 
         return p;
 	}
+    Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t FALLO EL LOCK ");
 	return NULL;
 }
 
-void PedidosParaEntregar::marcarPedidoComoEntregado(Pedido &p) {
+int PedidosParaEntregar::marcarPedidoComoEntregado(Pedido &p) {
     if (pedidosEntregados->tomarLockManualmente()) {
         unsigned long cant = pedidosEntregados->leerInseguro();
         cant++;
         pedidosEntregados->escribirInseguro(cant);
         pedidosEntregados->liberarLockManualmente();
+        semaforoEntregados->v();
+        return 0;
     }
+    return -1;
 }
 
 

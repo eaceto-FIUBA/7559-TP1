@@ -3,7 +3,6 @@
 
 #include "PedidosParaHornear.h"
 #include "PedidosParaEntregar.h"
-#include "PedidosParaCocinar.h"
 
 Horno::Horno() {
 
@@ -15,9 +14,9 @@ Horno::~Horno() {
 
 void Horno::realizarTarea() {
 
-    log(logDEBUG, "Esperando pedido para hornear...");
+    log(logDEBUG, "\t\tEsperando pedido para hornear...");
     if (PedidosParaHornear::getInstance()->esperarNuevoPedido() != 0) {
-        this->log(logERROR, "ERROR AL ESPERAR NUEVO PEDIDO PARA HORNEAR. - " + to_string(errno));
+        this->log(logERROR, "\t\tERROR AL ESPERAR NUEVO PEDIDO PARA HORNEAR. - " + to_string(errno));
         cout << ">>>>>>>> FATAL ERROR: " << strerror(errno) << " <<<<<<<<" << endl;
         assert(false); // error al realizar la espera!
     }
@@ -25,9 +24,17 @@ void Horno::realizarTarea() {
 
     Pedido *p = PedidosParaHornear::getInstance()->tomarNuevoPedido();
     if (p != NULL) {
-        this->log(logDEBUG, "Tomando pedido para hornear numero " + to_string(p->numero));
-        PedidosParaEntregar::getInstance()->nuevoPedidoListo(*p);
-        this->log(logDEBUG, "Nuevo pedido listo para ser entregado.");
+        this->log(logDEBUG, "\t\t{Pedido " + to_string(p->numero) + "} ingresando al horno");
+        int res = PedidosParaEntregar::getInstance()->nuevoPedidoListo(*p);
+        if (res >= 0) {
+            this->log(logDEBUG, "\t\t{Pedido " + to_string(p->numero) + "} cocinador. listo para entregar.");
+        }
+        else {
+            this->log(logERROR, "\t\t{Pedido " + to_string(p->numero) + "} ERROR al cocinar pedido.");
+        }
+    }
+    else {
+        this->log(logDEBUG, "\t\t{Pedido NULL +}");
     }
 //
 //    if (PedidosParaHornear::getInstance()->tomarNuevoPedido()) {
@@ -49,7 +56,7 @@ string Horno::nombre() {
 }
 
 void Horno::destruirRecursos() {
-    this->log(logDEBUG, "Horno. Fin del trabajo.");
+    this->log(logDEBUG, "\t\tHorno. Fin del trabajo.");
 
     PedidosParaHornear::getInstance()->finalizarParaLeer();
     PedidosParaEntregar::getInstance()->finalizarParaEscribir();

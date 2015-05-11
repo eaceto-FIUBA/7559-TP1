@@ -5,6 +5,7 @@
 #include "PedidosParaCocinar.h"
 #include <assert.h>
 #include "Constantes.h"
+#include "Logger.h"
 
 PedidosParaCocinar *PedidosParaCocinar::instance = NULL;
 const string PedidosParaCocinar::fileName = SEMAFOROS_PATH + FIFO_A_COCINAR + SEMAFOROS_EXTENSION;
@@ -66,6 +67,8 @@ void PedidosParaCocinar::finalizarParaLeer() {
 }
 
 int PedidosParaCocinar::ingresarPedidoACocinar(Pedido &p) {
+
+    Logger::getInstance()->log(logDEBUG, " [ PedidosParaCocinar ] \t\t esperando lock escritura...");
 	if (memoria->tomarLockManualmente()) {
 		unsigned long cantidad = memoria->leerInseguro();
 		cantidad++;
@@ -77,15 +80,20 @@ int PedidosParaCocinar::ingresarPedidoACocinar(Pedido &p) {
         memoria->liberarLockManualmente();
         return semaforo->v();
 	}
+    Logger::getInstance()->log(logERROR, " [ PedidosParaCocinar ] \t\t FALLO EL LOCK ");
     return -1;
 }
 
 Pedido* PedidosParaCocinar::tomarPedidoACocinar() {
 
+    Logger::getInstance()->log(logDEBUG, " [ PedidosParaCocinar ] \t\t tomando lock manualmente... ");
 	if (memoria->tomarLockManualmente()) {
         unsigned long cantidad = memoria->leerInseguro();
 
+        Logger::getInstance()->log(logDEBUG, " [ PedidosParaCocinar ] \t\t cantidad " + to_string(cantidad));
+
         if (cantidad == 0) {
+            Logger::getInstance()->log(logDEBUG, " [ PedidosParaCocinar ] \t\t sin pedido luego de tomar lock ");
             memoria->liberarLockManualmente();
             return NULL;
         }
@@ -97,13 +105,16 @@ Pedido* PedidosParaCocinar::tomarPedidoACocinar() {
         ssize_t bytesLeidos = fifoLecPedidosACocinar->leer( static_cast< void* >(p), sizeof(*p) ) ;
         assert(bytesLeidos - sizeof(Pedido) == 0);
 
+        Logger::getInstance()->log(logDEBUG,
+                                   " [ PedidosParaCocinar ] \t\t nuevo pedido tomado: " + to_string(p->numero));
+
         memoria->escribirInseguro(cantidad);
 
         memoria->liberarLockManualmente();
 
         return p;
 	}
-
+    Logger::getInstance()->log(logERROR, " [ PedidosParaCocinar ] \t\t FALLO EL LOCK ");
 	return NULL;
 }
 

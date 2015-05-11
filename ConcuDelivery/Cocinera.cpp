@@ -19,18 +19,26 @@ void Cocinera::realizarTarea() {
     //    cocinar la pizza.
 
     /** Esperar pedido para cocinar **/
-    log(logDEBUG, "Esperando nuevo pedido para cocinar...");
+    log(logDEBUG, "\t\tEsperando nuevo pedido para cocinar...");
     if (PedidosParaCocinar::getInstance()->esperarPedidoACocinar() != 0) {
-        this->log(logERROR, "ERROR AL ESPERAR NUEVO PEDIDO PARA COCINAR. - " + to_string(errno));
+        this->log(logERROR, "\t\tERROR AL ESPERAR NUEVO PEDIDO PARA COCINAR. - " + to_string(errno));
         cout << ">>>>>>>> FATAL ERROR: " << strerror(errno) << " <<<<<<<<" << endl;
         assert(false); // error al realizar la espera!
     }
 
     Pedido *p = PedidosParaCocinar::getInstance()->tomarPedidoACocinar();
     if (p != NULL) {
-        this->log(logDEBUG, "Tomando pedido para cocinar numero " + to_string(p->numero));
-        PedidosParaHornear::getInstance()->hornearPedido(*p);
-        this->log(logDEBUG, "Nuevo pedido ingresado en horno.");
+        this->log(logDEBUG, "\t\t{Pedido " + to_string(p->numero) + "} tomado para cocinar");
+        int res = PedidosParaHornear::getInstance()->hornearPedido(*p);
+        if (res >= 0) {
+            this->log(logDEBUG, "\t\t{Pedido " + to_string(p->numero) + "} ingresado al horno");
+        }
+        else {
+            this->log(logERROR, "\t\t{Pedido " + to_string(p->numero) + "} ERROR al ingresarlo al horno");
+        }
+    }
+    else {
+        this->log(logDEBUG, "\t\t{Pedido NULL +}");
     }
 
 //    /** Tomar pedido para cocinar **/
@@ -58,7 +66,7 @@ string Cocinera::nombre() {
 }
 
 void Cocinera::destruirRecursos() {
-    this->log(logDEBUG, "Cocinera. Fin del trabajo.");
+    this->log(logDEBUG, "\t\tCocinera. Fin del trabajo.");
 
     PedidosParaCocinar::getInstance()->finalizarParaLeer();
     PedidosParaHornear::getInstance()->finalizarParaEscribir();

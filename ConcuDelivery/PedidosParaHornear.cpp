@@ -8,6 +8,7 @@
 #include "PedidosParaHornear.h"
 #include <assert.h>
 #include "Constantes.h"
+#include "Logger.h"
 
 PedidosParaHornear *PedidosParaHornear::instance = NULL;
 const string PedidosParaHornear::fileName = SEMAFOROS_PATH + FIFO_A_HORNEAR + SEMAFOROS_EXTENSION;
@@ -77,6 +78,7 @@ int PedidosParaHornear::hornearPedido(Pedido &p) {
 	//TODO
 	//Lock if (memoria->size() < cant_hornos)
 
+    Logger::getInstance()->log(logDEBUG, " [ PedidosParaHornear ] \t\t esperando lock escritura... ");
 	if (memoria->tomarLockManualmente()) {
 		unsigned long cantidad = memoria->leerInseguro();
 		cantidad++;
@@ -88,15 +90,21 @@ int PedidosParaHornear::hornearPedido(Pedido &p) {
         memoria->liberarLockManualmente();
         return semaforo->v();
 	}
+
+    Logger::getInstance()->log(logERROR, " [ PedidosParaHornear ] \t\t FALLO EL LOCK ESCRITURA");
     return -1;
 }
 
 Pedido* PedidosParaHornear::tomarNuevoPedido() {
 
+    Logger::getInstance()->log(logDEBUG, " [ PedidosParaHornear ] \t\t tomando lock manualmente... ");
 	if (memoria->tomarLockManualmente()) {
         unsigned long cantidad = memoria->leerInseguro();
 
+        Logger::getInstance()->log(logDEBUG, " [ PedidosParaHornear ] \t\t cantidad " + to_string(cantidad));
+
         if (cantidad == 0) {
+            Logger::getInstance()->log(logDEBUG, " [ PedidosParaHornear ] \t\t sin pedido luego de tomar lock ");
             memoria->liberarLockManualmente();
             return NULL;
         }
@@ -108,12 +116,16 @@ Pedido* PedidosParaHornear::tomarNuevoPedido() {
         ssize_t bytesLeidos = fifoLecPedidosAHornear->leer( static_cast< void* >(p), sizeof(*p) ) ;
         assert(bytesLeidos - sizeof(Pedido) == 0);
 
+        Logger::getInstance()->log(logDEBUG,
+                                   " [ PedidosParaHornear] \t\t nuevo pedido tomado: " + to_string(p->numero));
+
         memoria->escribirInseguro(cantidad);
 
         memoria->liberarLockManualmente();
 
         return p;
 	}
+    Logger::getInstance()->log(logERROR, " [ PedidosParaHornear] \t\t FALLO EL LOCK ");
 	return NULL;
 }
 

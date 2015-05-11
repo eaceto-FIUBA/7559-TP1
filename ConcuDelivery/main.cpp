@@ -11,6 +11,8 @@
 #include "Supervisora.h"
 #include "Horno.h"
 
+#include "Constantes.h"
+
 #include "Pedido.h"
 #include "PedidosParaCocinar.h"
 #include "PedidosPorAtender.h"
@@ -249,10 +251,13 @@ void comenzarTrabajo() {
     pedidosParaHornear->setCantHornos(hornosCount);
     log->log(logINFO,"Buffer Pedidos para Hornear creado.");
 
-    /// Pedidos entregados y cobrados (Cadeta -> Cliente)
+    /// Pedidos para entregar y cobrar (Horno -> Cadeta)
     int cantidadDePedidosEntregados = 0;
     PedidosParaEntregar *pedidosParaEntregar = PedidosParaEntregar::getInstance();
     log->log(logINFO,"Buffer Pedidos para Entregar y Cobrar creado.");
+
+    /// Pedidos entregados (Cadeta -> Cliente)
+    Semaforo semaforoEntregados(SEMAFOROS_PATH + "PedidosEntregados" + SEMAFOROS_EXTENSION, 'A');
 
     //2. Crear procesos
     log->log(logINFO,"Creando procesos");
@@ -270,7 +275,7 @@ void comenzarTrabajo() {
 
     pedidosPorAtender->inicializarParaEscribir();
 
-    //sleep(3);
+    sleep(3);
 
     //3. iniciar la simulacion
     while (sigint_handler.getGracefulQuit() == 0 && cantidadDePedidosRealizados < simulacionCount) {
@@ -281,7 +286,7 @@ void comenzarTrabajo() {
         if (pedidoRealizado) {
             cantidadDePedidosRealizados++;
             log->log(logINFO,
-                     "<< Nuevo pedido en curso. Cantidad de pedidos realizados: " +
+                     " [ SIMULACION ] \tNuevo pedido en curso. Cantidad de pedidos realizados: " +
                      to_string(cantidadDePedidosRealizados));
         }
 
@@ -291,11 +296,20 @@ void comenzarTrabajo() {
     }
 
     //4. Eserar a que cantidad de pedidos entregados / cobrados == cantidadDePedidosRealizados
-    do {
-        cantidadDePedidosEntregados = pedidosParaEntregar->cantidadDePedidosEntregados();
-        usleep(500 * 1000);
-    } while (cantidadDePedidosEntregados <= cantidadDePedidosRealizados);
 
+    do {
+        semaforoEntregados.p();
+        cantidadDePedidosEntregados++;
+        usleep(500 * 1000);
+        /*
+        unsigned long cant = pedidosParaEntregar->cantidadDePedidosEntregados();
+        usleep(500 * 1000);
+        if (cant != cantidadDePedidosEntregados) {
+            log->log(logINFO, " [ SIMULACION ] \tSimulación detecto nuevo pedido entregado. Pedidos simulados entregados: " + to_string(cant));
+            cantidadDePedidosEntregados = cant;
+        }
+         */
+    } while (cantidadDePedidosEntregados <= cantidadDePedidosRealizados);
 
     //5. detener procesos y eliminar recursos
     log->log(logINFO,">> Deteniendo procesos...");

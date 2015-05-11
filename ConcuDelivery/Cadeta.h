@@ -16,6 +16,7 @@ public:
     void destruirRecursos();
 
 private:
+
     void realizarTarea();
 
     void inicializarProceso(unsigned long id);

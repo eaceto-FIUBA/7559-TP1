@@ -19,6 +19,9 @@ using namespace std;
 class PedidosParaEntregar {
 private:
     Semaforo *semaforo;
+
+    Semaforo *semaforoEntregados;
+
     MemoriaCompartidaConcurrente<unsigned long> *memoria;
     MemoriaCompartidaConcurrente<unsigned long> *pedidosEntregados;
 
@@ -55,7 +58,7 @@ public:
     int nuevoPedidoListo(Pedido &p); // ejecutado solo por la cocinera / horno
     Pedido* tomarPedidoParaEntregar();   // true si pudo tomar un nuevo pedido para entregar
 
-    void marcarPedidoComoEntregado(Pedido &p);
+    int marcarPedidoComoEntregado(Pedido &p);
 
     unsigned long cantidadDePedidosEntregados();
 

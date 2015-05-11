@@ -3,7 +3,7 @@
 #define CONCUDELIVERY_PEDIDO_H
 
 
-class Pedido {
+struct Pedido {
 
 public:
 
