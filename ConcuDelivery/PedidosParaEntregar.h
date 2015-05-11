@@ -33,7 +33,7 @@ private:
     static const string fileName;
     static const string memoriafileName;
     static const string pedidosFilename;
-
+    static const string sEntregadosFileName;
     /** fifo files **/
     static const string aEntregarFileName;
 

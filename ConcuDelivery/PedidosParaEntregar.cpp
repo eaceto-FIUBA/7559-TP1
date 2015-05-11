@@ -10,11 +10,12 @@ const string PedidosParaEntregar::fileName = SEMAFOROS_PATH + FIFO_A_ENTREGAR + 
 const string PedidosParaEntregar::memoriafileName = MEMORIA_PATH + FIFO_A_ENTREGAR + MEMORIA_EXTENSION;
 const string PedidosParaEntregar::pedidosFilename = MEMORIA_PATH + "PedidosEntregados" + MEMORIA_EXTENSION;
 const string PedidosParaEntregar::aEntregarFileName = MEMORIA_PATH + FIFO_A_ENTREGAR + FIFO_EXTENSION;
+const string PedidosParaEntregar::sEntregadosFileName = SEMAFOROS_PATH + "PedidosEntregados" + SEMAFOROS_EXTENSION;
 
 PedidosParaEntregar::PedidosParaEntregar() {
     semaforo = new Semaforo(fileName, 0);
 
-    semaforoEntregados = new Semaforo(SEMAFOROS_PATH + "PedidosEntregados" + SEMAFOROS_EXTENSION, 'A');
+    semaforoEntregados = new Semaforo(sEntregadosFileName, 0);
 
     memoria = new MemoriaCompartidaConcurrente<unsigned long>(memoriafileName, 'A');
     memoria->escribir(0);

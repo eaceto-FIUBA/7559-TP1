@@ -242,7 +242,7 @@ void comenzarTrabajo() {
     log->log(logINFO,"Buffer Pedidos para Atender creado.");
 
     // Pedidos para cocinar (Recepcionista -> Cocinera)
-    PedidosParaCocinar *pedidosParaCocinar = PedidosParaCocinar::getInstance();
+    PedidosParaCocinar::getInstance();
     log->log(logINFO,"Buffer Pedidos para Cocinar creado.");
 
     // Pedidos para hornear (Cocinera -> Horno)
@@ -253,11 +253,11 @@ void comenzarTrabajo() {
 
     /// Pedidos para entregar y cobrar (Horno -> Cadeta)
     int cantidadDePedidosEntregados = 0;
-    PedidosParaEntregar *pedidosParaEntregar = PedidosParaEntregar::getInstance();
+    PedidosParaEntregar::getInstance();
     log->log(logINFO,"Buffer Pedidos para Entregar y Cobrar creado.");
 
     /// Pedidos entregados (Cadeta -> Cliente)
-    Semaforo semaforoEntregados(SEMAFOROS_PATH + "PedidosEntregados" + SEMAFOROS_EXTENSION, 'A');
+    Semaforo semaforoEntregados(SEMAFOROS_PATH + "PedidosEntregados" + SEMAFOROS_EXTENSION, 0);
 
     //2. Crear procesos
     log->log(logINFO,"Creando procesos");
