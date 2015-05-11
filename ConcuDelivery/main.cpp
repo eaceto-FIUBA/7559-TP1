@@ -11,8 +11,6 @@
 #include "Supervisora.h"
 #include "Horno.h"
 
-#include "Constantes.h"
-
 #include "Pedido.h"
 #include "PedidosParaCocinar.h"
 #include "PedidosPorAtender.h"
@@ -257,7 +255,7 @@ void comenzarTrabajo() {
     log->log(logINFO,"Buffer Pedidos para Entregar y Cobrar creado.");
 
     /// Pedidos entregados (Cadeta -> Cliente)
-    Semaforo semaforoEntregados(SEMAFOROS_PATH + "PedidosEntregados" + SEMAFOROS_EXTENSION, 0);
+    //Semaforo semaforoEntregados(SEMAFOROS_PATH + "PedidosEntregados" + SEMAFOROS_EXTENSION, 0);
 
     //2. Crear procesos
     log->log(logINFO,"Creando procesos");
@@ -268,10 +266,10 @@ void comenzarTrabajo() {
     Supervisora s;
     pid_t supervisora = s.iniciar(0);
 
-    crearRecepcionistas(recepcionistas);
-    crearCocineras(cocineras);
-    crearHornos(hornos);
     crearCadetas(cadetas);
+    crearHornos(hornos);
+    crearCocineras(cocineras);
+    crearRecepcionistas(recepcionistas);
 
     pedidosPorAtender->inicializarParaEscribir();
 
@@ -296,19 +294,13 @@ void comenzarTrabajo() {
     }
 
     //4. Eserar a que cantidad de pedidos entregados / cobrados == cantidadDePedidosRealizados
-
+    log->log(logINFO, " [ SIMULACION ] \tEsperando finalizacion de pedidos...");
     do {
-        semaforoEntregados.p();
+        PedidosParaEntregar::getInstance()->esperarNuevoPedidoEntregado();
         cantidadDePedidosEntregados++;
-        usleep(500 * 1000);
-        /*
-        unsigned long cant = pedidosParaEntregar->cantidadDePedidosEntregados();
-        usleep(500 * 1000);
-        if (cant != cantidadDePedidosEntregados) {
-            log->log(logINFO, " [ SIMULACION ] \tSimulación detecto nuevo pedido entregado. Pedidos simulados entregados: " + to_string(cant));
-            cantidadDePedidosEntregados = cant;
-        }
-         */
+        log->log(logINFO,
+                 " [ SIMULACION ] \tSimulación detecto nuevo pedido entregado. Pedidos simulados entregados: " +
+                 to_string(cantidadDePedidosEntregados));
     } while (cantidadDePedidosEntregados <= cantidadDePedidosRealizados);
 
     //5. detener procesos y eliminar recursos
@@ -316,10 +308,10 @@ void comenzarTrabajo() {
 
     pedidosPorAtender->finalizarParaEscribir();
 
-    pararTodas(recepcionistas);
-    pararTodas(cocineras);
-    pararTodas(hornos);
     pararTodas(cadetas);
+    pararTodas(hornos);
+    pararTodas(cocineras);
+    pararTodas(recepcionistas);
 
     recepcionistas.clear();
     cocineras.clear();

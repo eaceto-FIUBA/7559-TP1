@@ -124,15 +124,27 @@ Pedido* PedidosParaEntregar::tomarPedidoParaEntregar() {
 }
 
 int PedidosParaEntregar::marcarPedidoComoEntregado(Pedido &p) {
+    Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t Esperando lock entregado ");
     if (pedidosEntregados->tomarLockManualmente()) {
         unsigned long cant = pedidosEntregados->leerInseguro();
         cant++;
+
+        Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t Pedidos entregados " + to_string(cant));
+
         pedidosEntregados->escribirInseguro(cant);
         pedidosEntregados->liberarLockManualmente();
-        semaforoEntregados->v();
+
+        int res = semaforoEntregados->v();
+
+        Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t señal enviada " + to_string(res));
         return 0;
     }
+    Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t FALLO EL LOCK ");
     return -1;
+}
+
+void PedidosParaEntregar::esperarNuevoPedidoEntregado() {
+    semaforoEntregados->p();
 }
 
 

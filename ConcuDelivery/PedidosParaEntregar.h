@@ -60,6 +60,8 @@ public:
 
     int marcarPedidoComoEntregado(Pedido &p);
 
+    void esperarNuevoPedidoEntregado();
+
     unsigned long cantidadDePedidosEntregados();
 
 };

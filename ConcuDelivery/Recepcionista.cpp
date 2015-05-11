@@ -43,7 +43,7 @@ void Recepcionista::realizarTarea() {
         }
     }
     else {
-        this->log(logDEBUG, "\t{Pedido NULL +}");
+        //this->log(logDEBUG, "\t{Pedido NULL}");
     }
 //    unsigned long cantDePedidosParaCocinar =
 //            PedidosParaCocinar::getInstance()->cantidadDePedidosParaCocinar();
