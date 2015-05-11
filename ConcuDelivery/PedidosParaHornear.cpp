@@ -81,14 +81,13 @@ int PedidosParaHornear::hornearPedido(Pedido &p) {
 	//TODO
 	//Lock if (memoria->size() < cant_hornos)
 
-    Logger::getInstance()->log(logDEBUG, " [ PedidosParaHornear ] \t\t esperando lock escritura... ");
+    //  Logger::getInstance()->log(logDEBUG, " [ PedidosParaHornear ] \t\t esperando lock escritura... ");
 	if (memoria->tomarLockManualmente()) {
 		unsigned long cantidad = memoria->leerInseguro();
 		cantidad++;
 		memoria->escribirInseguro(cantidad);
 
-        Logger::getInstance()->log(logDEBUG,
-                                   " [ PedidosParaHornear ] \t\t pedidos en los hornos " + to_string(cantidad));
+        //  Logger::getInstance()->log(logDEBUG,  " [ PedidosParaHornear ] \t\t pedidos en los hornos " + to_string(cantidad));
 
 
 		ssize_t bytesEscritos = fifoEscPedidosAHornear->escribir( static_cast< void* >(&p), sizeof(p) ) ;
@@ -98,20 +97,20 @@ int PedidosParaHornear::hornearPedido(Pedido &p) {
         return semaforo->v();
 	}
 
-    Logger::getInstance()->log(logERROR, " [ PedidosParaHornear ] \t\t FALLO EL LOCK ESCRITURA");
+    //  Logger::getInstance()->log(logERROR, " [ PedidosParaHornear ] \t\t FALLO EL LOCK ESCRITURA");
     return -1;
 }
 
 Pedido* PedidosParaHornear::tomarNuevoPedido() {
 
-    Logger::getInstance()->log(logDEBUG, " [ PedidosParaHornear ] \t\t tomando lock manualmente... ");
+    // Logger::getInstance()->log(logDEBUG, " [ PedidosParaHornear ] \t\t tomando lock manualmente... ");
 	if (memoria->tomarLockManualmente()) {
         unsigned long cantidad = memoria->leerInseguro();
 
-        Logger::getInstance()->log(logDEBUG, " [ PedidosParaHornear ] \t\t cantidad " + to_string(cantidad));
+        // Logger::getInstance()->log(logDEBUG, " [ PedidosParaHornear ] \t\t cantidad " + to_string(cantidad));
 
         if (cantidad == 0) {
-            Logger::getInstance()->log(logDEBUG, " [ PedidosParaHornear ] \t\t sin pedido luego de tomar lock ");
+            //     Logger::getInstance()->log(logDEBUG, " [ PedidosParaHornear ] \t\t sin pedido luego de tomar lock ");
             memoria->liberarLockManualmente();
             return NULL;
         }
@@ -123,8 +122,7 @@ Pedido* PedidosParaHornear::tomarNuevoPedido() {
         ssize_t bytesLeidos = fifoLecPedidosAHornear->leer( static_cast< void* >(p), sizeof(*p) ) ;
         assert(bytesLeidos - sizeof(Pedido) == 0);
 
-        Logger::getInstance()->log(logDEBUG,
-                                   " [ PedidosParaHornear] \t\t nuevo pedido tomado: " + to_string(p->numero));
+        //  Logger::getInstance()->log(logDEBUG, " [ PedidosParaHornear] \t\t nuevo pedido tomado: " + to_string(p->numero));
 
         memoria->escribirInseguro(cantidad);
 
@@ -132,7 +130,7 @@ Pedido* PedidosParaHornear::tomarNuevoPedido() {
 
         return p;
 	}
-    Logger::getInstance()->log(logERROR, " [ PedidosParaHornear] \t\t FALLO EL LOCK ");
+    //  Logger::getInstance()->log(logERROR, " [ PedidosParaHornear] \t\t FALLO EL LOCK ");
 	return NULL;
 }
 

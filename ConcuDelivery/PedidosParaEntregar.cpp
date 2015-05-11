@@ -78,13 +78,13 @@ int PedidosParaEntregar::esperarNuevoPedidoParaEntregar() {
 
 int PedidosParaEntregar::nuevoPedidoListo(Pedido &p) {
 
-    Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar ] \t\t esperando lock escritura... ");
+    // Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar ] \t\t esperando lock escritura... ");
 	if (memoria->tomarLockManualmente()) {
 		unsigned long cantidad = memoria->leerInseguro();
 		cantidad++;
 		memoria->escribirInseguro(cantidad);
 
-        Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar ] \t\t cantidad de pedidos para entregar ");
+        //Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar ] \t\t cantidad de pedidos para entregar ");
 
         p.estado = Pedido::LISTO_PARA_ENTREGAR;
 
@@ -95,18 +95,18 @@ int PedidosParaEntregar::nuevoPedidoListo(Pedido &p) {
         return semaforo->v();
 	}
 
-    Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t FALLO EL LOCK ESCRITURA");
+    // Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t FALLO EL LOCK ESCRITURA");
     return -1;
 }
 
 Pedido* PedidosParaEntregar::tomarPedidoParaEntregar() {
 
-    Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar ] \t\t tomando lock manualmente... ");
+    // Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar ] \t\t tomando lock manualmente... ");
 	if (memoria->tomarLockManualmente()) {
         unsigned long cantidad = memoria->leerInseguro();
-        Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar] \t\t cantidad " + to_string(cantidad));
+        //Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar] \t\t cantidad " + to_string(cantidad));
         if (cantidad == 0) {
-            Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar ] \t\t sin pedido luego de tomar lock ");
+            //Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar ] \t\t sin pedido luego de tomar lock ");
             memoria->liberarLockManualmente();
             return NULL;
         }
@@ -118,8 +118,7 @@ Pedido* PedidosParaEntregar::tomarPedidoParaEntregar() {
         ssize_t bytesLeidos = fifoLecPedidosAEntregar->leer( static_cast< void* >(p), sizeof(*p) ) ;
         assert(bytesLeidos - sizeof(Pedido) == 0);
 
-        Logger::getInstance()->log(logDEBUG,
-                                   " [ PedidosParaEntregar ] \t\t nuevo pedido tomado: " + to_string(p->numero));
+        // Logger::getInstance()->log(logDEBUG, " [ PedidosParaEntregar ] \t\t nuevo pedido tomado: " + to_string(p->numero));
 
         memoria->escribirInseguro(cantidad);
 
@@ -127,27 +126,27 @@ Pedido* PedidosParaEntregar::tomarPedidoParaEntregar() {
 
         return p;
 	}
-    Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t FALLO EL LOCK ");
+    //Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t FALLO EL LOCK ");
 	return NULL;
 }
 
 int PedidosParaEntregar::marcarPedidoComoEntregado(Pedido &p) {
-    Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t Esperando lock entregado ");
+    //Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t Esperando lock entregado ");
     if (pedidosEntregados->tomarLockManualmente()) {
         unsigned long cant = pedidosEntregados->leerInseguro();
         cant++;
 
-        Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t Pedidos entregados " + to_string(cant));
+        // Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t Pedidos entregados " + to_string(cant));
 
         pedidosEntregados->escribirInseguro(cant);
         pedidosEntregados->liberarLockManualmente();
 
         int res = semaforoEntregados->v();
 
-        Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t señal enviada " + to_string(res));
+        // Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t señal enviada " + to_string(res));
         return res;
     }
-    Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t FALLO EL LOCK ");
+    // Logger::getInstance()->log(logERROR, " [ PedidosParaEntregar ] \t\t FALLO EL LOCK ");
     return -1;
 }
 
