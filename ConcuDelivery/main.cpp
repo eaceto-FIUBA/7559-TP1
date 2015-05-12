@@ -41,7 +41,7 @@ long cadetasCount = kDefaultCadetasCount;
 long hornosCount = kDefaultHornosCount;
 long cocinerasCount = kDefaultCocinerasCount;
 
-long            simulacionCount         = kDefaultSimulacionCount;
+unsigned long simulacionCount = kDefaultSimulacionCount;
 
 void print_version() {
     cout << "ConcuDelivery v" << kAppVersion << endl << endl;
@@ -233,9 +233,9 @@ void comenzarTrabajo() {
 
     //1. crear recursos
     log->log(logINFO,"Creando recursos");
-    /// Pedidos por atender (Cliente -> Recepcionista)
 
-    int cantidadDePedidosRealizados = 0;
+    /// Pedidos por atender (Cliente -> Recepcionista)
+    unsigned long cantidadDePedidosRealizados = 0;
     PedidosPorAtender *pedidosPorAtender = PedidosPorAtender::getInstance();
     log->log(logINFO,"Buffer Pedidos para Atender creado.");
 
@@ -250,12 +250,9 @@ void comenzarTrabajo() {
     log->log(logINFO,"Buffer Pedidos para Hornear creado.");
 
     /// Pedidos para entregar y cobrar (Horno -> Cadeta)
-    int cantidadDePedidosEntregados = 0;
+    unsigned long cantidadDePedidosEntregados = 0;
     PedidosParaEntregar::getInstance();
     log->log(logINFO,"Buffer Pedidos para Entregar y Cobrar creado.");
-
-    /// Pedidos entregados (Cadeta -> Cliente)
-    //Semaforo semaforoEntregados(SEMAFOROS_PATH + "PedidosEntregados" + SEMAFOROS_EXTENSION, 0);
 
     //2. Crear procesos
     log->log(logINFO,"Creando procesos");
@@ -273,7 +270,7 @@ void comenzarTrabajo() {
 
     pedidosPorAtender->inicializarParaEscribir();
 
-    sleep(3);
+    // sleep(3);
 
     //3. iniciar la simulacion
     while (sigint_handler.getGracefulQuit() == 0 && cantidadDePedidosRealizados < simulacionCount) {
@@ -303,13 +300,8 @@ void comenzarTrabajo() {
                      " [ SIMULACION ] \tSimulación detecto nuevo pedido entregado. Pedidos simulados entregados: " +
                      to_string(cantidadDePedidosEntregados));
         }
-        /*
-        PedidosParaEntregar::getInstance()->esperarNuevoPedidoEntregado();
-        cantidadDePedidosEntregados++;
-        log->log(logINFO,
-                 " [ SIMULACION ] \tSimulación detecto nuevo pedido entregado. Pedidos simulados entregados: " +
-                 to_string(cantidadDePedidosEntregados));+*/
-        sleep(1);
+
+        // sleep(1);
     } while (cantidadDePedidosEntregados < cantidadDePedidosRealizados);
 
     //5. detener procesos y eliminar recursos
