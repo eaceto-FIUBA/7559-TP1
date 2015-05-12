@@ -52,9 +52,9 @@ public:
 
     static void destroy();
 
-    int esperarNuevoPedido();  // ejecutado solo por horno
-    int hornearPedido(Pedido &p); // ejecutado solo por cocinera
-    Pedido* tomarNuevoPedido();   // true si pudo tomar un nuevo pedido para hornear
+    int esperarNuevoPedido();       // ejecutado solo por horno
+    int hornearPedido(Pedido &p);   // ejecutado solo por cocinera
+    Pedido* tomarNuevoPedido();     // true si pudo tomar un nuevo pedido para hornear
 };
 
 #endif /* PEDIDOSPARAHORNEAR_H_ */

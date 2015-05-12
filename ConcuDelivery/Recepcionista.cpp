@@ -73,11 +73,10 @@ void Recepcionista::inicializarProceso(unsigned long id) {
 }
 
 void Recepcionista::destruirRecursos() {
+    
     this->log(logDEBUG, "\tRecepcionista. Fin del trabajo.");
 
     PedidosPorAtender::getInstance()->finalizarParaLeer();
     PedidosParaCocinar::getInstance()->finalizarParaEscribir();
 
-    // PedidosPorAtender::getInstance()->destroy();
-    // PedidosParaCocinar::getInstance()->destroy();
 }

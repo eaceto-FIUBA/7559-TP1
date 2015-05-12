@@ -50,9 +50,9 @@ public:
 
     void finalizarParaLeer();
 
-    int esperarPedidoACocinar();  // ejecutado solo por cocinera
-    int ingresarPedidoACocinar(Pedido &p); // ejecutado solo por recepcionista
-    Pedido* tomarPedidoACocinar();   // true si pudo tomar un nuevo pedido para cocinar
+    int esperarPedidoACocinar();            // ejecutado solo por cocinera
+    int ingresarPedidoACocinar(Pedido &p);  // ejecutado solo por recepcionista
+    Pedido* tomarPedidoACocinar();          // true si pudo tomar un nuevo pedido para cocinar
 
 //    unsigned long cantidadDePedidosParaCocinar();
 

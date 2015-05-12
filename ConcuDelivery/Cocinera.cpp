@@ -14,7 +14,7 @@ Cocinera::~Cocinera() {
 
 void Cocinera::realizarTarea() {
 
-    // Gio: considerar enunciado del TP:
+    //TODO Gio: considerar enunciado del TP:
     // 7. Para preparar un pedido, la cocinera debe amasar la mezcla, esperar un horno libre y poner a
     //    cocinar la pizza.
 
@@ -31,6 +31,7 @@ void Cocinera::realizarTarea() {
         assert(false); // error al realizar la espera!
     }
 
+    /** Tomar pedido para cocinar **/
     Pedido *p = PedidosParaCocinar::getInstance()->tomarPedidoACocinar();
     if (p != NULL) {
         this->log(logDEBUG, "\t\t{Pedido " + to_string(p->numero) + "} tomado para cocinar");
@@ -46,19 +47,6 @@ void Cocinera::realizarTarea() {
         this->log(logDEBUG, "\t\t{Pedido NULL +}");
     }
 
-//    /** Tomar pedido para cocinar **/
-//    if (PedidosParaCocinar::getInstance()->tomarPedidoACocinar()) {
-//    	//TODO
-//        this->log(logDEBUG, "Tomando Nuevo pedido para cocinar.");
-//
-//        /** Esperar PedidosParaHornear disponible**/
-//        //TODO Lock si no hay hornos disponibles
-//
-//        /** AgregarPedido para Hornear **/
-//        PedidosParaHornear::getInstance()->hornearPedido();
-//        this->log(logDEBUG, "Nuevo pedido listo para entregar.");
-//    }
-
 }
 
 void Cocinera::inicializarProceso(unsigned long id) {
@@ -71,11 +59,10 @@ string Cocinera::nombre() {
 }
 
 void Cocinera::destruirRecursos() {
+
     this->log(logDEBUG, "\t\tCocinera. Fin del trabajo.");
 
     PedidosParaCocinar::getInstance()->finalizarParaLeer();
     PedidosParaHornear::getInstance()->finalizarParaEscribir();
 
-    // PedidosParaCocinar::getInstance()->destroy();
-    // PedidosParaHornear::getInstance()->destroy();
 }

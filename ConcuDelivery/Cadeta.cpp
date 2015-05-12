@@ -56,9 +56,8 @@ string Cadeta::nombre() {
 
 
 void Cadeta::destruirRecursos() {
+    
     this->log(logDEBUG, "\t\tCadeta. Fin del trabajo.");
 
     PedidosParaEntregar::getInstance()->finalizarParaLeer();
-
-    // PedidosParaEntregar::getInstance()->destroy();
 }

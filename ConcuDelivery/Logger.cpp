@@ -64,8 +64,6 @@ void Logger::log( LogLevel level, string message ){
 
 		cout << tag << " " << dateTime << " Proceso-"<< getpid() << ": " << message << std::endl;
 
-		// usleep(100 * 1000);
-
 		logFile.liberarLock();
     }
     else {

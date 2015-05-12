@@ -26,7 +26,7 @@ void Horno::realizarTarea() {
         assert(false); // error al realizar la espera!
     }
 
-
+    /** Tomar pedido para hornear **/
     Pedido *p = PedidosParaHornear::getInstance()->tomarNuevoPedido();
     if (p != NULL) {
         this->log(logDEBUG, "\t\t{Pedido " + to_string(p->numero) + "} ingresando al horno");
@@ -41,14 +41,7 @@ void Horno::realizarTarea() {
     else {
         this->log(logDEBUG, "\t\t{Pedido NULL +}");
     }
-//
-//    if (PedidosParaHornear::getInstance()->tomarNuevoPedido()) {
-//
-//    	this->log(logDEBUG, "Tomando Nuevo pedido para hornear.");
-//
-//        PedidosParaEntregar::getInstance()->nuevoPedidoListo();
-//        this->log(logDEBUG, "Nuevo pedido listo para entregar.");
-//    }
+
 }
 
 void Horno::inicializarProceso(unsigned long id) {
@@ -61,11 +54,10 @@ string Horno::nombre() {
 }
 
 void Horno::destruirRecursos() {
+
     this->log(logDEBUG, "\t\tHorno. Fin del trabajo.");
 
     PedidosParaHornear::getInstance()->finalizarParaLeer();
     PedidosParaEntregar::getInstance()->finalizarParaEscribir();
 
-    // PedidosParaHornear::getInstance()->destroy();
-    // PedidosParaEntregar::getInstance()->destroy();
 }

@@ -50,9 +50,9 @@ public:
 
     void finalizarParaLeer();
 
-    int esperarNuevoPedido();  // ejecutado solo por recepcionistas
+    int esperarNuevoPedido();           // ejecutado solo por recepcionistas
     int ingresarNuevoPedido(Pedido &p); // ejecutado solo por la simulacion
-    Pedido* tomarNuevoPedido();   // true si pudo tomar un nuevo pedido
+    Pedido* tomarNuevoPedido();         // true si pudo tomar un nuevo pedido
 
 };
 
