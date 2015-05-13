@@ -150,6 +150,7 @@ int setupCLI(int argc, char **argv) {
 
 void inicializar() {
     Logger* log = Logger::getInstance();
+    log->setLogLevel(debugMode);
     log->log(logINFO,"Inicio de ConcuDelivery.");
 }
 

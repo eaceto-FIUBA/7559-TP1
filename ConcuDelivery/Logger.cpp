@@ -3,6 +3,7 @@
 
 Logger* Logger::instance = NULL;
 const string Logger::fileName = LOG_PATH + getDateTime() + LOG_EXTENSION;
+bool Logger::debugMode = false;
 
 Logger::Logger(): logFile ( (char*) fileName.c_str() ){
 
@@ -26,6 +27,10 @@ void Logger::destroy () {
 
 }
 
+void Logger::setLogLevel(bool debug){
+	debugMode = debug;
+}
+
 std::string Logger::getTag( LogLevel level ){
 
 	switch(level){
@@ -43,6 +48,9 @@ std::string Logger::getTag( LogLevel level ){
 }
 
 void Logger::log( LogLevel level, string message ){
+
+	if(!debugMode && (level == logDEBUG))
+		return;
 
 	if (logFile.tomarLock() == 0) {
 

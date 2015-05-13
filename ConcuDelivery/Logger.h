@@ -14,6 +14,7 @@ using namespace std;
 
 class Logger {
 
+
 	private:
 
 		static Logger* instance;
@@ -21,12 +22,14 @@ class Logger {
 		LockFile logFile;
 		Logger();
 		std::string getTag( LogLevel level );
+		static bool debugMode;
 
 	public:
 
 		static Logger* getInstance();
 		static void destroy ();
 		void log( LogLevel level, string message );
+		void setLogLevel(bool debug);
 
 };
 
