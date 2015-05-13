@@ -99,6 +99,7 @@ int PedidosParaHornear::hornearPedido(Pedido &p) {
 			return semaforo->v();
 		}
 		else{
+			memoria->liberarLockManualmente();
 			Logger::getInstance()->log(logDEBUG,  " [ PedidosParaHornear ] \t\t no se pudo ingresar el pedido. Hornos ocupados.");
 			return hornearPedido(p);
 		}
