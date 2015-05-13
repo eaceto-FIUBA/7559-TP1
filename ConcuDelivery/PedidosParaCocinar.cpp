@@ -75,6 +75,7 @@ int PedidosParaCocinar::ingresarPedidoACocinar(Pedido &p) {
 	if (memoria->tomarLockManualmente()) {
 		unsigned long cantidad = memoria->leerInseguro();
 		cantidad++;
+
 		memoria->escribirInseguro(cantidad);
 
         Logger::getInstance()->log(logDEBUG, " [ PedidosParaCocinar ] \t\t pedidos en la cocina " + to_string(cantidad));
@@ -124,8 +125,6 @@ Pedido* PedidosParaCocinar::tomarPedidoACocinar() {
 	return NULL;
 }
 
-
-
-//unsigned long PedidosParaCocinar::cantidadDePedidosParaCocinar() {
-//    return memoria->leer();
-//}
+unsigned long PedidosParaCocinar::cantidadDePedidosParaCocinar() {
+    return static_cast< unsigned long > (memoria->leer());
+}

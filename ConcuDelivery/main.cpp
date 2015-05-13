@@ -21,9 +21,9 @@ using namespace std;
 
 #define kAppVersion "0.2"
 
-#define kDefaultRecepcionistasCount 2
+#define kDefaultRecepcionistasCount 5
 #define kDefaultCadetasCount        2
-#define kDefaultCocinerasCount      2
+#define kDefaultCocinerasCount      1
 #define kDefaultHornosCount         2
 #define kDefaultSimulacionCount     10
 

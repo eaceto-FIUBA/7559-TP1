@@ -35,32 +35,28 @@ void Recepcionista::realizarTarea() {
     // las recepcionistas dejan de atender los tel ́efonos hasta tant
     // o se procese al menos un pedido de los pendientes.
 
-
-    Pedido *p = PedidosPorAtender::getInstance()->tomarNuevoPedido();
-    if (p != NULL) {
-        this->log(logDEBUG, "\t{Pedido " + to_string(p->numero) + "} tomando pedido");
-        int res = PedidosParaCocinar::getInstance()->ingresarPedidoACocinar(*p);
-        if (res >= 0) {
-            this->log(logDEBUG, "\t{Pedido " + to_string(p->numero) + "} ingresado a la cocina");
-        }
-        else {
-            this->log(logERROR, "\t{Pedido " + to_string(p->numero) + "} ERROR al ingresar a la cocina");
-        }
+    unsigned long cantDePedidosParaCocinar =
+            PedidosParaCocinar::getInstance()->cantidadDePedidosParaCocinar();
+    this->log(logDEBUG, "\tcantDePedidosParaCocinar: "+to_string(cantDePedidosParaCocinar));
+    if (cantDePedidosParaCocinar <= 2 * cantDeCocinerasDisponibles) {
+		Pedido *p = PedidosPorAtender::getInstance()->tomarNuevoPedido();
+		if (p != NULL) {
+			this->log(logDEBUG, "\t{Pedido " + to_string(p->numero) + "} tomando pedido");
+			int res = PedidosParaCocinar::getInstance()->ingresarPedidoACocinar(*p);
+			if (res >= 0) {
+				this->log(logDEBUG, "\t{Pedido " + to_string(p->numero) + "} ingresado a la cocina");
+			}
+			else {
+				this->log(logERROR, "\t{Pedido " + to_string(p->numero) + "} ERROR al ingresar a la cocina");
+			}
+		}
+		else {
+			//this->log(logDEBUG, "\t{Pedido NULL}");
+		}
+    }else{
+    	this->log(logDEBUG, "\tCocineras ocupadas. Cantidad de pedidos no tomados > 2* Cantidad de Cocineras");
     }
-    else {
-        //this->log(logDEBUG, "\t{Pedido NULL}");
-    }
-//    unsigned long cantDePedidosParaCocinar =
-//            PedidosParaCocinar::getInstance()->cantidadDePedidosParaCocinar();
 
-
-//    if (cantDePedidosParaCocinar <= 2 * cantDeCocinerasDisponibles) {
-//        if (PedidosPorAtender::getInstance()->tomarNuevoPedido()) {
-//            this->log(logDEBUG, "Tomando Nuevo pedido.");
-//            PedidosParaCocinar::getInstance()->ingresarPedidoACocinar();
-//            this->log(logDEBUG, "Nuevo pedido ingresado en cocina.");
-//        }
-//    }
 }
 
 string Recepcionista::nombre() {
