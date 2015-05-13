@@ -14,3 +14,5 @@ const std::string FIFO_A_ATENDER = "PedidosAAtender";
 const std::string FIFO_A_COCINAR = "PedidosACocinar";
 const std::string FIFO_A_HORNEAR = "PedidosAHornear";
 const std::string FIFO_A_ENTREGAR = "PedidosAEntregar";
+
+const double PEDIDO_COSTO = 10.0;

@@ -17,6 +17,8 @@
 #include "PedidosParaEntregar.h"
 #include "PedidosParaHornear.h"
 
+#include "Constantes.h"
+
 using namespace std;
 
 #define kAppVersion "0.2"
@@ -219,7 +221,7 @@ void pararTodas(vector<pid_t>& pids) {
 
 bool realizarPedido(PedidosPorAtender *pedidosPorAtender, unsigned long count) {
 
-    Pedido *p = new Pedido(count, 10.0, Pedido::ESPERANDO);
+    Pedido *p = new Pedido(count, PEDIDO_COSTO, Pedido::ESPERANDO);
 
     return pedidosPorAtender->ingresarNuevoPedido(*p) == 0;
 }
