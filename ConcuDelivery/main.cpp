@@ -23,11 +23,11 @@ using namespace std;
 
 #define kAppVersion "0.2"
 
-#define kDefaultRecepcionistasCount 5
+#define kDefaultRecepcionistasCount 10
 #define kDefaultCadetasCount        2
-#define kDefaultCocinerasCount      1
-#define kDefaultHornosCount         2
-#define kDefaultSimulacionCount     10
+#define kDefaultCocinerasCount      10
+#define kDefaultHornosCount         1
+#define kDefaultSimulacionCount     50
 
 #define kCLINoAargument         0
 #define kCLIRequiredArgument    1

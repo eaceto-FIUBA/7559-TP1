@@ -79,22 +79,29 @@ int PedidosParaHornear::esperarNuevoPedido() {
 
 int PedidosParaHornear::hornearPedido(Pedido &p) {
 	
-    //TODO
-	//Lock if (memoria->size() < cant_hornos)
-
     Logger::getInstance()->log(logDEBUG, " [ PedidosParaHornear ] \t\t esperando lock escritura... ");
 	if (memoria->tomarLockManualmente()) {
+
 		unsigned long cantidad = memoria->leerInseguro();
-		cantidad++;
-		memoria->escribirInseguro(cantidad);
 
-        Logger::getInstance()->log(logDEBUG,  " [ PedidosParaHornear ] \t\t pedidos en los hornos " + to_string(cantidad));
+		/** la cocinera se debe asegurar que haya un horno libre al ingresar la pizza*/
+		if(cantidad < cant_hornos )
+		{
+			cantidad++;
+			memoria->escribirInseguro(cantidad);
 
-		ssize_t bytesEscritos = fifoEscPedidosAHornear->escribir( static_cast< void* >(&p), sizeof(p) ) ;
-		assert(bytesEscritos - sizeof(Pedido) == 0);
+			Logger::getInstance()->log(logDEBUG,  " [ PedidosParaHornear ] \t\t pedidos en los hornos " + to_string(cantidad));
 
-        memoria->liberarLockManualmente();
-        return semaforo->v();
+			ssize_t bytesEscritos = fifoEscPedidosAHornear->escribir( static_cast< void* >(&p), sizeof(p) ) ;
+			assert(bytesEscritos - sizeof(Pedido) == 0);
+
+			memoria->liberarLockManualmente();
+			return semaforo->v();
+		}
+		else{
+			Logger::getInstance()->log(logDEBUG,  " [ PedidosParaHornear ] \t\t no se pudo ingresar el pedido. Hornos ocupados.");
+			return hornearPedido(p);
+		}
 	}
 
     Logger::getInstance()->log(logERROR, " [ PedidosParaHornear ] \t\t FALLO EL LOCK ESCRITURA");

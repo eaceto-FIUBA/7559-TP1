@@ -30,14 +30,10 @@ void Recepcionista::realizarTarea() {
         assert(false); // error al realizar la espera!
     }
 
-    // 8. Cuando la cantidad pedidos que aun no fueron tomados ́
-    // por las cocineras es mayor al doble de la cantidad de cocineras,
-    // las recepcionistas dejan de atender los tel ́efonos hasta tant
-    // o se procese al menos un pedido de los pendientes.
-
     unsigned long cantDePedidosParaCocinar =
             PedidosParaCocinar::getInstance()->cantidadDePedidosParaCocinar();
     this->log(logDEBUG, "\tcantDePedidosParaCocinar: "+to_string(cantDePedidosParaCocinar));
+
     if (cantDePedidosParaCocinar <= 2 * cantDeCocinerasDisponibles) {
 		Pedido *p = PedidosPorAtender::getInstance()->tomarNuevoPedido();
 		if (p != NULL) {

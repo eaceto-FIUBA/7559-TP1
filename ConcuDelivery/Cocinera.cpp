@@ -14,10 +14,6 @@ Cocinera::~Cocinera() {
 
 void Cocinera::realizarTarea() {
 
-    //TODO Gio: considerar enunciado del TP:
-    // 7. Para preparar un pedido, la cocinera debe amasar la mezcla, esperar un horno libre y poner a
-    //    cocinar la pizza.
-
     /** Esperar pedido para cocinar **/
     log(logDEBUG, "\t\tEsperando nuevo pedido para cocinar...");
     if (PedidosParaCocinar::getInstance()->esperarPedidoACocinar() != 0) {
