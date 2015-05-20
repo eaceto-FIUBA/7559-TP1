@@ -161,6 +161,10 @@ int setupCLI(int argc, char **argv) {
 }
 
 void inicializar() {
+    system(("mkdir " + SEMAFOROS_PATH).c_str());
+    system(("mkdir " + MEMORIA_PATH).c_str());
+    system(("mkdir " + LOG_PATH).c_str());
+
     Logger* log = Logger::getInstance();
     log->setLogLevel(debugMode);
     log->log(logINFO,"Inicio de ConcuDelivery.");
@@ -357,9 +361,7 @@ int main(int argc, char **argv) {
 
     inicializar();
     loggearParametros();
-
     comenzarTrabajo();
-
     eliminarRecursos();
     return ( 0 );
 }
