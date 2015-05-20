@@ -61,6 +61,7 @@ void printHelp() {
     cout << "\tc (cocineras)\t\t\t[int] Number of process with type 'cocineras'" << endl;
     cout << "\to (hornos)\t\t\t[int] Number of process with type 'hornos'" << endl;
     cout << "\ta (cadetas)\t\t\t[int] Number of process with type 'cadetas'" << endl;
+    cout << "\ts (simulaciones)\t\t\t[int] Number of simulations to perform" << endl;
     cout << endl;
     cout << "ConcuDelivery --help\t\t\tdisplay help" <<endl;
     cout << "ConcuDelivery --version\t\t\tdisplay version" <<endl;
@@ -79,6 +80,7 @@ int setupCLI(int argc, char **argv) {
                 {"help",            kCLINoAargument,        NULL, 'h'},
                 {"debug",           kCLINoAargument,        NULL, 'd'},
                 {"recepcionistas",  kCLIRequiredArgument,   NULL, 'r'},
+                {"simulaciones", kCLIRequiredArgument, NULL, 's'},
                 {"cocineras",       kCLIRequiredArgument,   NULL, 'c'},
                 {"hornos",          kCLIRequiredArgument,   NULL, 'o'},
                 {"cadetas",         kCLIRequiredArgument,   NULL, 'a'},
@@ -141,6 +143,15 @@ int setupCLI(int argc, char **argv) {
                 }
                 if (cadetasCount < 0) {
                     cadetasCount = kDefaultCadetasCount;
+                }
+                break;
+
+            case 's':
+                if (optarg) {
+                    simulacionCount = atol(optarg);
+                }
+                if (simulacionCount < 0) {
+                    simulacionCount = kDefaultSimulacionCount;
                 }
                 break;
         }
