@@ -21,7 +21,7 @@
 
 using namespace std;
 
-#define kAppVersion "0.2"
+#define kAppVersion "0.3"
 
 #define kDefaultRecepcionistasCount 10
 #define kDefaultCadetasCount        2
@@ -64,6 +64,7 @@ void printHelp() {
     cout << endl;
     cout << "ConcuDelivery --help\t\t\tdisplay help" <<endl;
     cout << "ConcuDelivery --version\t\t\tdisplay version" <<endl;
+    cout << "ConcuDelivery --debug\t\t\tenable debug messages" << endl;
     cout << endl;
 }
 
