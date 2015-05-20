@@ -26,7 +26,7 @@ using namespace std;
 #define kDefaultRecepcionistasCount 10
 #define kDefaultCadetasCount        2
 #define kDefaultCocinerasCount      10
-#define kDefaultHornosCount         1
+#define kDefaultHornosCount         5
 #define kDefaultSimulacionCount     50
 
 #define kCLINoAargument         0
