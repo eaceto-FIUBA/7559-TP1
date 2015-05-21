@@ -40,6 +40,8 @@ void Cadeta::realizarTarea() {
         else {
             this->log(logERROR, "\t\t{Pedido " + to_string(p->numero) + "} ERROR al entregar pedido");
         }
+        delete p;
+        p = NULL;
     }
     else {
         this->log(logDEBUG, "\t\t{Pedido NULL +}");

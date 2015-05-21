@@ -15,7 +15,6 @@ Supervisora::~Supervisora() {
 }
 
 void Supervisora::realizarTarea() {
-
 	unsigned long c = PedidosParaEntregar::getInstance()->cantidadDePedidosEntregados();
 	this->log(logINFO, "\tPedidos Entregados: " + to_string(c) + "\tRecaudación: $"+to_string(c*PEDIDO_COSTO) +".");
 	sleep(1); //Lee la recaudación cada 1 segundo.

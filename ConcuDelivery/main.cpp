@@ -95,7 +95,7 @@ int setupCLI(int argc, char **argv) {
 
     while(iarg != -1)
     {
-        iarg = getopt_long(argc, argv, "vhdr:c:o:a:", longopts, &index);
+        iarg = getopt_long(argc, argv, "vhdr:c:o:a:s:", longopts, &index);
 
         switch (iarg) {
             case 'h':

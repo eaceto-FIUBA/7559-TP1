@@ -45,6 +45,8 @@ void Recepcionista::realizarTarea() {
 			else {
 				this->log(logERROR, "\t{Pedido " + to_string(p->numero) + "} ERROR al ingresar a la cocina");
 			}
+            delete p;
+            p = NULL;
 		}
 		else {
 			//this->log(logDEBUG, "\t{Pedido NULL}");

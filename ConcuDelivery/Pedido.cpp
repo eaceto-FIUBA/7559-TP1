@@ -11,3 +11,9 @@ Pedido::Pedido(unsigned long n, double c, Estado e){
     costo = c;
     estado = e;
 }
+
+Pedido::~Pedido() {
+    numero = 0;
+    costo = 0;
+    estado = ESPERANDO;
+}
