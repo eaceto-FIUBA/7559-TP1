@@ -11,10 +11,8 @@
     </ADDITIONAL_GENERATION_ENVIRONMENT>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba0f2085-7ce5-4738-b186-29dcdf2ad3c8" name="Default" comment="varios leaks solucionados + fix de simulacion count">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/Debug/ConcuDelivery" afterPath="$PROJECT_DIR$/bin/Debug/ConcuDelivery" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PedidosParaEntregar.cpp" afterPath="$PROJECT_DIR$/PedidosParaEntregar.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.cpp" afterPath="$PROJECT_DIR$/main.cpp" />
+    <list default="true" id="ba0f2085-7ce5-4738-b186-29dcdf2ad3c8" name="Default" comment="cero leaks">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../2015-1C-PrimerProyecto-2.pdf" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ConcuDelivery.iws" />
@@ -83,8 +81,8 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.08120649">
-              <caret line="232" column="10" selection-start-line="232" selection-start-column="10" selection-end-line="232" selection-end-column="10" />
+            <state vertical-scroll-proportion="-0.0023201855">
+              <caret line="230" column="57" selection-start-line="230" selection-start-column="57" selection-end-line="230" selection-end-column="57" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
                 <element signature="e#135#161#0" expanded="true" />
@@ -481,7 +479,13 @@
       <option name="project" value="LOCAL" />
       <updated>1432206244665</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="cero leaks">
+      <created>1432206569753</created>
+      <option name="number" value="00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1432206569753</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TodoView">
@@ -565,7 +569,8 @@
     <MESSAGE value="número de simulacioens" />
     <MESSAGE value="mkdirs" />
     <MESSAGE value="varios leaks solucionados + fix de simulacion count" />
-    <option name="LAST_COMMIT_MESSAGE" value="varios leaks solucionados + fix de simulacion count" />
+    <MESSAGE value="cero leaks" />
+    <option name="LAST_COMMIT_MESSAGE" value="cero leaks" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1023,8 +1028,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.08120649">
-          <caret line="232" column="10" selection-start-line="232" selection-start-column="10" selection-end-line="232" selection-end-column="10" />
+        <state vertical-scroll-proportion="-0.0023201855">
+          <caret line="230" column="57" selection-start-line="230" selection-start-column="57" selection-end-line="230" selection-end-column="57" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
             <element signature="e#135#161#0" expanded="true" />
