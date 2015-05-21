@@ -34,6 +34,7 @@ PedidosParaEntregar::PedidosParaEntregar() {
 PedidosParaEntregar::~PedidosParaEntregar() {
     semaforo->eliminar();
     delete semaforo;
+    delete semaforoEntregados;
     delete memoria;
     delete pedidosEntregados;
 

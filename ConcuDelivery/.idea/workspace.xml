@@ -11,14 +11,9 @@
     </ADDITIONAL_GENERATION_ENVIRONMENT>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba0f2085-7ce5-4738-b186-29dcdf2ad3c8" name="Default" comment="mkdirs">
+    <list default="true" id="ba0f2085-7ce5-4738-b186-29dcdf2ad3c8" name="Default" comment="varios leaks solucionados + fix de simulacion count">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/Debug/ConcuDelivery" afterPath="$PROJECT_DIR$/bin/Debug/ConcuDelivery" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Cadeta.cpp" afterPath="$PROJECT_DIR$/Cadeta.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Cocinera.cpp" afterPath="$PROJECT_DIR$/Cocinera.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Horno.cpp" afterPath="$PROJECT_DIR$/Horno.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Pedido.cpp" afterPath="$PROJECT_DIR$/Pedido.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Recepcionista.cpp" afterPath="$PROJECT_DIR$/Recepcionista.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Supervisora.cpp" afterPath="$PROJECT_DIR$/Supervisora.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PedidosParaEntregar.cpp" afterPath="$PROJECT_DIR$/PedidosParaEntregar.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.cpp" afterPath="$PROJECT_DIR$/main.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -63,24 +58,48 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Pedido.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Pedido.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Pedido.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6388309">
+            <state vertical-scroll-proportion="0.0">
               <caret line="17" column="23" selection-start-line="17" selection-start-column="23" selection-end-line="17" selection-end-column="23" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="PedidosParaEntregar.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PedidosParaEntregar.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="21" column="46" selection-start-line="21" selection-start-column="46" selection-end-line="21" selection-end-column="46" />
+              <folding>
+                <element signature="e#1#33#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-27.071428">
-              <caret line="344" column="14" selection-start-line="344" selection-start-column="14" selection-end-line="344" selection-end-column="14" />
+            <state vertical-scroll-proportion="0.08120649">
+              <caret line="232" column="10" selection-start-line="232" selection-start-column="10" selection-end-line="232" selection-end-column="10" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
                 <element signature="e#135#161#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PedidosPorAtender.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PedidosPorAtender.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="70" column="23" selection-start-line="70" selection-start-column="23" selection-end-line="70" selection-end-column="23" />
+              <folding>
+                <element signature="e#39#69#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -116,31 +135,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Supervisora.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Supervisora.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="PedidosParaHornear.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PedidosParaHornear.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="111" column="28" selection-start-line="111" selection-start-column="28" selection-end-line="111" selection-end-column="28" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Proceso.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Proceso.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="67" column="27" selection-start-line="67" selection-start-column="21" selection-end-line="67" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -183,16 +182,16 @@
         <option value="$PROJECT_DIR$/Proceso.cpp" />
         <option value="$PROJECT_DIR$/Semaforo.cpp" />
         <option value="$PROJECT_DIR$/PedidosParaCocinar.cpp" />
-        <option value="$PROJECT_DIR$/PedidosParaEntregar.cpp" />
         <option value="$PROJECT_DIR$/PedidosParaHornear.cpp" />
         <option value="$PROJECT_DIR$/PedidosPorAtender.cpp" />
-        <option value="$PROJECT_DIR$/main.cpp" />
         <option value="$PROJECT_DIR$/Supervisora.cpp" />
         <option value="$PROJECT_DIR$/Cadeta.cpp" />
         <option value="$PROJECT_DIR$/Recepcionista.cpp" />
         <option value="$PROJECT_DIR$/Cocinera.cpp" />
         <option value="$PROJECT_DIR$/Horno.cpp" />
         <option value="$PROJECT_DIR$/Pedido.cpp" />
+        <option value="$PROJECT_DIR$/PedidosParaEntregar.cpp" />
+        <option value="$PROJECT_DIR$/main.cpp" />
       </list>
     </option>
   </component>
@@ -476,7 +475,13 @@
       <option name="project" value="LOCAL" />
       <updated>1432162638974</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="varios leaks solucionados + fix de simulacion count">
+      <created>1432206244665</created>
+      <option name="number" value="00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1432206244665</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TodoView">
@@ -494,11 +499,11 @@
     <layout>
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21402214" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32957393" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5053996" sideWeight="0.49815497" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.5053996" sideWeight="0.49815497" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3283208" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.9719222" sideWeight="0.5044808" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18790497" sideWeight="0.49446493" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.45356372" sideWeight="0.49551925" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.45356372" sideWeight="0.49551925" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32829374" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -559,7 +564,8 @@
     <MESSAGE value="5 hornos como default" />
     <MESSAGE value="número de simulacioens" />
     <MESSAGE value="mkdirs" />
-    <option name="LAST_COMMIT_MESSAGE" value="mkdirs" />
+    <MESSAGE value="varios leaks solucionados + fix de simulacion count" />
+    <option name="LAST_COMMIT_MESSAGE" value="varios leaks solucionados + fix de simulacion count" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -579,7 +585,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/PedidosParaEntregar.cpp</url>
-          <line>155</line>
+          <line>156</line>
           <option name="timeStamp" value="126" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
@@ -589,17 +595,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/PedidosParaEntregar.cpp</url>
-          <line>145</line>
+          <line>146</line>
           <option name="timeStamp" value="129" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>315</line>
+          <line>319</line>
           <option name="timeStamp" value="133" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>326</line>
+          <line>330</line>
           <option name="timeStamp" value="134" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
@@ -872,16 +878,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PedidosParaEntregar.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.50344825">
-          <caret line="147" column="10" selection-start-line="147" selection-start-column="10" selection-end-line="147" selection-end-column="10" />
-          <folding>
-            <element signature="e#1#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/asm-generic/errno-base.h">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3475862">
@@ -915,16 +911,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PedidosPorAtender.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="77" column="19" selection-start-line="77" selection-start-column="17" selection-end-line="77" selection-end-column="33" />
-          <folding>
-            <element signature="e#39#69#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MemoriaCompartidaConcurrente.h">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -938,17 +924,6 @@
         <state vertical-scroll-proportion="-1.3571428">
           <caret line="127" column="32" selection-start-line="127" selection-start-column="32" selection-end-line="127" selection-end-column="32" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-27.071428">
-          <caret line="344" column="14" selection-start-line="344" selection-start-column="14" selection-end-line="344" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-            <element signature="e#135#161#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1020,9 +995,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Pedido.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6388309">
+        <state vertical-scroll-proportion="0.0">
           <caret line="17" column="23" selection-start-line="17" selection-start-column="23" selection-end-line="17" selection-end-column="23" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PedidosParaEntregar.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="21" column="46" selection-start-line="21" selection-start-column="46" selection-end-line="21" selection-end-column="46" />
+          <folding>
+            <element signature="e#1#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PedidosPorAtender.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="70" column="23" selection-start-line="70" selection-start-column="23" selection-end-line="70" selection-end-column="23" />
+          <folding>
+            <element signature="e#39#69#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.08120649">
+          <caret line="232" column="10" selection-start-line="232" selection-start-column="10" selection-end-line="232" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#135#161#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -240,7 +240,11 @@ bool realizarPedido(PedidosPorAtender *pedidosPorAtender, unsigned long count) {
 
     Pedido *p = new Pedido(count, PEDIDO_COSTO, Pedido::ESPERANDO);
 
-    return pedidosPorAtender->ingresarNuevoPedido(*p) == 0;
+    int res = pedidosPorAtender->ingresarNuevoPedido(*p) == 0;
+
+    delete p;
+
+    return res;
 }
 
 void comenzarTrabajo() {
